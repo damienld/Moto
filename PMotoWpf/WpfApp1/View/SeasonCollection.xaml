@@ -40,7 +40,7 @@
             <RowDefinition Height="Auto"></RowDefinition>
         </Grid.RowDefinitions>
         <DataGrid Grid.Row="0" ItemsSource="{Binding SeasonCollection}" 
-                  SelectedItem="{Binding SelectedSeason,Mode=TwoWay}"></DataGrid>
+                  SelectedItem="{Binding SelectedSeason,Mode=TwoWay}" AutoGenerateColumns="true"></DataGrid>
         <Grid Grid.Row="1" DataContext="{Binding SelectedSeason}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"></RowDefinition>

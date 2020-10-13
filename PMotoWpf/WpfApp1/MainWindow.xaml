@@ -3,20 +3,17 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:Data="clr-namespace:Moto.Data;assembly=Moto.Data" x:Class="PMotoWpf.MainWindow"
+        xmlns:Data="clr-namespace:Moto.Data;assembly=Moto.Data" 
+        x:Class="PMotoWpf.MainWindow"
         xmlns:VM="clr-namespace:PMotoWpf.ViewModel"
         xmlns:View="clr-namespace:PMotoWpf.View"
         mc:Ignorable="d"
-        Title="MainWindow" Height="460" Width="898" Loaded="Window_Loaded">
-    <Window.Resources>
-        <CollectionViewSource x:Key="gpViewSource" d:DesignSource="{d:DesignInstance {x:Type Data:Season}, CreateList=True}"/>
-        <CollectionViewSource x:Key="gpSessionsViewSource" Source="{Binding Sessions, Source={StaticResource gpViewSource}}"/>
-    </Window.Resources>
+        Title="MainWindow" Height="460" Width="898">
     <Window.DataContext>
         <VM:MainWindowViewModel></VM:MainWindowViewModel>
     </Window.DataContext>
 
-    <Grid DataContext="{StaticResource gpSessionsViewSource}">
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>

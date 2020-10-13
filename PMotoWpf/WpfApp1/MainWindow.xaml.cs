@@ -1,4 +1,6 @@
 ﻿using Moto.Data;
+using PMotoWpf.Infra;
+using PMotoWpf.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,15 +26,10 @@ namespace PMotoWpf
         public MainWindow()
         {
             InitializeComponent();
-            
-        }
-
-        private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-
-            System.Windows.Data.CollectionViewSource gpViewSource = ((System.Windows.Data.CollectionViewSource)(this.FindResource("gpViewSource")));
-            // Load data by setting the CollectionViewSource.Source property:
-            // gpViewSource.Source = [generic data source]
+            (this.DataContext as MainWindowViewModel).ShowMessageBox += delegate (object sender, EventArgs args)
+            {
+                MessageBox.Show(((MessageEventArgs)args).Message);
+            };
         }
     }
 }

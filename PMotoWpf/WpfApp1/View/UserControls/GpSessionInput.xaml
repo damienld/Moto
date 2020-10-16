@@ -53,7 +53,7 @@
             <TextBlock Grid.Row="0" Grid.Column="3" Text="Note"></TextBlock>
             <TextBlock Grid.Row="0" Grid.Column="4" Text="Weather"></TextBlock>
 
-            <TextBox Grid.Row="1" Grid.Column="0" Text="{Binding IdInSeason}"/>
+            <TextBox Grid.Row="1" Grid.Column="0" Text="{Binding GpIdInSeason}"/>
             <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Name}" CharacterCasing="Upper"/>
             <DatePicker Grid.Column="2" HorizontalAlignment="Left" Grid.Row="1" SelectedDate="{Binding Date}" VerticalAlignment="Top"/>
             <TextBox Grid.Row="1" Grid.Column="3" Text="{Binding Note}" ClipToBounds="True"/>

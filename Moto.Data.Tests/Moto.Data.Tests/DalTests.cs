@@ -8,7 +8,7 @@ namespace Moto.Data.Tests
     [TestClass]
     public class DalTests
     {
-        private Dal dal = new Dal(); //TODO IDal
+        private Dal dal = new Dal("Moto"); //TODO IDal
         [TestInitialize]
         public void Init_AvantChaqueTest()
         {
@@ -16,7 +16,7 @@ namespace Moto.Data.Tests
                 //= new MotoDbInitializer();
                 = new DropCreateDatabaseAlways<MotoDataContext>();
             Database.SetInitializer(init);
-            init.InitializeDatabase(new MotoDataContext());
+            init.InitializeDatabase(new MotoDataContext("Moto_Test"));
             InitSeasons2020();
         }
 
@@ -50,8 +50,8 @@ namespace Moto.Data.Tests
         [TestMethod]
         public void Check_AddGp()
         {
-            dal.AddGp(2020, Categories.c125, 1, new DateTime(2020, 3, 6), "Qatar", "");
-            dal.AddGp(2020, Categories.c250, 1, new DateTime(2020, 3, 6), "Qatar", "");
+            dal.AddGp(2020, Categories.c125, 1, new DateTime(2020, 3, 6), "Qatar", "", "");
+            dal.AddGp(2020, Categories.c250, 1, new DateTime(2020, 3, 6), "Qatar", "", "");
             Gp gp = dal.getGp(2020, Categories.c250, 1);
             Assert.IsTrue(gp != null);
             gp = dal.getGp(2020, Categories.c125, 1);

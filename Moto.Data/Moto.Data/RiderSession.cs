@@ -33,20 +33,19 @@ namespace Moto.Data
         public virtual ICollection<LapTime> ListLapTimes
         { get; set; }
 
-        
-
         public List<LapTime> getListBestXLaps(int aNbLaps)
         {
-            List<LapTime> _CountedLaps = getListCountedLaps();
+            List<LapTime> _CountedLaps = getListFullLaps();
             if (_CountedLaps == null || _CountedLaps.Count < aNbLaps)
                 return null;
             return _CountedLaps.GetRange(0, aNbLaps);
         }
-        public List<LapTime> getListCountedLaps()
+        public List<LapTime> getListFullLaps()
         {
             if (ListLapTimes == null)
                 return null;
-            return ListLapTimes.Where(m => !m.IsUnFinished && !m.IsCancelled && m.Time != null).ToList();
+            return ListLapTimes.Where(m => !m.IsUnFinished && !m.IsCancelled
+            && !m.IsPitStop && m.Time != null).ToList();
         }
         public decimal AvgBest5Laps
         {
@@ -64,7 +63,7 @@ namespace Moto.Data
             get
             {
                 int _nb = 1;
-                List<LapTime> _l = getListCountedLaps();
+                List<LapTime> _l = getListFullLaps();
                 if (_l != null && _l.Count >= _nb)
                 {
                     decimal d = _l[_nb-1].Time.Value;
@@ -79,7 +78,7 @@ namespace Moto.Data
             get
             {
                 int _nb = 2;
-                List<LapTime> _l = getListCountedLaps();
+                List<LapTime> _l = getListFullLaps();
                 if (_l != null && _l.Count >= _nb)
                 {
                     decimal d = _l[_nb - 1].Time.Value;
@@ -94,7 +93,7 @@ namespace Moto.Data
             get
             {
                 int _nb = 3;
-                List<LapTime> _l = getListCountedLaps();
+                List<LapTime> _l = getListFullLaps();
                 if (_l != null && _l.Count >= _nb)
                 {
                     decimal d = _l[_nb - 1].Time.Value;
@@ -109,7 +108,7 @@ namespace Moto.Data
             get
             {
                 int _nb = 4;
-                List<LapTime> _l = getListCountedLaps();
+                List<LapTime> _l = getListFullLaps();
                 if (_l != null && _l.Count >= _nb)
                 {
                     decimal d = _l[_nb - 1].Time.Value;
@@ -124,7 +123,7 @@ namespace Moto.Data
             get
             {
                 int _nb = 4;
-                List<LapTime> _l = getListCountedLaps();
+                List<LapTime> _l = getListFullLaps();
                 if (_l != null && _l.Count >= _nb)
                 {
                     decimal d = _l[_nb - 1].Time.Value;
@@ -134,13 +133,12 @@ namespace Moto.Data
                     return "";
             }
         }
-
         public string Lap6
         {
             get
             {
                 int _nb = 6;
-                List<LapTime> _l = getListCountedLaps();
+                List<LapTime> _l = getListFullLaps();
                 if (_l != null && _l.Count >= _nb)
                 {
                     decimal d = _l[_nb - 1].Time.Value;
@@ -155,7 +153,7 @@ namespace Moto.Data
             get
             {
                 int _nb = 7;
-                List<LapTime> _l = getListCountedLaps();
+                List<LapTime> _l = getListFullLaps();
                 if (_l != null && _l.Count >= _nb)
                 {
                     decimal d = _l[_nb - 1].Time.Value;
@@ -170,7 +168,7 @@ namespace Moto.Data
             get
             {
                 int _nb = 8;
-                List<LapTime> _l = getListCountedLaps();
+                List<LapTime> _l = getListFullLaps();
                 if (_l != null && _l.Count >= _nb)
                 {
                     decimal d = _l[_nb - 1].Time.Value;

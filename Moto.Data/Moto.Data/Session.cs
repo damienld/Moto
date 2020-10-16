@@ -22,6 +22,8 @@ namespace Moto.Data
         //public string Name { get; set; }
         public DateTime Date { get; set; }
         public string Note { get; set; }
+
+        public int? GroundTemperature { get; set; }
         public bool IsWet { get; set; }
         [Required]
         public Gp Gp { get; set; }
@@ -40,7 +42,7 @@ namespace Moto.Data
         }
         public static List<RiderSession> ReadAnalysisPdf(string _data)
         {
-            List<string> lines = _data.Replace("\r\n", "ù").Split('ù').ToList();
+            List<string> lines = _data.Replace("\r\n", "£").Split('£').ToList();
 
             lines = removeUselessLines(lines);
 
@@ -134,24 +136,19 @@ namespace Moto.Data
                     _data.RemoveAt(_index - 1);
                     _data.RemoveAt(_index - 1);
                     _data.RemoveAt(_index - 1);
-                    /*if (strToFindPilots == "Runs=")
-                    {
-                        _data.RemoveAt(_index - 1);
-                        _data.RemoveAt(_index - 1);
-                    }*/
 
-                    //read All Laps/Runs
                     int _indexNextRider = _data.FindIndex(l => l.StartsWith(strToFindPilots)) - 2;
                     TyreType? currentFrontTyreType = null;
                     TyreType? currentRearTyreType = null;
                     int? nbLapsFrontTyre = null;
                     int? nbLapsRearTyre = null;
+                    int lastIndexLap = 0;
+                    //read All Laps/Runs
                     for (int i = _index; i <= (_indexNextRider == -2 ? _data.Count - 1 : _indexNextRider); i++)
                     {
                         string _lineLap = _data.ElementAt(i - 1);
                         Console.WriteLine(_lineLap);
                         string[] _tabLineLap = _lineLap.Split(' ');
-                        //if 2nd sequence of the line contains ' (= it's a time)
                         if (_tabLineLap.Length >= 4 && _tabLineLap[0].StartsWith("Run"))
                         {//Run # 2 Front Tyre Slick-Medium Slick-Medium Rear Tyre
                             try
@@ -178,7 +175,6 @@ namespace Moto.Data
                                             Console.WriteLine("ERROR: Can't read Tyre");
                                             return null;
                                     }
-
                                 }
                                 currentFrontTyreType = tyreStrToTyreType(frontTyre);
                                 currentRearTyreType = tyreStrToTyreType(rearTyre);
@@ -215,25 +211,26 @@ namespace Moto.Data
                             {
                             }
                         }
-                        else if (_tabLineLap.Length >= 1 && _tabLineLap[1].Contains("'"))
-                        {
+                        else if (_tabLineLap.Length >= 2 && _tabLineLap[1].Contains("'"))
+                        { //if 2nd sequence of the line contains ' (= it's a time)
+                            lastIndexLap = Convert.ToInt16(_tabLineLap[0]);
                             if (nbLapsFrontTyre.HasValue)
                                 nbLapsFrontTyre += 1;
                             if (nbLapsRearTyre.HasValue)
                                 nbLapsRearTyre += 1;
                             LapTime _lapTimes = new LapTime()
                             {
-                                IndexLap = _tabLineLap[0],
+                                IndexLap = lastIndexLap,
                                 Time = null,
-                                IsCancelled = _tabLineLap[1].Contains("*") || _lineLap.Contains(" P ")
-                                || _lineLap.Contains(" * "),
+                                IsCancelled = _tabLineLap[1].Contains("*") || _lineLap.Contains(" * "),
+                                IsPitStop = _lineLap.Contains(" P "),
                                 IsUnFinished = _tabLineLap[0].ToLower() == "unfinished",
                                 FrontTyreType = currentFrontTyreType,
                                 RearTyreType = currentRearTyreType,
                                 NbLapsFrontTyre = nbLapsFrontTyre,
                                 NbLapsRearTyre = nbLapsRearTyre
                             };
-                            if (!_lapTimes.IsUnFinished && !_lapTimes.IsCancelled)
+                            if (!_lapTimes.IsUnFinished)// && !_lapTimes.IsCancelled && !_lapTimes.IsPitStop)
                             {
                                 string[] _tabTime = _tabLineLap[1].Replace('*', ' ').Replace("'", ".").Trim().Split('.');
                                 if (_tabTime.Length == 3)
@@ -246,24 +243,33 @@ namespace Moto.Data
                             _riderSession.ListLapTimes.Add(_lapTimes);
                         }
                         else
-                        {
-                            if (nbLapsFrontTyre.HasValue)
-                                nbLapsFrontTyre += 1;
-                            if (nbLapsRearTyre.HasValue)
-                                nbLapsRearTyre += 1;
-                            _riderSession.ListLapTimes.Add(new LapTime()
+                        {//IF it s NOT a time
+                            bool isUnFinished = _tabLineLap[0].ToLower() == "unfinished";
+                            if (isUnFinished)
                             {
-                                IsUnFinished = _tabLineLap[0].ToLower() == "unfinished",
-                                Time = null
-                            });
+                                _riderSession.ListLapTimes.Add(new LapTime()
+                                {
+                                    IsUnFinished = isUnFinished,
+                                    Time = null,
+                                    IndexLap = lastIndexLap
+                                });
+                                if (nbLapsFrontTyre.HasValue)
+                                    nbLapsFrontTyre += 1;
+                                if (nbLapsRearTyre.HasValue)
+                                    nbLapsRearTyre += 1;
+                            }
+                            else
+                            {
+                                Console.WriteLine($"Line not read: {_lineRider}");
+                            }
                         }
                     }
                     for (int i = 1; i <= (_indexNextRider == -1 ? _data.Count - 1 : Math.Min(_indexNextRider, _data.Count - 1)); i++)
                     {
                         _data.RemoveAt(0);
                     }
-                    _riderSession.ListLapTimes = _riderSession.ListLapTimes.Where(m => !m.IsCancelled).OrderBy(m => m.Time).ToList();
-                    _riderSession.NbFullLaps = _riderSession.getListCountedLaps().Count + "";
+                    _riderSession.ListLapTimes = _riderSession.ListLapTimes/*.Where(m => !m.IsCancelled)*/.OrderBy(m => m.Time).ToList();
+                    _riderSession.NbFullLaps = _riderSession.getListFullLaps().Count + "";
                 }
                 catch (Exception exc)
                 {
@@ -327,20 +333,24 @@ namespace Moto.Data
                         _indexNextRider = _data.FindIndex(l => l.Contains(" Runs="));
                     else
                         _indexNextRider = _data.FindIndex(l => l.EndsWith("st") || l.EndsWith("nd") || l.EndsWith("rd") || l.EndsWith("th")); //end with 1st 2nd 3rd...
-                    for (int i = _index; i <= (_indexNextRider == -1 ? _data.Count - 1 : _indexNextRider); i++)
+                    int lastIndexLap = 0;
+                    //All lines for a Rider
+                    for (int i = _index; i <= (_indexNextRider == -1 ? _data.Count - 1 : _indexNextRider-1); i++)
                     {
                         string _lineLap = _data.ElementAt(i);
                         string[] _tabLineLap = _lineLap.Split(' ');
                         if (_tabLineLap.Length >= 1)
                         {
+                            lastIndexLap = Convert.ToInt16(_tabLineLap[0]);
                             LapTime _lapTimes = new LapTime()
                             {
-                                IndexLap = _tabLineLap[0],
+                                IndexLap = lastIndexLap,
                                 Time = null,
-                                IsCancelled = _tabLineLap[1].Contains("*") || _lineLap.Contains(" P ") || _lineLap.Contains(" * "),
+                                IsCancelled = _tabLineLap[1].Contains("*")  || _lineLap.Contains(" * "),
+                                IsPitStop = _lineLap.Contains(" P "),
                                 IsUnFinished = _tabLineLap[0].ToLower() == "unfinished"
                             };
-                            if (!_lapTimes.IsUnFinished && !_lapTimes.IsCancelled)
+                            if (!_lapTimes.IsUnFinished)// && !_lapTimes.IsCancelled && !_lapTimes.IsPitStop)
                             {
                                 string[] _tabTime = _tabLineLap[1].Replace('*', ' ').Replace("'", ".").Trim().Split('.');
                                 if (_tabTime.Length == 3)
@@ -357,7 +367,8 @@ namespace Moto.Data
                             _rider.ListLapTimes.Add(new LapTime()
                             {
                                 IsUnFinished = _tabLineLap[0].ToLower() == "unfinished",
-                                Time = null
+                                Time = null,
+                                IndexLap = lastIndexLap
                             });
                         }
                     }
@@ -365,7 +376,8 @@ namespace Moto.Data
                     {
                         _data.RemoveAt(_index);
                     }
-                    _rider.ListLapTimes = _rider.ListLapTimes.Where(m => !m.IsCancelled).OrderBy(m => m.Time).ToList();
+                    //_rider.ListLapTimes = _rider.ListLapTimes.Where(m => !m.IsCancelled).OrderBy(m => m.Time).ToList();
+                    _rider.ListLapTimes = _rider.ListLapTimes.OrderBy(m => m.Time).ToList();
                 }
                 catch (Exception exc)
                 {

@@ -4,11 +4,13 @@
     public class LapTime
     {
         public long LapTimeId { get; set; }
-        public string IndexLap
+        public int IndexLap
         { get; set; }
         public decimal? Time
         { get; set; }
         public bool IsCancelled
+        { get; set; }
+        public bool IsPitStop
         { get; set; }
         public bool IsUnFinished
         { get; set; }

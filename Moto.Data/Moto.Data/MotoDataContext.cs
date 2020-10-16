@@ -9,9 +9,9 @@ namespace Moto.Data
 {
     public class MotoDataContext: DbContext
     {
-        public MotoDataContext(): base("MotoGp")//("name=MotoGpDBConnectionString")
+        public MotoDataContext(string nameDb): base(nameDb)//("name=MotoGpDBConnectionString")
         {
-            Database.SetInitializer<MotoDataContext>(new MotoDbInitializer());
+            //Database.SetInitializer<MotoDataContext>(new MotoDbInitializer());
         }
 
         public DbSet<Gp> GPs { get; set; }

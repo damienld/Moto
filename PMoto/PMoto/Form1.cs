@@ -15,8 +15,7 @@ namespace PMoto
 {
     public partial class Form1 : Form
     {
-        private Dal dal = new Dal(); //TODO IDal
-
+        
         public Color color = new Color();
         public Form1()
         {

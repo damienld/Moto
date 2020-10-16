@@ -21,27 +21,67 @@
                 <x:Type TypeName="Data:Categories"/>
             </ObjectDataProvider.MethodParameters>
         </ObjectDataProvider>
+        <ObjectDataProvider x:Key="sessionTypesEnum" MethodName="GetValues" ObjectType="{x:Type System:Enum}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="Data:SessionType"/>
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
     </Page.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"></RowDefinition>
-            <RowDefinition></RowDefinition>
+            <RowDefinition Height="60"></RowDefinition>
             <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition></ColumnDefinition>
             <ColumnDefinition></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <ComboBox Grid.Row="0" Grid.Column="0" SelectedItem="{Binding SelectedCategory}"
+        <StackPanel Grid.Row="0" Grid.Column="0" >
+            <ComboBox SelectedItem="{Binding SelectedCategory}"
                       ItemsSource="{Binding Source={StaticResource categoriesEnum}}"/>
-        <ComboBox Grid.Row="0" Grid.Column="1" SelectedItem="{Binding SelectedGp}"
+            <ComboBox SelectedItem="{Binding SelectedGp}"
                       ItemsSource="{Binding ListGpsForCategory}"/>
+        </StackPanel>
+        <ComboBox Grid.Row="0" Grid.Column="1" SelectedItem="{Binding SelectedSession}"
+                      ItemsSource="{Binding ListSessionsForGp}"/>
         <TextBox TextWrapping="Wrap" ScrollViewer.HorizontalScrollBarVisibility="Visible" ClipToBounds="True"
-                   Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Text="{Binding TextToProcess, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" AcceptsReturn="True"></TextBox>
+                   Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Text="{Binding TextToProcess, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" AcceptsReturn="True" FontSize="9"></TextBox>
         <Button Content="Process" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" HorizontalAlignment="Center" Width="Auto"
                 Command="{Binding ProcessTextCmd}"/>
-        <DataGrid Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" ItemsSource="{Binding ListRiderSessions}"
-            AutoGenerateColumns="True" SelectionMode="Single"></DataGrid>
+        <DataGrid Grid.Row="3" Grid.Column="0" ItemsSource="{Binding ListRiderSessions}" 
+                  SelectedItem="{Binding SelectedRiderSession}"
+            AutoGenerateColumns="True" SelectionMode="Single">
+            <DataGrid.Columns>
+                <DataGridTextColumn Binding="{Binding RiderName}"></DataGridTextColumn>
+                <DataGridTextColumn Binding="{Binding RiderFirstName}"></DataGridTextColumn>
+                <DataGridTextColumn Binding="{Binding NbFullLaps}"></DataGridTextColumn>
+                <DataGridTextColumn Binding="{Binding NbRuns}"></DataGridTextColumn>
+                <DataGridTextColumn Binding="{Binding AvgBest5Laps}"></DataGridTextColumn>
+                <DataGridTextColumn Binding="{Binding Lap1}"></DataGridTextColumn>
+                <DataGridTextColumn Binding="{Binding Lap2}"></DataGridTextColumn>
+                <DataGridTextColumn Binding="{Binding Lap3}"></DataGridTextColumn>
+                <DataGridTextColumn Binding="{Binding Lap4}"></DataGridTextColumn>
+                <DataGridTextColumn Binding="{Binding Lap5}"></DataGridTextColumn>
+                <DataGridTextColumn Binding="{Binding Lap6}"></DataGridTextColumn>
+                <DataGridTextColumn Binding="{Binding Lap7}"></DataGridTextColumn>
+                <DataGridTextColumn Binding="{Binding Lap8}"></DataGridTextColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+        <DataGrid Grid.Row="3" Grid.Column="1" ItemsSource="{Binding SelectedRiderSession.ListLapTimes}" 
+            AutoGenerateColumns="True" SelectionMode="Single">
+        </DataGrid>
+        <StackPanel Grid.Row="4" Grid.Column="0" Orientation="Horizontal">
+            <ComboBox SelectedItem="{Binding SessionType}"
+                      ItemsSource="{Binding Source={StaticResource sessionTypesEnum}}"/>
+            <TextBox Text="{Binding Note}" Width="150" ToolTip="Note"/>
+            <TextBox Text="{Binding GroundTemp}" Width="35" ToolTip="Note"/>
+            <TextBlock Text="°C (ground)"></TextBlock>
+            <CheckBox Content="Wet" IsChecked="{Binding IsWet}"></CheckBox>
+            <Button Content="Save Session" Command="{Binding SaveSessionCmd}"></Button>
+        </StackPanel>
+        
     </Grid>
 </Page>

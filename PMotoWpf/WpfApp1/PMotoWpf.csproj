@@ -100,9 +100,6 @@
     <Compile Include="View\UserControls\SeasonCollection.xaml.cs">
       <DependentUpon>SeasonCollection.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\UserControls\SessionInput.xaml.cs">
-      <DependentUpon>SessionInput.xaml</DependentUpon>
-    </Compile>
     <Page Include="View\AddSeasonOrGpView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -132,10 +129,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\UserControls\SeasonCollection.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\UserControls\SessionInput.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

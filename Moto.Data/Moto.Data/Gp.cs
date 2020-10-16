@@ -22,6 +22,7 @@ namespace Moto.Data
         public int GpIdInSeason { get; set; }
         public string Name { get; set; }
         public DateTime Date { get; set; }
+        public string UrlWeather { get; set; }
         public string Note { get; set; }
         [Required]
         public Season Season { get; set; }

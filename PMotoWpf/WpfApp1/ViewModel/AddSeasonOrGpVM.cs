@@ -28,7 +28,7 @@ namespace PMotoWpf.ViewModel
             set
             {
                 seasonCollection = value;
-                OnProprtyChanged();
+                NotifyPropertyChanged();
             }
         }
         public Season SelectedSeason
@@ -42,7 +42,7 @@ namespace PMotoWpf.ViewModel
                 _season = value;
                 //if (_season != null)
                 //    SelectedGp = _season.GPs.FirstOrDefault();
-                OnProprtyChanged();
+                NotifyPropertyChanged();
             }
         }
         public Gp SelectedGp
@@ -54,7 +54,7 @@ namespace PMotoWpf.ViewModel
             set
             {
                 _gp = value;
-                OnProprtyChanged();
+                NotifyPropertyChanged();
             }
         }
         public Session SelectedSession
@@ -66,15 +66,8 @@ namespace PMotoWpf.ViewModel
             set
             {
                 _session = value;
-                OnProprtyChanged();
+                NotifyPropertyChanged();
             }
-        }
-        private string urlWeather;
-
-        public string UrlWeather
-        {
-            get { return urlWeather; }
-            set { urlWeather = value; OnProprtyChanged(); }
         }
 
         #region SeasonCommands
@@ -185,17 +178,21 @@ namespace PMotoWpf.ViewModel
                 return new RelayCommand(SaveGp, true);
             }
         }
-
+        private void ResetForm()
+        {
+            SelectedGp = new Gp() { };
+        }
         private void SaveGp()
         {
             try
             {
                 Gp gp= _dal.AddGp(SelectedSeason.Year, SelectedSeason.Category, SelectedGp.GpIdInSeason
-                    , SelectedGp.Date, SelectedGp.Name);
+                    , SelectedGp.Date, SelectedGp.UrlWeather, SelectedGp.Name, SelectedGp.Note);
                 ShowMessageBox(this, new MessageEventArgs()
                 {
                     Message = $"Gp Changes are saved ! {gp}"
                 });
+                ResetForm();
             }
             catch (Exception ex)
             {

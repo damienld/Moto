@@ -14,7 +14,7 @@ namespace Moto.Data
             Db.Dispose();
         }
         public MotoDataContext Db { get; set; }
-        public Dal() => Db = new MotoDataContext();
+        public Dal(string nameDB) => Db = new MotoDataContext(nameDB);
         public ObservableCollection<Season> getAllSeasons()
         {
             return new ObservableCollection<Season>(Db.Seasons);
@@ -101,7 +101,7 @@ namespace Moto.Data
         /// <param name="category"></param>
         /// <returns>NullReferenceException if season don't exist</returns>
         public Gp AddGp(int year, Categories category, int gpIndexInSeason, DateTime date, string name
-            , string note="")
+            , string urlWeather, string note)
         {
             Season season = getSeason(year, category);
             if (season == null)
@@ -109,27 +109,30 @@ namespace Moto.Data
             Gp gp = new Gp()
             {
                 Date = date,
-                GpIdInSeason = season.GPs.Count + 1,
+                GpIdInSeason = gpIndexInSeason,
                 Name = name,
                 Season = season,
-                Note = note
+                Note = note,
+                UrlWeather = urlWeather
             };
             season.GPs.Add(gp);
             Db.SaveChanges();
             return gp;
         }
 
-        public void AddSession(Gp gp, SessionType sessionType, DateTime date, string note, bool isWet = false)
+        public void AddOrReplaceSession(Gp gp, Session session)
         {
-            gp.Sessions.Add(new Session() { Date = date, Gp = gp, IsWet = isWet, Note = note,
-                SessionType = sessionType
-            });
+            Session existingSimilarSession = gp.Sessions.FirstOrDefault(s => s.SessionType == session.SessionType);
+            if (existingSimilarSession == null)
+                gp.Sessions.Add(session);
+            else
+                existingSimilarSession = session;
             Db.SaveChanges();
         }
 
-        public void AddListRiderSession(Session session, List<RiderSession> riderSessions)
+        public void SetListRiderSession(Session session, List<RiderSession> riderSessions)
         {
-            session.RiderSessions.Concat(riderSessions);
+            session.RiderSessions = riderSessions;
             Db.SaveChanges();
         }
 

@@ -1,5 +1,6 @@
 ﻿using Moto.Data;
 using PMotoWpf.Infra;
+using PMotoWpf.View;
 using PMotoWpf.ViewModel;
 using System;
 using System.Collections.Generic;
@@ -26,10 +27,21 @@ namespace PMotoWpf
         public MainWindow()
         {
             InitializeComponent();
-            (this.DataContext as MainWindowViewModel).ShowMessageBox += delegate (object sender, EventArgs args)
+            /*(this.DataContext as MainWindowViewModel).ShowMessageBox += delegate (object sender, EventArgs args)
             {
                 MessageBox.Show(((MessageEventArgs)args).Message);
-            };
+            };*/
+            MainFrame.Navigate(new AddSeasonOrGpView());
+        }
+
+        private void MenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            MainFrame.Navigate(new AddSeasonOrGpView());
+        }
+
+        private void MenuItem_Click_1(object sender, RoutedEventArgs e)
+        {
+            MainFrame.Navigate(new AddGpSessionView());
         }
     }
 }

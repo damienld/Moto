@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,5 +19,17 @@ namespace Moto.Data
         public int Year { get; set; }
         public Categories Category { get; set; }
         public virtual ICollection<Gp> GPs { get; set; }
+        [NotMapped]
+        public string Label
+        {
+            get
+            {
+                return this.ToString();
+            }
+        }
+        public override string ToString()
+        {
+            return $"{this.SeasonId}-{this.Year}-{this.Category}";
+        }
     }
 }

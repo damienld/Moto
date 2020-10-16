@@ -8,7 +8,7 @@ namespace Moto.Data.Tests
     [TestClass]
     public class DalTests
     {
-        private Dal dal = new Dal("Moto"); //TODO IDal
+        private Dal dal = new Dal("Moto_Test"); //TODO IDal
         [TestInitialize]
         public void Init_AvantChaqueTest()
         {

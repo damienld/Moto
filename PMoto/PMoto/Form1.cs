@@ -15,7 +15,6 @@ namespace PMoto
 {
     public partial class Form1 : Form
     {
-        
         public Color color = new Color();
         public Form1()
         {

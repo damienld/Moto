@@ -63,11 +63,14 @@ namespace PMotoWpf.ViewModel
             get { return _selectedGp; }
             set
             {
-                _selectedGp = value;
-                ListSessionsForGp = new ObservableCollection<Session>(_selectedGp.Sessions);
-                if (ListSessionsForGp.Count > 0)
-                    SelectedSession = ListSessionsForGp.First();
-                NotifyPropertyChanged();
+                if (SelectedGp != null)
+                {
+                    _selectedGp = value;
+                    ListSessionsForGp = new ObservableCollection<Session>(_selectedGp.Sessions);
+                    if (ListSessionsForGp.Count > 0)
+                        SelectedSession = ListSessionsForGp.First();
+                    NotifyPropertyChanged();
+                }
             }
         }
         private ObservableCollection<Session> _listSessionsForGp;
@@ -86,9 +89,12 @@ namespace PMotoWpf.ViewModel
             get { return selectedSession; }
             set
             {
-                selectedSession = value;
-                ListRiderSessions = new ObservableCollection<RiderSession>(selectedSession.RiderSessions);
-                NotifyPropertyChanged();
+                if (selectedSession != null)
+                {
+                    selectedSession = value;
+                    ListRiderSessions = new ObservableCollection<RiderSession>(selectedSession.RiderSessions);
+                    NotifyPropertyChanged();
+                }
             }
         }
 

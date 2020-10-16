@@ -10,7 +10,7 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="AddSeasonOrGp">
     <Page.DataContext>
-        <VM:AddSeasonOrGpViewModel></VM:AddSeasonOrGpViewModel>
+        <VM:AddSeasonOrGpVM></VM:AddSeasonOrGpVM>
     </Page.DataContext>
     <Grid>
         <Grid.RowDefinitions>

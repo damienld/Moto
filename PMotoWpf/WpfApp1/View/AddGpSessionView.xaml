@@ -11,7 +11,7 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="AddSession">
     <Page.DataContext>
-        <VM:AddGpSessionViewModel></VM:AddGpSessionViewModel>
+        <VM:AddGpSessionVM></VM:AddGpSessionVM>
     </Page.DataContext>
 
     <Page.Resources>

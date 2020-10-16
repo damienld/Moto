@@ -9,10 +9,10 @@ using System.Threading.Tasks;
 
 namespace PMotoWpf.ViewModel
 {
-    public class AddGpSessionViewModel : NotificationClass
+    public class AddGpSessionVM : NotificationClass
     {
         public EventHandler ShowMessageBox = delegate { };
-        private Dal _dal = MainWindowViewModel._dal;
+        private Dal _dal = MainWindowVM._dal;
 
         private Categories selectedCategory;
         public Categories SelectedCategory { 
@@ -38,7 +38,7 @@ namespace PMotoWpf.ViewModel
             }
         }
         
-        public AddGpSessionViewModel()
+        public AddGpSessionVM()
         {
             ListGpsForCategory = new ObservableCollection<Gp>();
         }

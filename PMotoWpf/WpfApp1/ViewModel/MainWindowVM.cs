@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 
 namespace PMotoWpf.ViewModel
 {
-    public class MainWindowViewModel
+    public class MainWindowVM
     {
         public static readonly Dal _dal = new Dal();
 
         public EventHandler ShowMessageBox = delegate { };
 
-        public MainWindowViewModel()
+        public MainWindowVM()
         {
 
         }

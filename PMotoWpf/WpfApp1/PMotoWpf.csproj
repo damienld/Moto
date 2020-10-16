@@ -80,8 +80,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="ViewModel\AddGpSessionViewModel.cs" />
-    <Compile Include="ViewModel\MainWindowViewModel.cs" />
+    <Compile Include="ViewModel\AddGpSessionVM.cs" />
+    <Compile Include="ViewModel\MainWindowVM.cs" />
     <Compile Include="View\AddSeasonOrGpView.xaml.cs">
       <DependentUpon>AddSeasonOrGpView.xaml</DependentUpon>
     </Compile>
@@ -90,7 +90,7 @@
     </Compile>
     <Compile Include="Infra\RelayCommand.cs" />
     <Compile Include="Infra\Utility.cs" />
-    <Compile Include="ViewModel\AddSeasonOrGpViewModel.cs" />
+    <Compile Include="ViewModel\AddSeasonOrGpVM.cs" />
     <Compile Include="View\Page1.xaml.cs">
       <DependentUpon>Page1.xaml</DependentUpon>
     </Compile>
@@ -100,14 +100,8 @@
     <Compile Include="View\UserControls\SeasonCollection.xaml.cs">
       <DependentUpon>SeasonCollection.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\UserControls\SelectGp.xaml.cs">
-      <DependentUpon>SelectGp.xaml</DependentUpon>
-    </Compile>
     <Compile Include="View\UserControls\SessionInput.xaml.cs">
       <DependentUpon>SessionInput.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\UserControls\UserControl1.xaml.cs">
-      <DependentUpon>UserControl1.xaml</DependentUpon>
     </Compile>
     <Page Include="View\AddSeasonOrGpView.xaml">
       <SubType>Designer</SubType>
@@ -141,15 +135,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\UserControls\SelectGp.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="View\UserControls\SessionInput.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\UserControls\UserControl1.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

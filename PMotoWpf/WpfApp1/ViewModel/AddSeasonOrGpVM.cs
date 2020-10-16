@@ -9,14 +9,14 @@ using System.Threading.Tasks;
 
 namespace PMotoWpf.ViewModel
 {
-    public class AddSeasonOrGpViewModel : NotificationClass
+    public class AddSeasonOrGpVM : NotificationClass
     {
         public EventHandler ShowMessageBox = delegate { };
         private Season _season;
         private Gp _gp;
         private Session _session;
-        private Dal _dal = MainWindowViewModel._dal;
-        public AddSeasonOrGpViewModel()
+        private Dal _dal = MainWindowVM._dal;
+        public AddSeasonOrGpVM()
         {
             SeasonCollection = _dal.getAllSeasons();
         }
@@ -69,6 +69,14 @@ namespace PMotoWpf.ViewModel
                 OnProprtyChanged();
             }
         }
+        private string urlWeather;
+
+        public string UrlWeather
+        {
+            get { return urlWeather; }
+            set { urlWeather = value; OnProprtyChanged(); }
+        }
+
         #region SeasonCommands
         public RelayCommand AddSeasonCmd
         {

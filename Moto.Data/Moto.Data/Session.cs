@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Moto.Data
@@ -20,8 +23,71 @@ namespace Moto.Data
         public DateTime Date { get; set; }
         public string Note { get; set; }
         public bool IsWet { get; set; }
+        [Required]
         public Gp Gp { get; set; }
         public virtual ICollection<RiderSession> RiderSessions { get; set; }
+        [NotMapped]
+        public string Label
+        {
+            get
+            {
+                return this.ToString();
+            }
+        }
+        public override string ToString()
+        {
+            return $"{this.SessionType}-{this.Gp.Name}-{this.Gp.Season.Category}";
+        }
+        public static List<RiderSession> ReadAnalysisPdf(string _data)
+        {
+            List<string> lines = _data.Replace("\r\n", "ù").Split('ù').ToList();
+
+            lines = removeUselessLines(lines);
+
+            if (lines.FindIndex(l => l.Contains("Run #")) > -1)
+                return ReadLinesRidersAndLapsWithRunsDetails(lines);
+            else
+                return ReadLinesRidersAndLaps(lines);
+        }
+        private static List<string> removeUselessLines(List<string> _data)
+        {
+            //SortableBindingList<RiderSession> _listRiders = new SortableBindingList<RiderSession>();
+            //remove all rows till "Chronological "
+            int _index1 = _data.FindIndex(l => l.StartsWith("Chronological "));
+            for (int i = 0; i <= _index1; i++)
+            {
+                _data.RemoveAt(0);
+            }
+            //remove all interpage between rows "* Page X of X" and "TISSOT"
+            Regex _reg = new Regex(@"^.*Page [0-9] of [0-9]$");
+            int _index2 = _data.FindIndex(l => _reg.IsMatch(l));
+            while (_index2 > -1)
+            {
+                int _index3 = _data.FindIndex(l => l.Trim().ToUpper() == "TISSOT");
+                for (int i = _index2; i <= _index3; i++)
+                {
+                    _data.RemoveAt(_index2);
+                }
+                _index2 = _data.FindIndex(l => _reg.IsMatch(l));
+            }
+            //remove
+            int _index4 = _data.FindIndex(l => l.EndsWith(" Speed"));
+            while (_index4 > -1)
+            {
+                _data.RemoveAt(_index4);
+                _index4 = _data.FindIndex(l => l.EndsWith(" Speed"));
+            }
+            int _index5 = _data.FindIndex(l => (l.EndsWith(" Moto2") || l.EndsWith(" Moto3") || l.EndsWith(" MotoGP"))
+            && !l.EndsWith("Yamaha MotoGP"));
+            while (_index5 > -1)
+            {
+                _data.RemoveAt(_index5);
+                _index5 = _data.FindIndex(l => (l.EndsWith(" Moto2") || l.EndsWith(" Moto3") || l.EndsWith(" MotoGP"))
+            && !l.EndsWith("Yamaha MotoGP"));
+            }
+
+            return _data;
+        }
 
         public static List<RiderSession> ReadLinesRidersAndLapsWithRunsDetails(List<string> _data)
         {

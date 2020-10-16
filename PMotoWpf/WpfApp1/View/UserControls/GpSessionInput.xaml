@@ -1,0 +1,70 @@
+﻿<UserControl x:Class="PMotoWpf.View.GpSessionInput"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:PMotoWpf.View"
+             xmlns:System="clr-namespace:System;assembly=mscorlib"
+             xmlns:Infra="clr-namespace:PMotoWpf.Infra"
+             xmlns:Data="clr-namespace:Moto.Data;assembly=Moto.Data"
+             mc:Ignorable="d" d:DesignWidth="400" Height="124">
+    <UserControl.Resources>
+        <Style TargetType="TextBlock">
+            <Style.Setters>
+                <Setter Property="Margin" Value="3"></Setter>
+                <Setter Property="HorizontalAlignment" Value="Left"></Setter>
+            </Style.Setters>
+        </Style>
+        <Style TargetType="TextBox">
+            <Style.Setters>
+                <Setter Property="Width" Value="80"></Setter>
+                <Setter Property="Margin" Value="3"></Setter>
+            </Style.Setters>
+        </Style>
+        <Style TargetType="Button">
+            <Style.Setters>
+                <Setter Property="Margin" Value="3"></Setter>
+            </Style.Setters>
+        </Style>
+    </UserControl.Resources>
+    <Grid Margin="0,0,0,0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="1" DataContext="{Binding SelectedGp}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="45"></ColumnDefinition>
+                <ColumnDefinition Width="90"></ColumnDefinition>
+                <ColumnDefinition Width="100"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Grid.Row="0" Grid.Column="0" Text="Index"></TextBlock>
+            <TextBlock Grid.Row="0" Grid.Column="1" Text="Race"></TextBlock>
+            <TextBlock Grid.Row="0" Grid.Column="2" Text="Date"></TextBlock>
+            <TextBlock Grid.Row="0" Grid.Column="3" Text="Note"></TextBlock>
+
+            <TextBox Grid.Row="1" Grid.Column="0" Text="{Binding IdInSeason}"/>
+            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Name}" CharacterCasing="Upper"/>
+            <DatePicker Grid.Column="2" HorizontalAlignment="Left" Grid.Row="1" SelectedDate="{Binding Date}" VerticalAlignment="Top"/>
+            <TextBox Grid.Row="1" Grid.Column="3" Text="{Binding Note}" Width="150"/>
+        </Grid>
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Button Command="{Binding AddGpCmd}" Content="Add New" Grid.Column="0"></Button>
+            <Button Command="{Binding SaveGpCmd}" Content="Update" Grid.Column="1"></Button>
+            <Button Command="{Binding DeleteGpCmd}" Content="Delete" Grid.Column="2"></Button>
+        </Grid>
+    </Grid>
+</UserControl>

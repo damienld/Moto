@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 
 namespace Moto.Data
@@ -10,6 +11,7 @@ namespace Moto.Data
         {
             ListLapTimes = new List<LapTime>();
         }
+        [Required]
         public Session Session { get; set; }
         
         public int RiderSessionId { get; set; }

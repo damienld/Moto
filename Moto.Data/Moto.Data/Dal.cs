@@ -84,27 +84,39 @@ namespace Moto.Data
             && g.GpIdInSeason == gpIdInSeason);
             return gp;
         }
+        public List<Gp> getAllGp(int year, Categories category)
+        {
+            List<Gp> gps = Db.GPs.Where(g => year == g.Season.Year && category == g.Season.Category).ToList();
+            return gps;
+        }
+        public List<Gp> getAllGp(Categories category)
+        {
+            List<Gp> gps = Db.GPs.Where(g => category == g.Season.Category).OrderByDescending(g => g.Date).ToList();
+            return gps;
+        }
         /// <summary>
         /// Add the Gp (not checking if already exist).
         /// </summary>
         /// <param name="year"></param>
         /// <param name="category"></param>
         /// <returns>NullReferenceException if season don't exist</returns>
-        public void AddGp(int year, Categories category, int gpIndexInSeason, DateTime date, string name
+        public Gp AddGp(int year, Categories category, int gpIndexInSeason, DateTime date, string name
             , string note="")
         {
             Season season = getSeason(year, category);
             if (season == null)
                 throw new NullReferenceException(String.Format("No existing Season for {0} {1}", year, category));
-            season.GPs.Add(new Gp()
+            Gp gp = new Gp()
             {
                 Date = date,
                 GpIdInSeason = season.GPs.Count + 1,
                 Name = name,
                 Season = season,
                 Note = note
-            });
+            };
+            season.GPs.Add(gp);
             Db.SaveChanges();
+            return gp;
         }
 
         public void AddSession(Gp gp, SessionType sessionType, DateTime date, string note, bool isWet = false)

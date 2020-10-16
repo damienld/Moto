@@ -5,14 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:Data="clr-namespace:Moto.Data;assembly=Moto.Data" 
         x:Class="PMotoWpf.MainWindow"
-        xmlns:VM="clr-namespace:PMotoWpf.ViewModel"
-        xmlns:View="clr-namespace:PMotoWpf.View"
         mc:Ignorable="d"
         Title="MainWindow" Height="460" Width="898">
-    <Window.DataContext>
-        <VM:MainWindowViewModel></VM:MainWindowViewModel>
-    </Window.DataContext>
-
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -26,6 +20,10 @@
                 <MenuItem Header="_Save" />
                 <Separator />
                 <MenuItem Header="_Exit" />
+            </MenuItem>
+            <MenuItem Header="Add Season/Gp" Click="MenuItem_Click">
+            </MenuItem>
+            <MenuItem Header="Add Gp Session" Click="MenuItem_Click_1" >
             </MenuItem>
         </Menu>
         <DockPanel Grid.Row="2" VerticalAlignment="Bottom">
@@ -57,6 +55,7 @@
             </StatusBar>
 
         </DockPanel>
-        <View:SeasonCollection></View:SeasonCollection>
+        <Frame Grid.Row="1" Name="MainFrame" Content="Test"></Frame>
+
     </Grid>
 </Window>

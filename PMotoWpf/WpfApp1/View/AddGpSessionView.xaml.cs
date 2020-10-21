@@ -1,4 +1,6 @@
-﻿using System;
+﻿using PMotoWpf.Infra;
+using PMotoWpf.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +25,10 @@ namespace PMotoWpf.View
         public AddGpSessionView()
         {
             InitializeComponent();
+            (this.DataContext as AddGpSessionVM).ShowMessageBox += delegate (object sender, EventArgs args)
+            {
+                MessageBox.Show(((MessageEventArgs)args).Message);
+            };
         }
     }
 }

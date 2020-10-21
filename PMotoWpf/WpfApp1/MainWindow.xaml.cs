@@ -24,6 +24,8 @@ namespace PMotoWpf
     /// </summary>
     public partial class MainWindow : Window
     {
+        private readonly AddSeasonOrGpView AddSeasonOrGpView = new AddSeasonOrGpView();
+        private readonly AddGpSessionView AddGpSessionView = new AddGpSessionView();
         public MainWindow()
         {
             InitializeComponent();
@@ -31,17 +33,17 @@ namespace PMotoWpf
             {
                 MessageBox.Show(((MessageEventArgs)args).Message);
             };*/
-            MainFrame.Navigate(new AddSeasonOrGpView());
+            MainFrame.Navigate(AddGpSessionView);
         }
 
         private void MenuItem_Click(object sender, RoutedEventArgs e)
         {
-            MainFrame.Navigate(new AddSeasonOrGpView());
+            MainFrame.Navigate(AddSeasonOrGpView);
         }
 
         private void MenuItem_Click_1(object sender, RoutedEventArgs e)
         {
-            MainFrame.Navigate(new AddGpSessionView());
+            MainFrame.Navigate(AddGpSessionView);
         }
     }
 }

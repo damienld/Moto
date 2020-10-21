@@ -11,6 +11,11 @@ namespace PMotoWpf.ViewModel
 {
     public class AddGpSessionVM : NotificationClass
     {
+        public AddGpSessionVM()
+        {
+            ListSessionsForGp = new ObservableCollection<Session>();
+        }
+
         public EventHandler ShowMessageBox = delegate { };
         private Dal _dal = MainWindowVM._dal;
 
@@ -47,7 +52,7 @@ namespace PMotoWpf.ViewModel
                 NotifyPropertyChanged();
             }
         }
-        private ObservableCollection<Gp> _listGpsForCategory;
+        private ObservableCollection<Gp> _listGpsForCategory = new ObservableCollection<Gp>();
         public ObservableCollection<Gp> ListGpsForCategory
         {
             get { return _listGpsForCategory; }
@@ -63,17 +68,17 @@ namespace PMotoWpf.ViewModel
             get { return _selectedGp; }
             set
             {
-                if (SelectedGp != null)
+                if (value != null)
                 {
                     _selectedGp = value;
-                    ListSessionsForGp = new ObservableCollection<Session>(_selectedGp.Sessions);
+                    ListSessionsForGp = new ObservableCollection<Session>(_dal.GetGpSessions(_selectedGp));
                     if (ListSessionsForGp.Count > 0)
                         SelectedSession = ListSessionsForGp.First();
                     NotifyPropertyChanged();
                 }
             }
         }
-        private ObservableCollection<Session> _listSessionsForGp;
+        private ObservableCollection<Session> _listSessionsForGp = new ObservableCollection<Session>();
         public ObservableCollection<Session> ListSessionsForGp
         {
             get { return _listSessionsForGp; }
@@ -89,20 +94,19 @@ namespace PMotoWpf.ViewModel
             get { return selectedSession; }
             set
             {
-                if (selectedSession != null)
+                if (value != null)
                 {
                     selectedSession = value;
                     ListRiderSessions = new ObservableCollection<RiderSession>(selectedSession.RiderSessions);
+                    Note = selectedSession.Note;
+                    IsWet = selectedSession.IsWet;
+                    GroundTemp = selectedSession.GroundTemperature;
+                    SessionType = selectedSession.SessionType;
                     NotifyPropertyChanged();
                 }
             }
         }
 
-        public AddGpSessionVM()
-        {
-            ListGpsForCategory = new ObservableCollection<Gp>();
-            ListSessionsForGp = new ObservableCollection<Session>();
-        }
         private void ResetForm()
         {
             TextToProcess = "";
@@ -168,6 +172,27 @@ namespace PMotoWpf.ViewModel
             {
                 ListRiderSessions = new ObservableCollection<RiderSession>
                     (Session.ReadAnalysisPdf(TextToProcess));
+                if (TextToProcess.ToLower().Contains("Free Practice Nr. 1".ToLower()))
+                    SessionType = SessionType.FP1;
+                else if (TextToProcess.ToLower().Contains("Free Practice Nr. 2".ToLower()))
+                    SessionType = SessionType.FP2;
+                else if (TextToProcess.ToLower().Contains("Free Practice Nr. 3".ToLower()))
+                    SessionType = SessionType.FP3;
+                else if (TextToProcess.ToLower().Contains("Free Practice Nr. 4".ToLower()))
+                    SessionType = SessionType.FP4;
+                else if (TextToProcess.ToLower().Contains("Qualifying Nr. 1".ToLower()))
+                    SessionType = SessionType.Q1;
+                else if (TextToProcess.ToLower().Contains("Qualifying Nr. 2".ToLower()))
+                    SessionType = SessionType.Q2;
+                else if (TextToProcess.ToLower().Contains("Warm Up".ToLower()))
+                    SessionType = SessionType.WUP;
+                else if (TextToProcess.ToLower().Contains("Race 2".ToLower()))
+                    SessionType = SessionType.Race2;
+                else if (TextToProcess.ToLower().Contains("Race".ToLower()))
+                    SessionType = SessionType.Race;
+                Note = "";
+                isWet = false;
+                GroundTemp = null;
             }
             catch (Exception ex)
             {
@@ -202,11 +227,13 @@ namespace PMotoWpf.ViewModel
                     return;
                 }
                 Session session = new Session() { Gp = SelectedGp, IsWet = IsWet, Note = Note
-                    , Date = SelectedGp.Date, GroundTemperature = GroundTemp };
+                    , Date = SelectedGp.Date, GroundTemperature = GroundTemp, SessionType = SessionType
+                };
                 _dal.AddOrReplaceSession(SelectedGp, session);
                 SelectedGp.NotifyPropertyChanged();
                 _dal.SetListRiderSession(session, ListRiderSessions.ToList());
                 ResetForm();
+                Note = $"<{SessionType} saved>";
             }
             catch (Exception ex)
             {

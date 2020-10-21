@@ -56,6 +56,7 @@ namespace Moto.Data
                 Db.SaveChanges();
             return listNewSeasons;
         }
+
         
         /// <summary>
         /// Add the season if it exists into the DB, else return the existing season.
@@ -94,6 +95,16 @@ namespace Moto.Data
             List<Gp> gps = Db.GPs.Where(g => category == g.Season.Category).OrderByDescending(g => g.Date).ToList();
             return gps;
         }
+        public List<Session> GetGpSessions(Gp selectedGp)
+        {
+            if (selectedGp != null)
+            {
+                List<Session> list = Db.Sessions.Where(g => g.Gp.GpId == selectedGp.GpId).ToList();
+                return list;
+            }
+            else return new List<Session>();
+        }
+
         /// <summary>
         /// Add the Gp (not checking if already exist).
         /// </summary>

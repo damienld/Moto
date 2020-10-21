@@ -24,11 +24,18 @@ namespace Moto.Data
         { get; set; }
         public string RiderNumber
         { get; set; }
-        public string NbFullLaps
+        private int? nbFullLaps;
+        public int? NbFullLaps
+        { get => getListFullLaps().Count;
+
+            set
+            {
+                nbFullLaps = value;
+            }
+        }
+        public int? NbRuns
         { get; set; }
-        public string NbRuns
-        { get; set; }
-        public string NbLaps
+        public int? NbLaps
         { get; set; }
         public virtual ICollection<LapTime> ListLapTimes
         { get; set; }
@@ -38,14 +45,14 @@ namespace Moto.Data
             List<LapTime> _CountedLaps = getListFullLaps();
             if (_CountedLaps == null || _CountedLaps.Count < aNbLaps)
                 return null;
-            return _CountedLaps.GetRange(0, aNbLaps);
+            return _CountedLaps.OrderBy(l =>l.Time).ToList().GetRange(0, aNbLaps);
         }
         public List<LapTime> getListFullLaps()
         {
             if (ListLapTimes == null)
-                return null;
+                return new List<LapTime>();
             return ListLapTimes.Where(m => !m.IsUnFinished && !m.IsCancelled
-            && !m.IsPitStop && m.Time != null).ToList();
+            && !m.IsPitStop && m.Time != null && m.Time > 0).ToList();
         }
         public decimal AvgBest5Laps
         {
@@ -63,7 +70,7 @@ namespace Moto.Data
             get
             {
                 int _nb = 1;
-                List<LapTime> _l = getListFullLaps();
+                List<LapTime> _l = getListFullLaps().OrderBy(l => l.Time).ToList();
                 if (_l != null && _l.Count >= _nb)
                 {
                     decimal d = _l[_nb-1].Time.Value;
@@ -78,7 +85,7 @@ namespace Moto.Data
             get
             {
                 int _nb = 2;
-                List<LapTime> _l = getListFullLaps();
+                List<LapTime> _l = getListFullLaps().OrderBy(l => l.Time).ToList();
                 if (_l != null && _l.Count >= _nb)
                 {
                     decimal d = _l[_nb - 1].Time.Value;
@@ -93,7 +100,7 @@ namespace Moto.Data
             get
             {
                 int _nb = 3;
-                List<LapTime> _l = getListFullLaps();
+                List<LapTime> _l = getListFullLaps().OrderBy(l => l.Time).ToList();
                 if (_l != null && _l.Count >= _nb)
                 {
                     decimal d = _l[_nb - 1].Time.Value;
@@ -108,7 +115,7 @@ namespace Moto.Data
             get
             {
                 int _nb = 4;
-                List<LapTime> _l = getListFullLaps();
+                List<LapTime> _l = getListFullLaps().OrderBy(l => l.Time).ToList();
                 if (_l != null && _l.Count >= _nb)
                 {
                     decimal d = _l[_nb - 1].Time.Value;
@@ -122,8 +129,8 @@ namespace Moto.Data
         {
             get
             {
-                int _nb = 4;
-                List<LapTime> _l = getListFullLaps();
+                int _nb = 5;
+                List<LapTime> _l = getListFullLaps().OrderBy(l => l.Time).ToList();
                 if (_l != null && _l.Count >= _nb)
                 {
                     decimal d = _l[_nb - 1].Time.Value;
@@ -138,7 +145,7 @@ namespace Moto.Data
             get
             {
                 int _nb = 6;
-                List<LapTime> _l = getListFullLaps();
+                List<LapTime> _l = getListFullLaps().OrderBy(l => l.Time).ToList();
                 if (_l != null && _l.Count >= _nb)
                 {
                     decimal d = _l[_nb - 1].Time.Value;
@@ -153,7 +160,7 @@ namespace Moto.Data
             get
             {
                 int _nb = 7;
-                List<LapTime> _l = getListFullLaps();
+                List<LapTime> _l = getListFullLaps().OrderBy(l => l.Time).ToList();
                 if (_l != null && _l.Count >= _nb)
                 {
                     decimal d = _l[_nb - 1].Time.Value;
@@ -168,7 +175,7 @@ namespace Moto.Data
             get
             {
                 int _nb = 8;
-                List<LapTime> _l = getListFullLaps();
+                List<LapTime> _l = getListFullLaps().OrderBy(l => l.Time).ToList();
                 if (_l != null && _l.Count >= _nb)
                 {
                     decimal d = _l[_nb - 1].Time.Value;

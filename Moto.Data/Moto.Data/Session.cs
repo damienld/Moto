@@ -120,24 +120,28 @@ namespace Moto.Data
                     if (_index >= 0)
                         _riderSession.RiderNumber = _data.ElementAt(_index - 1/*NEW was index*/).Split(' ')[0];
                     string _linelapDetails = _data.ElementAt(_index + 1);
-                    string[] _tabLapDetails = _linelapDetails.Split(' ');
-                    string _strFullLaps = _tabLapDetails[_tabLine.Length];
-                    string _strNbLaps = _tabLapDetails[_tabLine.Length - 2];
-                    string _strNbRuns = _tabLapDetails[_tabLine.Length - 4];
-                    _riderSession.NbFullLaps = _strFullLaps
-                        .Substring(_strFullLaps.IndexOf("=") + 1, _strFullLaps.Length - 1 - _strFullLaps.IndexOf("="));
-                    _riderSession.NbLaps = _strNbLaps
-                        .Substring(_strNbLaps.IndexOf("=") + 1, _strNbLaps.Length - 1 - _strNbLaps.IndexOf("="));
-                    _riderSession.NbRuns = _strNbRuns
-                        .Substring(_strNbRuns.IndexOf("=") + 1, _strNbRuns.Length - 1 - _strNbRuns.IndexOf("="));
-
+                    if (_linelapDetails.StartsWith("Runs="))
+                    {
+                        string[] _tabLapDetails = _linelapDetails.Split(' ');
+                        string _strFullLaps = _tabLapDetails[_tabLine.Length];
+                        string _strNbLaps = _tabLapDetails[_tabLine.Length - 2];
+                        string _strNbRuns = _tabLapDetails[_tabLine.Length - 4];
+                        _riderSession.NbFullLaps = Convert.ToInt16(_strFullLaps
+                            .Substring(_strFullLaps.IndexOf("=") + 1, _strFullLaps.Length - 1 - _strFullLaps.IndexOf("=")));
+                        _riderSession.NbLaps = Convert.ToInt16(_strNbLaps
+                            .Substring(_strNbLaps.IndexOf("=") + 1, _strNbLaps.Length - 1 - _strNbLaps.IndexOf("=")));
+                        _riderSession.NbRuns = Convert.ToInt16(_strNbRuns
+                            .Substring(_strNbRuns.IndexOf("=") + 1, _strNbRuns.Length - 1 - _strNbRuns.IndexOf("=")));
+                    }
                     _listRiders.Add(_riderSession);
-                    _data.RemoveAt(_index - 1);
-                    _data.RemoveAt(_index - 1);
-                    _data.RemoveAt(_index - 1);
-                    _data.RemoveAt(_index - 1);
+                    for (int i = 0; i < 4; i++)
+                    {
+                        string line = _data.ElementAt(_index - 1);
+                        if (!line.StartsWith("Run"))
+                            _data.RemoveAt(_index - 1);
+                    }
 
-                    int _indexNextRider = _data.FindIndex(l => l.StartsWith(strToFindPilots)) - 2;
+                    int _indexNextRider = _data.FindIndex(2, l => l.StartsWith(strToFindPilots)) - 2;
                     TyreType? currentFrontTyreType = null;
                     TyreType? currentRearTyreType = null;
                     int? nbLapsFrontTyre = null;
@@ -268,8 +272,8 @@ namespace Moto.Data
                     {
                         _data.RemoveAt(0);
                     }
-                    _riderSession.ListLapTimes = _riderSession.ListLapTimes/*.Where(m => !m.IsCancelled)*/.OrderBy(m => m.Time).ToList();
-                    _riderSession.NbFullLaps = _riderSession.getListFullLaps().Count + "";
+                    //_riderSession.ListLapTimes = _riderSession.ListLapTimes/*.Where(m => !m.IsCancelled)*/.OrderBy(m => m.Time).ToList();
+                    _riderSession.NbFullLaps = _riderSession.getListFullLaps().Count;
                 }
                 catch (Exception exc)
                 {
@@ -317,12 +321,12 @@ namespace Moto.Data
                         _strFullLaps = _tabLine[_tabLine.Length - 1];
                         _strNbLaps = _tabLine[_tabLine.Length - 3];
                         _strNbRuns = _tabLine[_tabLine.Length - 5];
-                        _rider.NbFullLaps = _strFullLaps.Substring(_strFullLaps.IndexOf("=") + 1
-                              , _strFullLaps.Length - 1 - _strFullLaps.IndexOf("="));
-                        _rider.NbLaps = _strNbLaps.Substring(_strNbLaps.IndexOf("=") + 1
-                              , _strNbLaps.Length - 1 - _strNbLaps.IndexOf("="));
-                        _rider.NbRuns = _strNbRuns.Substring(_strNbRuns.IndexOf("=") + 1
-                              , _strNbRuns.Length - 1 - _strNbRuns.IndexOf("="));
+                        _rider.NbFullLaps = Convert.ToInt16(_strFullLaps.Substring(_strFullLaps.IndexOf("=") + 1
+                              , _strFullLaps.Length - 1 - _strFullLaps.IndexOf("=")));
+                        _rider.NbLaps = Convert.ToInt16(_strNbLaps.Substring(_strNbLaps.IndexOf("=") + 1
+                              , _strNbLaps.Length - 1 - _strNbLaps.IndexOf("=")));
+                        _rider.NbRuns = Convert.ToInt16(_strNbRuns.Substring(_strNbRuns.IndexOf("=") + 1
+                              , _strNbRuns.Length - 1 - _strNbRuns.IndexOf("=")));
                     }
                     rankRider += 1;
                     _listRiders.Add(_rider);
@@ -377,7 +381,7 @@ namespace Moto.Data
                         _data.RemoveAt(_index);
                     }
                     //_rider.ListLapTimes = _rider.ListLapTimes.Where(m => !m.IsCancelled).OrderBy(m => m.Time).ToList();
-                    _rider.ListLapTimes = _rider.ListLapTimes.OrderBy(m => m.Time).ToList();
+                   // _rider.ListLapTimes = _rider.ListLapTimes.OrderBy(m => m.Time).ToList();
                 }
                 catch (Exception exc)
                 {

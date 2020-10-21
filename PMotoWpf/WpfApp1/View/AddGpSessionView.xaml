@@ -4,9 +4,10 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:System="clr-namespace:System;assembly=mscorlib"
-             xmlns:local="clr-namespace:PMotoWpf.View"
+      xmlns:local="clr-namespace:PMotoWpf.View"
       xmlns:Data="clr-namespace:Moto.Data;assembly=Moto.Data"
       xmlns:VM="clr-namespace:PMotoWpf.ViewModel"
+      xmlns:Converters="clr-namespace:PMotoWpf.Converters"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="AddSession">
@@ -15,6 +16,15 @@
     </Page.DataContext>
 
     <Page.Resources>
+        <Converters:LapTimeToBackgroundConverter x:Key="LapTimeToBackgroundConverter"/>
+        <Converters:LapTimeToForegroundConverter x:Key="LapTimeToForegroundConverter"/>
+        <Style x:Key="LapTimeStyle" TargetType="TextBlock">
+            <Setter Property="Foreground" 
+              Value="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGridRow}}, 
+                     
+                Path=Item, 
+                Converter={StaticResource LapTimeToForegroundConverter}}" />
+        </Style>
         <!--Enum categoriesEnum-->
         <ObjectDataProvider x:Key="categoriesEnum" MethodName="GetValues" ObjectType="{x:Type System:Enum}">
             <ObjectDataProvider.MethodParameters>
@@ -51,15 +61,16 @@
                    Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Text="{Binding TextToProcess, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" AcceptsReturn="True" FontSize="9"></TextBox>
         <Button Content="Process" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" HorizontalAlignment="Center" Width="Auto"
                 Command="{Binding ProcessTextCmd}"/>
-        <DataGrid Grid.Row="3" Grid.Column="0" ItemsSource="{Binding ListRiderSessions}" 
-                  SelectedItem="{Binding SelectedRiderSession}"
-            AutoGenerateColumns="True" SelectionMode="Single">
+        <StackPanel Orientation="Horizontal" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" ClipToBounds="True" Width="Auto">
+            <DataGrid  ItemsSource="{Binding ListRiderSessions}" CanUserAddRows="False"
+                  SelectedItem="{Binding SelectedRiderSession}" AutoGenerateColumns="False"
+            SelectionMode="Single">
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding RiderName}"></DataGridTextColumn>
                 <DataGridTextColumn Binding="{Binding RiderFirstName}"></DataGridTextColumn>
-                <DataGridTextColumn Binding="{Binding NbFullLaps}"></DataGridTextColumn>
+                <DataGridTextColumn Binding="{Binding NbFullLaps}" Header="NbFull"></DataGridTextColumn>
                 <DataGridTextColumn Binding="{Binding NbRuns}"></DataGridTextColumn>
-                <DataGridTextColumn Binding="{Binding AvgBest5Laps}"></DataGridTextColumn>
+                <DataGridTextColumn Binding="{Binding AvgBest5Laps}" Header="Avg Best5"></DataGridTextColumn>
                 <DataGridTextColumn Binding="{Binding Lap1}"></DataGridTextColumn>
                 <DataGridTextColumn Binding="{Binding Lap2}"></DataGridTextColumn>
                 <DataGridTextColumn Binding="{Binding Lap3}"></DataGridTextColumn>
@@ -70,14 +81,33 @@
                 <DataGridTextColumn Binding="{Binding Lap8}"></DataGridTextColumn>
             </DataGrid.Columns>
         </DataGrid>
-        <DataGrid Grid.Row="3" Grid.Column="1" ItemsSource="{Binding SelectedRiderSession.ListLapTimes}" 
-            AutoGenerateColumns="True" SelectionMode="Single">
+            <Separator Margin="2"></Separator>
+            <DataGrid  ItemsSource="{Binding SelectedRiderSession.ListLapTimes}" 
+            SelectionMode="Single" AutoGenerateColumns="False" CanUserAddRows="False" >
+            <DataGrid.RowStyle>
+                <Style TargetType="DataGridRow">
+                    <Setter Property="Background" Value="{Binding RelativeSource={RelativeSource Self},
+                    Path=Item, Converter={StaticResource LapTimeToBackgroundConverter}}"/>
+                </Style>
+            </DataGrid.RowStyle>
+            <DataGrid.Columns>
+                <DataGridTextColumn Binding="{Binding IndexLap}"></DataGridTextColumn>
+                <DataGridTextColumn Binding="{Binding Time, StringFormat=\{0:F1\}}" ElementStyle="{StaticResource LapTimeStyle}" Header="Time" FontWeight="Bold"></DataGridTextColumn>
+                <DataGridCheckBoxColumn Binding="{Binding IsCancelled}" Width="Auto" Header="Canc."></DataGridCheckBoxColumn>
+                <DataGridCheckBoxColumn Binding="{Binding IsPitStop}" Width="Auto" Header="pit"></DataGridCheckBoxColumn>
+                <DataGridCheckBoxColumn Binding="{Binding IsUnFinished}" Width="Auto" Header="ab."></DataGridCheckBoxColumn>
+                <DataGridTextColumn Binding="{Binding FrontTyreType}" Header="Front"></DataGridTextColumn>
+                <DataGridTextColumn Binding="{Binding NbLapsFrontTyre}" Header="Lap"></DataGridTextColumn>
+                <DataGridTextColumn Binding="{Binding RearTyreType}" Header="Rear"></DataGridTextColumn>
+                <DataGridTextColumn Binding="{Binding NbLapsRearTyre}" Header="Lap"></DataGridTextColumn>
+            </DataGrid.Columns>
         </DataGrid>
+        </StackPanel>
         <StackPanel Grid.Row="4" Grid.Column="0" Orientation="Horizontal">
             <ComboBox SelectedItem="{Binding SessionType}"
                       ItemsSource="{Binding Source={StaticResource sessionTypesEnum}}"/>
             <TextBox Text="{Binding Note}" Width="150" ToolTip="Note"/>
-            <TextBox Text="{Binding GroundTemp}" Width="35" ToolTip="Note"/>
+            <TextBox Text="{Binding GroundTemp}" Width="35"/>
             <TextBlock Text="°C (ground)"></TextBlock>
             <CheckBox Content="Wet" IsChecked="{Binding IsWet}"></CheckBox>
             <Button Content="Save Session" Command="{Binding SaveSessionCmd}"></Button>

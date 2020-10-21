@@ -148,7 +148,7 @@ namespace Moto.Data
                     int? nbLapsRearTyre = null;
                     int lastIndexLap = 0;
                     //read All Laps/Runs
-                    for (int i = _index; i <= (_indexNextRider == -2 ? _data.Count - 1 : _indexNextRider); i++)
+                    for (int i = _index; i <= (_indexNextRider <= -2 ? _data.Count : _indexNextRider); i++)
                     {
                         string _lineLap = _data.ElementAt(i - 1);
                         Console.WriteLine(_lineLap);
@@ -268,7 +268,7 @@ namespace Moto.Data
                             }
                         }
                     }
-                    for (int i = 1; i <= (_indexNextRider == -1 ? _data.Count - 1 : Math.Min(_indexNextRider, _data.Count - 1)); i++)
+                    for (int i = 1; i <= (_indexNextRider == -1 ? _data.Count - 1 : /*Math.Min(*/_indexNextRider/*, _data.Count - 1)*/); i++)
                     {
                         _data.RemoveAt(0);
                     }

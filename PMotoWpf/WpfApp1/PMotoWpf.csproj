@@ -82,6 +82,8 @@
     </ApplicationDefinition>
     <Compile Include="Converters\LapTimeToBackgroundConverter.cs" />
     <Compile Include="Converters\LapTimeToForegroundConverter.cs" />
+    <Compile Include="Infra\EventArgs.cs" />
+    <Compile Include="Infra\EventRaiser.cs" />
     <Compile Include="ViewModel\AddGpSessionVM.cs" />
     <Compile Include="ViewModel\MainWindowVM.cs" />
     <Compile Include="View\AddSeasonOrGpView.xaml.cs">

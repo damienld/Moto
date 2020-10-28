@@ -75,7 +75,7 @@ namespace PMotoWpf.ViewModel
         {
             get
             {
-                return new RelayCommand(AddSeason, canAddSeason());
+                return new RelayCommand(x => AddSeason(), x => canAddSeason());
             }
         }
         private bool canAddSeason()
@@ -101,7 +101,7 @@ namespace PMotoWpf.ViewModel
         {
             get
             {
-                return new RelayCommand(SaveSeason, true);
+                return new RelayCommand(x => SaveSeason(), x=>true);
             }
         }
 
@@ -130,7 +130,7 @@ namespace PMotoWpf.ViewModel
         {
             get
             {
-                return new RelayCommand(DeleteSeason, canDeleteSeason());
+                return new RelayCommand(x => DeleteSeason(), x => canDeleteSeason());
             }
         }
 
@@ -149,7 +149,7 @@ namespace PMotoWpf.ViewModel
         {
             get
             {
-                return new RelayCommand(AddGp, canAddGp());
+                return new RelayCommand(x => AddGp(), x => canAddGp());
             }
         }
         private bool canAddGp()
@@ -175,7 +175,7 @@ namespace PMotoWpf.ViewModel
         {
             get
             {
-                return new RelayCommand(SaveGp, true);
+                return new RelayCommand(x => SaveGp(), x => true);
             }
         }
         private void ResetForm()
@@ -187,7 +187,7 @@ namespace PMotoWpf.ViewModel
             try
             {
                 Gp gp= _dal.AddGp(SelectedSeason.Year, SelectedSeason.Category, SelectedGp.GpIdInSeason
-                    , SelectedGp.Date, SelectedGp.UrlWeather, SelectedGp.Name, SelectedGp.Note);
+                    , SelectedGp.Date, SelectedGp.Name, SelectedGp.UrlWeather, SelectedGp.Note);
                 ShowMessageBox(this, new MessageEventArgs()
                 {
                     Message = $"Gp Changes are saved ! {gp}"
@@ -208,7 +208,7 @@ namespace PMotoWpf.ViewModel
         {
             get
             {
-                return new RelayCommand(DeleteGp, canDeleteGp());
+                return new RelayCommand(x => DeleteGp(), x => canDeleteGp());
             }
         }
 

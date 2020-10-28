@@ -155,7 +155,7 @@ namespace PMotoWpf.ViewModel
         {
             get
             {
-                return new RelayCommand(ProcessText, canProcessText());
+                return new RelayCommand(x=>ProcessText());
             }
         }
         private bool canProcessText()
@@ -207,7 +207,7 @@ namespace PMotoWpf.ViewModel
         {
             get
             {
-                return new RelayCommand(SaveSession, canSaveSession());
+                return new RelayCommand(x=>SaveSession(), x=>canSaveSession());
             }
         }
         private bool canSaveSession()

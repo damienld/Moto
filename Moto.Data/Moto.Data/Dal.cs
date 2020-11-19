@@ -14,7 +14,8 @@ namespace Moto.Data
             Db.Dispose();
         }
         public MotoDataContext Db { get; set; }
-        public Dal(string nameDB) => Db = new MotoDataContext(nameDB);
+        //public Dal(string nameDB/*="MotoGp"*/, bool isConnectionString) => Db = new MotoDataContext(nameDB);
+        public Dal(string connectionString) => Db = new MotoDataContext(connectionString);
         public ObservableCollection<Season> getAllSeasons()
         {
             return new ObservableCollection<Season>(Db.Seasons);
@@ -95,6 +96,12 @@ namespace Moto.Data
             List<Gp> gps = Db.GPs.Where(g => category == g.Season.Category).OrderByDescending(g => g.Date).ToList();
             return gps;
         }
+        public List<Gp> getAllGp()
+        {
+            List<Gp> gps = Db.GPs.OrderByDescending(g => g.Date)
+                .ThenByDescending(g => g.Season.Category).ToList();
+            return gps;
+        }
         public List<Session> GetGpSessions(Gp selectedGp)
         {
             if (selectedGp != null)
@@ -103,6 +110,19 @@ namespace Moto.Data
                 return list;
             }
             else return new List<Session>();
+        }
+        public RiderSession GetRiderSession(int riderSessionId)
+        {
+            return Db.RiderSessions.FirstOrDefault(g => g.RiderSessionId == riderSessionId);
+        }
+        public List<RiderSession> GetRiderSessions (int sessionId)
+        {
+            return Db.RiderSessions.Where(g => g.Session.SessionId == sessionId).ToList();
+        }
+        public List<Session> GetGpSessions(int gpId)
+        {
+            List<Session> list = Db.Sessions.Where(g => g.Gp.GpId == gpId).ToList();
+            return list;
         }
 
         /// <summary>

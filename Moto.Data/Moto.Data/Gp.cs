@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -19,13 +20,16 @@ namespace Moto.Data
         }
 
         public long GpId { get; set; }
+        [Description("Id")]
         public int GpIdInSeason { get; set; }
+        [Description("GP")]
         public string Name { get; set; }
+        [DisplayFormat(DataFormatString = "{0:d}")]
         public DateTime Date { get; set; }
         public string UrlWeather { get; set; }
         public string Note { get; set; }
         [Required]
-        public Season Season { get; set; }
+        public virtual Season Season { get; set; }
         public virtual ICollection<Session> Sessions { get; set; }
         [NotMapped]
         public string Label
@@ -37,7 +41,7 @@ namespace Moto.Data
         }
         public override string ToString()
         {
-            return $"{this.GpIdInSeason}-{this.Name}-{this.Date}-{this.Season.Category}";
+            return $"{this.GpIdInSeason}-{this.Name}-{this.Date}";// -{this.Season.Category}";
         }
 
     }

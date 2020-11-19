@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -17,16 +18,18 @@ namespace Moto.Data
         {
             RiderSessions = new ObservableCollection<RiderSession>();
         }
+        [Description("Session")]
         public SessionType SessionType { get; set; }
         public long SessionId { get; set; }
         //public string Name { get; set; }
         public DateTime Date { get; set; }
         public string Note { get; set; }
-
+        [Description("Ground(°C)")]
         public int? GroundTemperature { get; set; }
+        [Description("Wet")]
         public bool IsWet { get; set; }
         [Required]
-        public Gp Gp { get; set; }
+        public virtual Gp Gp { get; set; }
         public virtual ICollection<RiderSession> RiderSessions { get; set; }
         [NotMapped]
         public string Label
@@ -164,17 +167,17 @@ namespace Moto.Data
                                     switch (tyreStr.ToLower())
                                     {
                                         case "slick-medium":
-                                            return TyreType.SlickMedium;
+                                            return TyreType.Medium;
                                         case "slick-hard":
-                                            return TyreType.SlickHard;
+                                            return TyreType.Hard;
                                         case "slick-soft":
-                                            return TyreType.SlickSoft;
+                                            return TyreType.Soft;
                                         case "wet-medium":
-                                            return TyreType.WetMedium;
+                                            return TyreType.MediumWet;
                                         case "wet-hard":
-                                            return TyreType.WetHard;
+                                            return TyreType.HardWet;
                                         case "wet-soft":
-                                            return TyreType.WetSoft;
+                                            return TyreType.SoftWet;
                                         default:
                                             Console.WriteLine("ERROR: Can't read Tyre");
                                             return null;

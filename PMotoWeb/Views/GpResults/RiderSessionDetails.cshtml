@@ -1,0 +1,123 @@
+﻿@model Moto.Data.RiderSession
+
+<br />
+@if (Model.Session.Gp.Season.Category == Moto.Data.Categories.c500)
+{
+<div>
+    Only min. Tyres: Front
+    <select id="filterTyreFront" onchange="filterTyre()" class="mdb-select md-form colorful-select">
+        <option value=0 selected>0</option>
+        <option value=2>2</option>
+        <option value=4>4</option>
+        <option value=6>6</option>
+        <option value=8>8</option>
+        <option value=10>10</option>
+        <option value=12>12</option>
+        <option value=14>14</option>
+        <option value=16>16</option>
+        <option value=18>18</option>
+    </select>
+    l. Rear
+    <select id="filterTyreRear" onchange="filterTyre()" class="mdb-select md-form colorful-select">
+        <option value=0 selected>0</option>
+        <option value=2>2</option>
+        <option value=4>4</option>
+        <option value=6>6</option>
+        <option value=8>8</option>
+        <option value=10>10</option>
+        <option value=12>12</option>
+        <option value=14>14</option>
+        <option value=16>16</option>
+        <option value=18>18</option>
+    </select>
+    l.
+</div>
+}
+else
+{
+<div>
+    Only min. Tyres: 
+    <select id="filterTyreFront" onchange="filterTyre()" class="mdb-select md-form colorful-select">
+        <option value=0 selected>0</option>
+        <option value=2>2</option>
+        <option value=4>4</option>
+        <option value=6>6</option>
+        <option value=8>8</option>
+        <option value=10>10</option>
+        <option value=12>12</option>
+        <option value=14>14</option>
+        <option value=16>16</option>
+        <option value=18>18</option>
+    </select>
+    laps
+    <select id="filterTyreRear" onchange="filterTyre()" class="mdb-select md-form colorful-select invisible">
+        <option value=0 selected>0</option>
+    </select>
+</div>
+}
+<script type="text/javascript">
+    function filterTyre() {
+        //select = $("#filterTyreFront");
+        var filterRear = $("#filterTyreRear").val();
+        var filterFront = $("#filterTyreFront").val();
+        $("#listLapsForRider tr").filter(function () {//for all <tr>
+            var rowValueFront = parseInt($(this).find("#lapsFrontTyre").text());
+            var rowValueRear = parseInt($(this).find("#lapsRearTyre").text());
+            
+        $(this).toggle(rowValueFront >= filterFront && rowValueRear >= filterRear);
+        });
+    }
+    $('#listLapsForRider').bootstrapTable();
+</script>
+<div>Lap Times for <strong>@Model.RiderFirstName @Model.RiderName</strong></div>
+<table data-toggle="table" class="table-sm table-hover table-responsive w-auto small border-0" id="listLapsForRider">
+    <thead>
+        <tr class="thead-light">
+            <th data-sortable="true" class="text-secondary">#</th>
+            <th data-sortable="true" class="font-weight-bold"  data-formatter="lapTimeFormatter">Time</th>
+            <th>Front</th>
+            <th data-sortable="true">Lap</th>
+            <th>Rear</th>
+            <th data-sortable="true">Lap</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.ListLapTimes)
+        {
+            string colorRow = "row-default";
+            if (item.IsUnFinished)
+            {
+                colorRow = "row-unfinished";
+            }
+            else if (item.IsPitStop)
+            {
+                colorRow = "row-pit";
+            }
+            else if(item.IsCancelled)
+            {
+                colorRow = "row-cancelled";
+            }
+
+            <tr class="@colorRow">
+                <td>@Html.DisplayFor(modelItem => item.IndexLap)</td>
+                <td class="font-weight-bold">@Html.DisplayFor(modelItem => item.Time)</td>
+                <td>
+                    @if (item.RearTyreType.HasValue)
+                    {
+                        <img src="@Url.Content("/img/" + item.FrontTyreType + ".jpg")" width="25" height="25"
+                             alt="@item.FrontTyreType" />
+                    }
+                </td>
+                <td id="lapsFrontTyre">@Html.DisplayFor(modelItem => item.NbLapsFrontTyre)</td>
+                <td>
+                    @if (item.RearTyreType.HasValue)
+                    {
+                        <img src="@Url.Content("/img/" + item.RearTyreType + ".jpg")" width="25" height="25"
+                         alt="@item.RearTyreType" />
+                    }
+                </td>
+                <td id="lapsRearTyre">@Html.DisplayFor(modelItem => item.NbLapsRearTyre)</td>
+            </tr>
+        }
+    </tbody>
+</table>

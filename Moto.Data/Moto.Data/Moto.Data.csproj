@@ -54,6 +54,15 @@
   <ItemGroup>
     <Compile Include="Dal.cs" />
     <Compile Include="LapTime.cs" />
+    <Compile Include="Migrations\202011061225559_InitialCreate.cs" />
+    <Compile Include="Migrations\202011061225559_InitialCreate.designer.cs">
+      <DependentUpon>202011061225559_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202011181023063_AddUserClass.cs" />
+    <Compile Include="Migrations\202011181023063_AddUserClass.designer.cs">
+      <DependentUpon>202011181023063_AddUserClass.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="MotoDataContext.cs" />
     <Compile Include="MotoDbInitializer.cs" />
     <Compile Include="NotificationClass.cs" />
@@ -64,10 +73,19 @@
     <Compile Include="Season.cs" />
     <Compile Include="Gp.cs" />
     <Compile Include="Session.cs" />
+    <Compile Include="User.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\202011061225559_InitialCreate.resx">
+      <DependentUpon>202011061225559_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202011181023063_AddUserClass.resx">
+      <DependentUpon>202011181023063_AddUserClass.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

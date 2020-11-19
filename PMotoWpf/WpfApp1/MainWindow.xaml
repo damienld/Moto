@@ -6,7 +6,7 @@
         xmlns:Data="clr-namespace:Moto.Data;assembly=Moto.Data" 
         x:Class="PMotoWpf.MainWindow"
         mc:Ignorable="d"
-        Title="MainWindow" Height="460" Width="1128">
+        Title="MotoGP" Height="460" Width="1128">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>

@@ -1,0 +1,145 @@
+{
+  "id": "/subscriptions/b4e98f3e-61fc-44cd-a3bc-2b85d1e91266/resourceGroups/Sport/providers/Microsoft.Resources/deployments/Microsoft.Web-WebApp-Portal-169a6d3d-ae7b",
+  "name": "Microsoft.Web-WebApp-Portal-169a6d3d-ae7b",
+  "type": "Microsoft.Resources/deployments",
+  "tags": {
+    "primaryResourceId": "/subscriptions/b4e98f3e-61fc-44cd-a3bc-2b85d1e91266/resourcegroups/Sport/providers/Microsoft.Web/sites/DataMotoGP",
+    "marketplaceItemId": "Microsoft.WebSite"
+  },
+  "properties": {
+    "templateHash": "14146142053412606234",
+    "parameters": {
+      "subscriptionId": {
+        "type": "String",
+        "value": "b4e98f3e-61fc-44cd-a3bc-2b85d1e91266"
+      },
+      "name": {
+        "type": "String",
+        "value": "DataMotoGP"
+      },
+      "location": {
+        "type": "String",
+        "value": "West Europe"
+      },
+      "hostingPlanName": {
+        "type": "String",
+        "value": "ASP-Sport-b332"
+      },
+      "serverFarmResourceGroup": {
+        "type": "String",
+        "value": "Sport"
+      },
+      "alwaysOn": {
+        "type": "Bool",
+        "value": false
+      },
+      "sku": {
+        "type": "String",
+        "value": "Free"
+      },
+      "skuCode": {
+        "type": "String",
+        "value": "F1"
+      },
+      "workerSize": {
+        "type": "String",
+        "value": "0"
+      },
+      "workerSizeId": {
+        "type": "String",
+        "value": "0"
+      },
+      "numberOfWorkers": {
+        "type": "String",
+        "value": "1"
+      },
+      "currentStack": {
+        "type": "String",
+        "value": "dotnet"
+      },
+      "phpVersion": {
+        "type": "String",
+        "value": "OFF"
+      },
+      "netFrameworkVersion": {
+        "type": "String",
+        "value": "v4.0"
+      }
+    },
+    "mode": "Incremental",
+    "debugSetting": {
+      "detailLevel": "None"
+    },
+    "provisioningState": "Succeeded",
+    "timestamp": "2020-11-06T01:20:33.8830023Z",
+    "duration": "PT26.5150174S",
+    "correlationId": "6ce5d4e8-dd70-414b-8d39-b5250e2ab93a",
+    "providers": [
+      {
+        "namespace": "Microsoft.Web",
+        "resourceTypes": [
+          {
+            "resourceType": "sites",
+            "locations": [
+              "westeurope"
+            ]
+          },
+          {
+            "resourceType": "serverfarms",
+            "locations": [
+              "westeurope"
+            ]
+          }
+        ]
+      },
+      {
+        "namespace": "microsoft.insights",
+        "resourceTypes": [
+          {
+            "resourceType": "components",
+            "locations": [
+              "westeurope"
+            ]
+          }
+        ]
+      }
+    ],
+    "dependencies": [
+      {
+        "dependsOn": [
+          {
+            "id": "/subscriptions/b4e98f3e-61fc-44cd-a3bc-2b85d1e91266/resourceGroups/Sport/providers/microsoft.insights/components/DataMotoGP",
+            "resourceType": "microsoft.insights/components",
+            "resourceName": "DataMotoGP"
+          },
+          {
+            "id": "/subscriptions/b4e98f3e-61fc-44cd-a3bc-2b85d1e91266/resourceGroups/Sport/providers/Microsoft.Web/serverfarms/ASP-Sport-b332",
+            "resourceType": "Microsoft.Web/serverfarms",
+            "resourceName": "ASP-Sport-b332"
+          },
+          {
+            "id": "/subscriptions/b4e98f3e-61fc-44cd-a3bc-2b85d1e91266/resourceGroups/Sport/providers/microsoft.insights/components/DataMotoGP",
+            "resourceType": "microsoft.insights/components",
+            "resourceName": "DataMotoGP",
+            "apiVersion": "2015-05-01"
+          }
+        ],
+        "id": "/subscriptions/b4e98f3e-61fc-44cd-a3bc-2b85d1e91266/resourceGroups/Sport/providers/Microsoft.Web/sites/DataMotoGP",
+        "resourceType": "Microsoft.Web/sites",
+        "resourceName": "DataMotoGP"
+      }
+    ],
+    "outputResources": [
+      {
+        "id": "/subscriptions/b4e98f3e-61fc-44cd-a3bc-2b85d1e91266/resourceGroups/Sport/providers/microsoft.insights/components/DataMotoGP"
+      },
+      {
+        "id": "/subscriptions/b4e98f3e-61fc-44cd-a3bc-2b85d1e91266/resourceGroups/Sport/providers/Microsoft.Web/serverfarms/ASP-Sport-b332"
+      },
+      {
+        "id": "/subscriptions/b4e98f3e-61fc-44cd-a3bc-2b85d1e91266/resourceGroups/Sport/providers/Microsoft.Web/sites/DataMotoGP"
+      }
+    ],
+    "validationLevel": "Template"
+  }
+}

@@ -1,0 +1,106 @@
+﻿@model PMotoWeb.ViewModels.GpResultsViewModel
+
+<input type="hidden" id="currentSessionId" value=@Model.SelectedSession.SessionId>
+<input type="hidden" id="currentSessionName" value="@Model.SelectedSessionName">
+<input type="hidden" id="currentRaceName" value="@Model.GpName">
+<script>
+    //$.bootstrapSortable({ applyLast: true });
+    DrawonLoad($("#currentSessionId").val());
+    $('#listRiders').bootstrapTable();
+    //$("#sessionNameForChat").textContent = $("#currentSessionName").val();
+    if ($("#currentSessionName").val().toLowerCase() == "race") {
+        $("#nbLapsForAvgInChart").val(10);//.select()
+    }
+    else $("#nbLapsForAvgInChart").val(5);
+
+    function lapTimeFormatter(value) {
+        var bestLapTimeSession = @Model.RiderSessions.First().Lap1;
+        var bgColour = "";
+        var Colour = "";
+        switch (true) {
+            case (value < bestLapTimeSession + 0.15): bgColour = '#3A61FF;color:white'; break;
+            case (value < bestLapTimeSession + 0.3): bgColour = '#6B88FF'; break;
+            case (value < bestLapTimeSession + 0.50): bgColour = '#A6B8FE'; break;
+            case (value < bestLapTimeSession + 0.75): bgColour = '#E1E7FF'; break;
+        }   
+        // 16777215 == ffffff in decimal
+        //var color = '#' + Math.floor(Math.random() * 6777215).toString(16)
+        return '<div style="background-color: ' + bgColour + '">' +
+            value +
+            '</div>'
+    }
+</script>
+<div class="row">
+
+    <div class="col-md-8">
+        Session: <div class="mark">
+            @Html.DisplayFor(m => Model.SelectedSession.Gp.Name)  -  @Html.DisplayFor(m => Model.SelectedSessionName)
+        </div>
+        <table data-toggle="table" class="table-sm table-hover table-striped table-responsive" data-pagination="true" 
+               data-page-size="12" data-page-list="[12, All]" id="listRiders">
+            <thead>
+                <tr class="thead-light">
+                    <th scope="col" data-sortable="true">Rk</th>
+                    <th scope="col" data-sortable="true">Name</th>
+                    <th scope="col" data-sortable="true" class="text-secondary">Lap</th>
+                    <th scope="col" data-sortable="true" class="text-secondary">Run</th>
+                    <th scope="col" data-sortable="true" data-toggle="tooltip" data-placement="top" title="average of best 5 laps">Best5</th>
+                    <th scope="col" data-sortable="true" data-formatter="lapTimeFormatter">Lap1</th>
+                    <th scope="col" data-sortable="true" data-formatter="lapTimeFormatter">Lap2</th>
+                    <th scope="col" data-sortable="true" data-formatter="lapTimeFormatter">Lap3</th>
+                    <th scope="col" data-sortable="true" data-formatter="lapTimeFormatter">Lap4</th>
+                    <th scope="col" data-sortable="true" data-formatter="lapTimeFormatter">Lap5</th>
+                    <th scope="col" data-sortable="true" data-formatter="lapTimeFormatter">Lap6</th>
+                    <th scope="col" data-sortable="true" data-formatter="lapTimeFormatter">Lap7</th>
+                    <th scope="col" data-sortable="true" data-formatter="lapTimeFormatter">Lap8</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @if (Model != null)
+                {
+                    foreach (var item in Model.RiderSessions)
+                    {
+
+                        <tr>
+                            <td>@Html.DisplayFor(m => item.Rank)</td>
+                            <td>
+                                @Ajax.ActionLink(item.RiderFirstName.Substring(0, 1) + "." + item.RiderName + " "
+                               , "RiderSessionDetails", new { idRiderSession = item.RiderSessionId }
+                           , new AjaxOptions
+                           {
+                               InsertionMode = InsertionMode.Replace,
+                               UpdateTargetId = "gridRiderSessionDetails",
+                               HttpMethod = "GET"
+                           })
+                            </td>
+                            <td>@Html.DisplayFor(m => item.NbFullLaps)</td>
+                            <td>@Html.DisplayFor(m => item.NbRuns)</td>
+                            <td>
+                                <strong>@Html.DisplayFor(m => item.AvgBest5Laps)</strong>
+                            </td>
+                            <td>@Html.DisplayFor(m => item.Lap1)</td>
+                            <td>@Html.DisplayFor(m => item.Lap2)</td>
+                            <td>@Html.DisplayFor(m => item.Lap3)</td>
+                            <td>@Html.DisplayFor(m => item.Lap4)</td>
+                            <td>@Html.DisplayFor(m => item.Lap5)</td>
+                            <td>@Html.DisplayFor(m => item.Lap6)</td>
+                            <td>@Html.DisplayFor(m => item.Lap7)</td>
+                            <td>@Html.DisplayFor(m => item.Lap8)</td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <div class="table-responsive col-md-4">
+        <div id="gridRiderSessionDetails">
+            @{
+                Html.RenderAction("RiderSessionDetails"
+                    , new { idRiderSession = Model.SelectedRiderSession?.RiderSessionId ?? null });
+            }
+        </div>
+    </div>
+</div>
+

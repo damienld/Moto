@@ -8,7 +8,7 @@ namespace Moto.Data.Tests
     [TestClass]
     public class DalTests
     {
-        private Dal dal = new Dal("Moto_Test"); //TODO IDal
+        private Dal dal = new Dal("cnnMotoDb"); //TODO IDal
         [TestInitialize]
         public void Init_AvantChaqueTest()
         {
@@ -16,7 +16,7 @@ namespace Moto.Data.Tests
                 //= new MotoDbInitializer();
                 = new DropCreateDatabaseAlways<MotoDataContext>();
             Database.SetInitializer(init);
-            init.InitializeDatabase(new MotoDataContext("Moto_Test"));
+            init.InitializeDatabase(new MotoDataContext("Moto_Test", false));
             InitSeasons2020();
         }
 

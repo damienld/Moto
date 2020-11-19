@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Moto.Data
 {
-    public class MotoDbInitializer : DropCreateDatabaseAlways<MotoDataContext>
+    public class MotoDbInitializer : CreateDatabaseIfNotExists<MotoDataContext>
     {
 	    protected override void Seed(MotoDataContext context)
 	    {

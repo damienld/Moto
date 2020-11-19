@@ -1,0 +1,83 @@
+[
+  {
+    "id": "/subscriptions/b4e98f3e-61fc-44cd-a3bc-2b85d1e91266/resourceGroups/Sport/providers/Microsoft.Resources/deployments/Microsoft.Web-WebApp-Portal-169a6d3d-ae7b/operations/3888D06B3A9A01DF",
+    "operationId": "3888D06B3A9A01DF",
+    "properties": {
+      "provisioningOperation": "Create",
+      "provisioningState": "Succeeded",
+      "timestamp": "2020-11-06T01:20:33.76492Z",
+      "duration": "PT20.1359366S",
+      "trackingId": "983ffa61-7c49-4175-8d25-2731f47daf53",
+      "statusCode": "OK",
+      "targetResource": {
+        "id": "/subscriptions/b4e98f3e-61fc-44cd-a3bc-2b85d1e91266/resourceGroups/Sport/providers/Microsoft.Web/sites/DataMotoGP",
+        "resourceType": "Microsoft.Web/sites",
+        "resourceName": "DataMotoGP"
+      }
+    }
+  },
+  {
+    "id": "/subscriptions/b4e98f3e-61fc-44cd-a3bc-2b85d1e91266/resourceGroups/Sport/providers/Microsoft.Resources/deployments/Microsoft.Web-WebApp-Portal-169a6d3d-ae7b/operations/EA4092CD7004A865",
+    "operationId": "EA4092CD7004A865",
+    "properties": {
+      "provisioningOperation": "Create",
+      "provisioningState": "Succeeded",
+      "timestamp": "2020-11-06T01:20:13.5924462Z",
+      "duration": "PT5.2182739S",
+      "trackingId": "1a0b9bc0-f48b-4cce-b5de-446244a4140e",
+      "statusCode": "OK",
+      "targetResource": {
+        "id": "/subscriptions/b4e98f3e-61fc-44cd-a3bc-2b85d1e91266/resourceGroups/Sport/providers/Microsoft.Web/serverfarms/ASP-Sport-b332",
+        "resourceType": "Microsoft.Web/serverfarms",
+        "resourceName": "ASP-Sport-b332"
+      }
+    }
+  },
+  {
+    "id": "/subscriptions/b4e98f3e-61fc-44cd-a3bc-2b85d1e91266/resourceGroups/Sport/providers/Microsoft.Resources/deployments/Microsoft.Web-WebApp-Portal-169a6d3d-ae7b/operations/E3C02ADC5BC747B3",
+    "operationId": "E3C02ADC5BC747B3",
+    "properties": {
+      "provisioningOperation": "Read",
+      "provisioningState": "Succeeded",
+      "timestamp": "2020-11-06T01:20:12.3879676Z",
+      "duration": "PT4.0137953S",
+      "trackingId": "02f8a459-adfe-4012-925c-965efd07a2bd",
+      "statusCode": "OK",
+      "targetResource": {
+        "id": "/subscriptions/b4e98f3e-61fc-44cd-a3bc-2b85d1e91266/resourceGroups/Sport/providers/microsoft.insights/components/DataMotoGP",
+        "resourceType": "microsoft.insights/components",
+        "resourceName": "DataMotoGP",
+        "apiVersion": "2015-05-01"
+      }
+    }
+  },
+  {
+    "id": "/subscriptions/b4e98f3e-61fc-44cd-a3bc-2b85d1e91266/resourceGroups/Sport/providers/Microsoft.Resources/deployments/Microsoft.Web-WebApp-Portal-169a6d3d-ae7b/operations/345CFD898A2703C8",
+    "operationId": "345CFD898A2703C8",
+    "properties": {
+      "provisioningOperation": "Create",
+      "provisioningState": "Succeeded",
+      "timestamp": "2020-11-06T01:20:12.2937519Z",
+      "duration": "PT3.9195796S",
+      "trackingId": "0117c701-13f9-4573-9706-706e71763f15",
+      "statusCode": "OK",
+      "targetResource": {
+        "id": "/subscriptions/b4e98f3e-61fc-44cd-a3bc-2b85d1e91266/resourceGroups/Sport/providers/microsoft.insights/components/DataMotoGP",
+        "resourceType": "microsoft.insights/components",
+        "resourceName": "DataMotoGP"
+      }
+    }
+  },
+  {
+    "id": "/subscriptions/b4e98f3e-61fc-44cd-a3bc-2b85d1e91266/resourceGroups/Sport/providers/Microsoft.Resources/deployments/Microsoft.Web-WebApp-Portal-169a6d3d-ae7b/operations/08585969812781096655",
+    "operationId": "08585969812781096655",
+    "properties": {
+      "provisioningOperation": "EvaluateDeploymentOutput",
+      "provisioningState": "Succeeded",
+      "timestamp": "2020-11-06T01:20:33.8541467Z",
+      "duration": "PT20.2251633S",
+      "trackingId": "952b5515-db1f-4fa4-acd4-73af4dbc6137",
+      "statusCode": "OK"
+    }
+  }
+]

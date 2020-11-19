@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 
@@ -12,19 +13,24 @@ namespace Moto.Data
             ListLapTimes = new List<LapTime>();
         }
         [Required]
-        public Session Session { get; set; }
+        public virtual Session Session { get; set; }
         
         public int RiderSessionId { get; set; }
         public virtual RiderSeason RiderSeason { get; set; }
+        [Description("Rk")]
         public int Rank
         { get; set; }
+        [Description("Name")]
         public string RiderName
         { get; set; }
+        [Description("")]
         public string RiderFirstName
         { get; set; }
+        [Description("#")]
         public string RiderNumber
         { get; set; }
         private int? nbFullLaps;
+        [Description("Laps")]
         public int? NbFullLaps
         { get => getListFullLaps().Count;
 
@@ -33,6 +39,7 @@ namespace Moto.Data
                 nbFullLaps = value;
             }
         }
+        [Description("Runs")]
         public int? NbRuns
         { get; set; }
         public int? NbLaps
@@ -40,12 +47,27 @@ namespace Moto.Data
         public virtual ICollection<LapTime> ListLapTimes
         { get; set; }
 
-        public List<LapTime> getListBestXLaps(int aNbLaps)
+        public List<LapTime> getListBestXLaps(int aNbLaps, int minTyreLapsFront = 0, int minTyreLapsRear = 0)
         {
             List<LapTime> _CountedLaps = getListFullLaps();
+            if (minTyreLapsFront > 0)
+                _CountedLaps = _CountedLaps.Where(l => l.NbLapsFrontTyre >= minTyreLapsFront).ToList();
+            if (minTyreLapsRear > 0)
+                _CountedLaps = _CountedLaps.Where(l => l.NbLapsRearTyre >= minTyreLapsRear).ToList();
             if (_CountedLaps == null || _CountedLaps.Count < aNbLaps)
                 return null;
             return _CountedLaps.OrderBy(l =>l.Time).ToList().GetRange(0, aNbLaps);
+        }
+        public List<LapTime> getListLaps(int minTyreLapsFront, int minTyreLapsRear)
+        {
+            List<LapTime> _CountedLaps = getListFullLaps();
+            if (minTyreLapsFront > 0)
+                _CountedLaps = _CountedLaps.Where(l => l.NbLapsFrontTyre >= minTyreLapsFront).ToList();
+            if (minTyreLapsRear > 0)
+                _CountedLaps = _CountedLaps.Where(l => l.NbLapsRearTyre >= minTyreLapsRear).ToList();
+            if (_CountedLaps == null )
+                return null;
+            return _CountedLaps.OrderBy(l => l.Time).ToList();
         }
         public List<LapTime> getListFullLaps()
         {
@@ -54,6 +76,7 @@ namespace Moto.Data
             return ListLapTimes.Where(m => !m.IsUnFinished && !m.IsCancelled
             && !m.IsPitStop && m.Time != null && m.Time > 0).ToList();
         }
+        [Description("Avg best 5 laps")]
         public decimal AvgBest5Laps
         {
             get
@@ -64,6 +87,14 @@ namespace Moto.Data
                 else
                     return Math.Round(_TopLaps.Average(m=>m.Time.Value), 1);
             }
+        }
+        public decimal getAvgBestXLaps(int laps, int minTyreLapsFront=0, int minTyreLapsRear=0)
+        {
+            List<LapTime> _TopLaps = getListBestXLaps(laps, minTyreLapsFront, minTyreLapsRear);
+            if (_TopLaps == null)
+                return 0;
+            else
+                return Math.Round(_TopLaps.Average(m => m.Time.Value), 1);
         }
         public string Lap1
         {
@@ -186,7 +217,36 @@ namespace Moto.Data
             }
         }
         
-
+        public static void simulateTyreUseIfNotAvailable(List<RiderSession> list)
+        {
+            //List<RiderSession> resultList = new List<RiderSession>();
+            if (list == null || list.Count <= 0)
+                return;
+            foreach (var riderSession in list)
+            {
+                simulateTyreUseIfNotAvailable(riderSession);
+            }
+        }
+        public static void simulateTyreUseIfNotAvailable(RiderSession riderSession)
+        {
+            //List<RiderSession> resultList = new List<RiderSession>();
+            if (riderSession == null || riderSession.ListLapTimes.Count() <= 0)
+                return;
+            int lastPit = 0;
+            //RiderSession newRiderSession = new RiderSession();
+            for (int i = 0; i < riderSession.ListLapTimes.Count(); i++)
+            {
+                LapTime lapTime = riderSession.ListLapTimes.ElementAt(i);
+                if (!lapTime.FrontTyreType.HasValue && !lapTime.RearTyreType.HasValue)
+                {
+                    lapTime.NbLapsFrontTyre = i + 1 - lastPit;
+                    lapTime.NbLapsRearTyre = i + 1 - lastPit;
+                }
+                if (lapTime.IsPitStop)
+                    lastPit = i + 1 - lastPit;
+            }
+            
+        }
     }
     
 }

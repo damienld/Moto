@@ -9,7 +9,7 @@ namespace PMotoWpf.ViewModel
 {
     public class MainWindowVM
     {
-        public static readonly Dal _dal = new Dal("MotoGp");
+        public static readonly Dal _dal = new Dal("cnnMotoDb");
 
         public EventHandler ShowMessageBox = delegate { };
 

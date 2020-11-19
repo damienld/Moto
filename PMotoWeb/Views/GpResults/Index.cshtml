@@ -1,0 +1,308 @@
+﻿@model PMotoWeb.ViewModels.GpResultsViewModel
+
+@{
+    ViewBag.Title = @Model.GpName;
+}
+<br />
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-5">
+            <table class="table table-sm sortable" id="tbSessions">
+                <thead class="alert">
+                    <tr>
+                        <th scope="col">Link</th>
+                        <th scope="col">Session</th>
+                        <th scope="col">Note</th>
+                        <th scope="col">Ground (°C)</th>
+                        <th scope="col">Wet</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Sessions)
+                    {
+                        <tr>
+                            <td>
+                                @Ajax.ActionLink("Details", "ListRiderSession", new { idSession = item.SessionId }, new AjaxOptions
+                           {
+                               InsertionMode = InsertionMode.Replace,
+                               UpdateTargetId = "gridListRiderSession",
+                               HttpMethod = "GET"
+                           }, new { id = "linkListRiderSession" })
+                            </td>
+                            <td>
+                                @Html.DisplayFor(p => item.SessionType)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(p => item.Note)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(p => item.GroundTemperature)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(p => item.IsWet)
+                            </td>
+
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-show-count="true">Tweet</a>
+
+
+        </div>
+        <div class="col-md-6 offset-md-1">
+            <table class="w-100 border">
+                <tr>
+                    <td class="font-weight-bold text-left w-auto">Avg:</td>
+                    <td class="text-right w-auto"> Select # of laps</td>
+                    <td class="text-left">
+                        <select class="mdb-select md-form colorful-select"
+                                title="#laps for average" id="nbLapsForAvgInChart" onchange="DrawonLoad(currentSessionId)">
+                            <option value=1>1</option>
+                            <option value=2>2</option>
+                            <option value=3>3</option>
+                            <option value=4>4</option>
+                            <option value=5>5</option>
+                            <option value=6>6</option>
+                            <option value=7>7</option>
+                            <option value=8>8</option>
+                            <option value=9>9</option>
+                            <option value=10 selected>10</option>
+                            <option value=11>11</option>
+                            <option value=12>12</option>
+                            <option value=13>13</option>
+                            <option value=14>14</option>
+                            <option value=15>15</option>
+                        </select>
+                    </td>
+                    <td class="w-25"></td>
+                    <td class="text-right font-weight-bold">
+                        <span class="font-weight-bold">Riders:</span>
+                        <select class="mdb-select md-form colorful-select"
+                                title="Riders" id="rangeRiders" onchange="DrawonLoad(currentSessionId)">
+                            <option value=1>1st-8th</option>
+                            <option value=2>9th-15th</option>
+                            <option value=3>16th-22nd</option>
+                        </select>
+                    </td>
+                </tr>
+            </table>
+            <table class="w-100 border">
+                @if (Model.SelectedSession.Gp.Season.Category != Moto.Data.Categories.c500)
+                {
+                <tr><td class="text-secondary" colspan="4">(For this cat. # of laps by tyre is just since last Pit stop)</td></tr>
+                }
+            <tr>
+                <td>
+                    <span class="font-weight-bold">Avg </span>
+                    <select class="mdb-select md-form colorful-select"
+                            title="#laps for average with used tyres" id="nbLapsForAvgWithTyresInChart" onchange="DrawonLoad(currentSessionId)">
+                        <option value=1 selected>1</option>
+                        <option value=2>2</option>
+                        <option value=3>3</option>
+                        <option value=4>4</option>
+                        <option value=5>5</option>
+                        <option value=6>6</option>
+                        <option value=7>7</option>
+                        <option value=8>8</option>
+                        <option value=9>9</option>
+                        <option value=10>10</option>
+                        <option value=11>11</option>
+                        <option value=12>12</option>
+                        <option value=13>13</option>
+                        <option value=14>14</option>
+                        <option value=15>15</option>
+                    </select>
+                </td>
+                <td>
+                    <span class="font-weight-bold"> with used tyres: </span>
+                    <span>select min laps</span>
+                    <span class="text-right font-weight-bold"> Front </span>
+                    <select class="mdb-select md-form colorful-select"
+                            title="#min laps for front tyre" id="nbLMinLapsFrontForAvgInChart" onchange="DrawonLoad()">
+                        <option value=0 selected>0</option>
+                        <option value=2>2</option>
+                        <option value=4>4</option>
+                        <option value=5>5</option>
+                        <option value=6>6</option>
+                        <option value=7>7</option>
+                        <option value=8>8</option>
+                        <option value=9>9</option>
+                        <option value=10>10</option>
+                        <option value=11>11</option>
+                        <option value=12>12</option>
+                        <option value=13>13</option>
+                        <option value=14>14</option>
+                        <option value=15>15</option>
+                        <option value=16>16</option>
+                        <option value=17>17</option>
+                        <option value=18>18</option>
+                        <option value=19>19</option>
+                        <option value=20>20</option>
+                    </select>
+                </td>
+                <td>
+                    <span class="text-right"> <span class="font-weight-bold">Rear</span> </span>
+                    <select class="mdb-select md-form colorful-select"
+                            title="#min laps for Rear Tyre" id="nbLMinLapsRearForAvgInChart" onchange="DrawonLoad()">
+                        <option value=0>0</option>
+                        <option value=2>2</option>
+                        <option value=4>4</option>
+                        <option value=5>5</option>
+                        <option value=6 selected>6</option>
+                        <option value=7>7</option>
+                        <option value=8>8</option>
+                        <option value=9>9</option>
+                        <option value=10>10</option>
+                        <option value=11>11</option>
+                        <option value=12>12</option>
+                        <option value=13>13</option>
+                        <option value=14>14</option>
+                        <option value=15>15</option>
+                        <option value=16>16</option>
+                        <option value=17>17</option>
+                        <option value=18>18</option>
+                        <option value=19>19</option>
+                        <option value=20>20</option>
+                    </select>
+                </td>
+            </tr>
+            </table>
+                
+                <div id="chartRiderSession" style="height: 450px; width: 100%; float:right">
+                </div>
+            </div>
+    </div>
+
+    <div id="gridListRiderSession">
+        @{
+            Html.RenderAction("ListRiderSession", new { idSession = Model.SelectedSession?.SessionId ?? null });
+        }
+    </div>
+</div>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script>
+
+</script>
+<script type="text/javascript">
+
+    google.charts.load('current', { 'packages': ['corechart'] });
+    //Call function after Google Chart is loaded, it is required, otherwise you may get error
+    google.charts.setOnLoadCallback(function () { DrawonLoad(); });
+    function DrawonLoad() {
+        $(function () {
+            sessionId = $("#currentSessionId").val();
+            nbLapsForAvg = $("#nbLapsForAvgInChart").val();
+            nbLapsForAvgWithTyres = $("#nbLapsForAvgWithTyresInChart").val();
+            riderRange = $("#rangeRiders").val();
+            nbMinLapsRearForAvg = 0;
+            nbMinLapsFrontForAvg = 0;
+            //isMotoGPCat = ("@(Model.SelectedSession.Gp.Season.Category == Moto.Data.Categories.c500)" == "True");
+            isMotoGPCat = true;
+            if (isMotoGPCat)
+            {
+                nbMinLapsRearForAvg = $("#nbLMinLapsRearForAvgInChart").val();
+                nbMinLapsFrontForAvg = $("#nbLMinLapsFrontForAvgInChart").val();
+            }
+            $.ajax({
+                type: 'GET',
+                url: '/GpResults/RiderSessionsToChart/' + sessionId + '/' + nbLapsForAvg + '/' + nbLapsForAvgWithTyres + '/'
+                    + nbMinLapsFrontForAvg + '/' + nbMinLapsRearForAvg + '/' + riderRange,
+                /*data: {
+                    idSession: sessionId,
+                    nbLapsForAvg: nbLapsForAvg
+                },*/
+                success: function (chartsdata) {
+                    // Callback that creates and populates a data table,
+                    // instantiates the pie chart, passes in the data and
+                    // draws it.
+
+                    //get JSONList from Object
+                    var DataList = chartsdata.JSONList;
+                    var data = new google.visualization.DataTable();
+                    data.addColumn('string', 'Rider');
+                    data.addColumn('number', 'Fastest Lap');
+                    data.addColumn('number', 'Avg best ' + nbLapsForAvg + ' laps');
+                    if (isMotoGPCat) {
+                        prefix = 'Avg best ' + nbLapsForAvgWithTyres + ' laps';
+                        if (nbLapsForAvgWithTyres < 2)
+                            prefix = 'Best Lap';
+                        data.addColumn('number', prefix +' - ' + nbMinLapsFrontForAvg + '+ laps Front & '
+                            + nbMinLapsRearForAvg + '+ laps Rear');
+                        data.addColumn({ type: 'number', role: 'annotation' });
+                    }
+                    //data.addRows(DataList);
+                    //Loop through each list data
+                    bestlap = 1000;
+                    worstavg = 0;
+                    for (var i = 0; i < DataList.length; i++) {
+                        //alert(Data[i].RiderName);
+                        //alert(Data[i].Lap1);
+                        if (isMotoGPCat)
+                            data.addRow([DataList[i].RiderName, DataList[i].Lap1, DataList[i].Avg, DataList[i].AvgUsedTyres, DataList[i].NbLapsForAvgUsedTyres]);
+                        else
+                            data.addRow([DataList[i].RiderName, DataList[i].Lap1, DataList[i].Avg]);
+                        if (bestlap > DataList[i].Lap1)
+                            bestlap = DataList[i].Lap1;
+                        if (worstavg < DataList[i].Avg)
+                            worstavg = DataList[i].Avg;
+                    }
+                    // Instantiate and draw our chart, passing in some options
+                    var chart = new google.visualization.BarChart(document.getElementById('chartRiderSession'));
+                    //var chart = new google.charts.Bar(document.getElementById('chartRiderSession'));
+                    var options = {
+                        //explorer: {},
+                        animation: {
+                            duration: 350,
+                            startup: true //This is the new option
+                        },
+                        //legend: { position: "bottom" },
+                        legend: {
+                            position: "bottom",
+                            maxLines: 2,
+                            textStyle: {
+                                fontSize: 10
+                            }
+                        },
+                        chartArea: { left: 50, top: 25, width: '90%', height: '80%' },
+                        bars: 'horizontal', is3D: true,
+                        title: "Lap by Riders - " + $("#currentSessionName").val() + " " + $("#currentRaceName").val()
+                            + " © datamotogp.eu",
+                        titleTextStyle: {
+                            color: '333333',
+                            fontName: 'Arial',
+                            fontSize: 11
+                        },
+                        position: "top",
+                        fontsize: "14px",
+                        //isStacked: true,  //to cumulate bars
+                        hAxis: {
+                            textPosition: "out",
+                            //direction: -1,
+                            showEveryText: 7,
+                            viewWindow: {
+                                min: bestlap - 0.1, max: bestlap + 1.5
+                            },
+                            slantedText: true
+                        }
+                    }
+                    //Draw pie chart command with data and chart options
+                    //chart.draw(data, google.charts.Bar.convertOptions(options));
+                    google.visualization.events.addListener(chart, 'ready', function () {
+                        //alert(chart.getImageURI());
+                        //document.getElementById('chartRiderSession').innerHTML = '<img src="' + chart.getImageURI() + '">';
+                        //document.getElementById('chartRiderSession').jsSocials
+                        //    ({ shares: ["email", "twitter", "facebook", "googleplus", "linkedin", "pinterest", "stumbleupon", "whatsapp"] });
+                    });
+                    chart.draw(data, options);
+
+                },
+                error: function () {
+                    alert("Error loading data! Please try again.");
+                }
+            });
+        })
+
+    }
+</script>

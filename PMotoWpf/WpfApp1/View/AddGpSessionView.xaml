@@ -111,6 +111,7 @@
             <TextBlock Text="°C (ground)"></TextBlock>
             <CheckBox Content="Wet" IsChecked="{Binding IsWet}"></CheckBox>
             <Button Content="Save Session" Command="{Binding SaveSessionCmd}"></Button>
+            <Button Content="Delete Session" Command="{Binding DeleteSessionCmd}"></Button>
         </StackPanel>
         
     </Grid>

@@ -188,6 +188,8 @@ namespace PMotoWpf.ViewModel
                     SessionType = SessionType.WUP;
                 else if (TextToProcess.ToLower().Contains("Race 2".ToLower()))
                     SessionType = SessionType.Race2;
+                else if (TextToProcess.ToLower().Contains("Race Part 2".ToLower()))
+                    SessionType = SessionType.Race2;
                 else if (TextToProcess.ToLower().Contains("Race".ToLower()))
                     SessionType = SessionType.Race;
                 Note = "";
@@ -243,5 +245,43 @@ namespace PMotoWpf.ViewModel
                 });
             }
         }
+        #region DELETE SESSION
+        public RelayCommand DeleteSessionCmd
+        {
+            get
+            {
+                return new RelayCommand(x => DeleteSession(), x => canDeleteSession());
+            }
+        }
+        private bool canDeleteSession()
+        {
+            return true;// ListRiderSessions != null && ListRiderSessions.Count > 0;
+        }
+        private void DeleteSession()
+        {
+            try
+            {
+                if (SelectedGp == null || SelectedSession == null)
+                {
+                    ShowMessageBox(this, new MessageEventArgs()
+                    {
+                        Message = "Please select a GrandPrix"
+                    }); ;
+                    return;
+                }
+                _dal.RemoveSession(SelectedSession);
+                SelectedGp.NotifyPropertyChanged();
+                ResetForm();
+                Note = $"<{SessionType} removed>";
+            }
+            catch (Exception ex)
+            {
+                ShowMessageBox(this, new MessageEventArgs()
+                {
+                    Message = ex.Message
+                });
+            }
+        }
+        #endregion
     }
 }

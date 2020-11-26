@@ -20,7 +20,17 @@ namespace Moto.Data
         {
             //Database.SetInitializer<MotoDataContext>(new MotoDbInitializer());
         }
+        /*protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Session>().HasMany(e => e.RiderSessions).WithOptional(s => s.Session).WillCascadeOnDelete(true);
+            modelBuilder.Entity<RiderSession>().HasMany(e => e.ListLapTimes).WithOptional(s => s.).WillCascadeOnDelete(true);
+            //...
 
+            modelBuilder.Entity<Session>()
+                .HasMany<RiderSession>(c => c.SessionId)
+                .WithOptional(x => x.Parent)
+                .WillCascadeOnDelete(true);
+        }*/
         public DbSet<Gp> GPs { get; set; }
         public DbSet<LapTime> LapTimes { get; set; }
         public DbSet<Rider> Riders { get; set; }

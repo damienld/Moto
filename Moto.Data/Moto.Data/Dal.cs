@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Configuration;
+using System.Data.Entity;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -106,7 +109,7 @@ namespace Moto.Data
         {
             if (selectedGp != null)
             {
-                List<Session> list = Db.Sessions.Where(g => g.Gp.GpId == selectedGp.GpId).ToList();
+                List<Session> list = Db.Sessions.Where(g => g.Gp.GpId == selectedGp.GpId).OrderBy(s=>s.SessionType).ToList();
                 return list;
             }
             else return new List<Session>();
@@ -119,9 +122,32 @@ namespace Moto.Data
         {
             return Db.RiderSessions.Where(g => g.Session.SessionId == sessionId).ToList();
         }
+        public void RemoveSession(Session session)
+        {
+            try
+            {
+                foreach (RiderSession riderSession in session.RiderSessions)
+                {
+                    if (riderSession.ListLapTimes != null) {
+                        //foreach (LapTime lapTime in riderSession.ListLapTimes)
+                        {
+                            Db.LapTimes.RemoveRange(riderSession.ListLapTimes);
+                        }
+                    }
+                }
+                Db.RiderSessions.RemoveRange(session.RiderSessions);
+                Db.Sessions.Remove(session);
+                Db.SaveChanges();
+                
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
         public List<Session> GetGpSessions(int gpId)
         {
-            List<Session> list = Db.Sessions.Where(g => g.Gp.GpId == gpId).ToList();
+            List<Session> list = Db.Sessions.Where(g => g.Gp.GpId == gpId).OrderBy(s=>s.SessionType).ToList();
             return list;
         }
 
@@ -179,6 +205,53 @@ namespace Moto.Data
                 Db.RiderSeasons.Add(new RiderSeason() { Season = season, Rider = rider, Team = team });
             Db.SaveChanges();
             return riderSeason;
+        }
+        public User AddUser(User user, string key, bool isValidation=true)
+        {
+            user.Password = BitConverter.ToString(new MD5CryptoServiceProvider()
+                    .ComputeHash(ASCIIEncoding.Default.GetBytes(user.Password + key)));
+            user.ConfirmPassword = BitConverter.ToString(new MD5CryptoServiceProvider()
+                                .ComputeHash(ASCIIEncoding.Default.GetBytes(user.ConfirmPassword + key)));
+            Db.Users.Add(user);
+            Db.Configuration.ValidateOnSaveEnabled = false;
+            try
+            {
+                Db.SaveChanges();
+            }
+            finally
+            {
+                user.Password = "";
+                user.ConfirmPassword = "";
+                Db.Configuration.ValidateOnSaveEnabled = true;
+            }
+            return user;
+        }
+        public User UpdateUser(User user, string key, bool isValidation = true)
+        {
+            Db.Entry(user).State = EntityState.Modified;
+            user.Password = BitConverter.ToString(new MD5CryptoServiceProvider()
+                    .ComputeHash(ASCIIEncoding.Default.GetBytes(user.Password + key)));
+            user.ConfirmPassword = BitConverter.ToString(new MD5CryptoServiceProvider()
+                                .ComputeHash(ASCIIEncoding.Default.GetBytes(user.ConfirmPassword + key)));
+           
+            Db.Configuration.ValidateOnSaveEnabled = false;
+            try
+            {
+                Db.SaveChanges();
+            }
+            finally
+            {
+                user.Password = "";
+                user.ConfirmPassword = "";
+                Db.Configuration.ValidateOnSaveEnabled = true;
+            }
+            return user;
+        }
+        public User GetUser(string username, string password, string key)
+        {
+            password = BitConverter.ToString(new MD5CryptoServiceProvider()
+                    .ComputeHash(ASCIIEncoding.Default.GetBytes(password + key)));
+            return Db.Users.FirstOrDefault(u => u.Username == username && u.Password == password);
         }
     }
 }

@@ -340,5 +340,6 @@ ASALocalRun/
 healthchecksdb
 /SQL backup
 
-# .config Files
-.config
+# AppSettingsSecrets.config Files
+AppSettingsSecrets.config
+connectionStrings.config

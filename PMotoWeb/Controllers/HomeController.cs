@@ -40,5 +40,25 @@ namespace PMotoWeb.Controllers
 
             return View();
         }
+        public ActionResult Tennis()
+        {
+            //ViewBag.Message = "Your application description page.";
+
+            return View();
+        }
+        public ActionResult Golf()
+        {
+            //ViewBag.Message = "Your application description page.";
+
+            return View();
+        }
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                dal.Db.Dispose();
+            }
+            base.Dispose(disposing);
+        }
     }
 }

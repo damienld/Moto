@@ -19,14 +19,17 @@ namespace Moto.Data
             RiderSessions = new ObservableCollection<RiderSession>();
         }
         [Description("Session")]
+        [Display(Name ="Session")]
         public SessionType SessionType { get; set; }
         public long SessionId { get; set; }
         //public string Name { get; set; }
         public DateTime Date { get; set; }
         public string Note { get; set; }
         [Description("Ground(°C)")]
+        [Display(Name = "Ground(°C)")]
         public int? GroundTemperature { get; set; }
         [Description("Wet")]
+        [Display(Name = "Wet")]
         public bool IsWet { get; set; }
         [Required]
         public virtual Gp Gp { get; set; }
@@ -41,7 +44,7 @@ namespace Moto.Data
         }
         public override string ToString()
         {
-            return $"{this.SessionType}-{this.Gp.Name}-{this.Gp.Season.Category}";
+            return $"{this.SessionType}-{this.Gp?.Name??""}-{this.Gp?.Season.Category.ToString()??""}";
         }
         public static List<RiderSession> ReadAnalysisPdf(string _data)
         {

@@ -18,19 +18,24 @@ namespace Moto.Data
         public int RiderSessionId { get; set; }
         public virtual RiderSeason RiderSeason { get; set; }
         [Description("Rk")]
+        [Display(Name = "Rk")]
         public int Rank
         { get; set; }
         [Description("Name")]
+        [Display(Name = "Name")]
         public string RiderName
         { get; set; }
         [Description("")]
+        [Display(Name = "")]
         public string RiderFirstName
         { get; set; }
         [Description("#")]
+        [Display(Name = "#")]
         public string RiderNumber
         { get; set; }
         private int? nbFullLaps;
         [Description("Laps")]
+        [Display(Name = "Laps")]
         public int? NbFullLaps
         { get => getListFullLaps().Count;
 
@@ -40,6 +45,7 @@ namespace Moto.Data
             }
         }
         [Description("Runs")]
+        [Display(Name = "Runs")]
         public int? NbRuns
         { get; set; }
         public int? NbLaps
@@ -243,7 +249,7 @@ namespace Moto.Data
                     lapTime.NbLapsRearTyre = i + 1 - lastPit;
                 }
                 if (lapTime.IsPitStop)
-                    lastPit = i + 1 - lastPit;
+                    lastPit = i + 1;
             }
             
         }

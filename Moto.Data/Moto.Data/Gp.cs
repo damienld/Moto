@@ -21,12 +21,14 @@ namespace Moto.Data
 
         public long GpId { get; set; }
         [Description("Id")]
+        [Display(Name="Id")]
         public int GpIdInSeason { get; set; }
         [Description("GP")]
+        [Display(Name = "GP")]
         public string Name { get; set; }
         [DisplayFormat(DataFormatString = "{0:d}")]
         public DateTime Date { get; set; }
-        public string UrlWeather { get; set; }
+        public string UrlWeather { get; set; } = "http://www.weather.com";
         public string Note { get; set; }
         [Required]
         public virtual Season Season { get; set; }

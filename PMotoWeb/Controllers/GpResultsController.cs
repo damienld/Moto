@@ -9,7 +9,6 @@ using System.Web.Mvc;
 
 namespace PMotoWeb.Controllers
 {
-    //[Authorize]
     public class GpResultsController : Controller
     {
         private Dal dal;
@@ -96,7 +95,7 @@ namespace PMotoWeb.Controllers
 
             decimal res = 0;
             List<RiderSessionChart> listChart 
-                = list.Select(p => new RiderSessionChart { RiderName = p.RiderName
+                = list.Select(p => new RiderSessionChart { RiderName = p.RiderFirstName.Substring(1,1)+"."+ p.RiderName
                 , Lap1 = Decimal.TryParse(p.Lap1, out res)?res:0
                 , Avg = p.getAvgBestXLaps(nbLapsForAvg.Value)
                 , AvgUsedTyres = p.getAvgBestXLaps(nbLapsForAvgWithTyres.Value, minTyreLapsFront.Value, minTyreLapsRear.Value)
@@ -114,6 +113,14 @@ namespace PMotoWeb.Controllers
             if (session.Session.Gp.Season.Category != Categories.c500)
                 RiderSession.simulateTyreUseIfNotAvailable(session);
             return PartialView(session);
+        }
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                dal.Db.Dispose();
+            }
+            base.Dispose(disposing);
         }
     }
 }

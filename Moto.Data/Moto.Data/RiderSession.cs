@@ -12,6 +12,16 @@ namespace Moto.Data
         {
             ListLapTimes = new List<LapTime>();
         }
+        [Browsable(false)]
+        public int NbFalls
+        {
+            get
+            {
+                return ListLapTimes?.Count(m => m.IsUnFinished) ?? 0;
+            }
+        }
+        [Browsable(false)]
+        public bool IsNotClassified { get; set; }
         [Required]
         public virtual Session Session { get; set; }
         
@@ -252,6 +262,26 @@ namespace Moto.Data
                     lastPit = i + 1;
             }
             
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="pointsForRanking">Send an empty array to get the default array {25,20,16,13,11,10,9,8,7,6,5,4,3,2,1 }</param>
+        /// <returns></returns>
+        public int getWorldStandingPoints(int[] pointsForRanking)
+        {
+            if (pointsForRanking.Length <= 0)
+                pointsForRanking = new[] {25,20,16,13,11,10,9,8,7,6,5,4,3,2,1 };
+            if (this.Rank <= pointsForRanking.Length)
+            {
+                Console.WriteLine(this.RiderName+ ":" + pointsForRanking[this.Rank - 1] + " " + this.Session.SessionType);
+                if (IsNotClassified)
+                    //means rider ended with unfinished lap
+                    return 0;
+                else return pointsForRanking[this.Rank - 1];
+            }
+            else
+                return 0;
         }
     }
     

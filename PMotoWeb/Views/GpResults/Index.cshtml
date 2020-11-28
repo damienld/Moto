@@ -13,37 +13,42 @@
                     <tr>
                         <th scope="col">Link</th>
                         <th scope="col">Session</th>
+                        <th scope="col">Falls</th>
                         <th scope="col">Note</th>
                         <th scope="col">Ground (°C)</th>
-                        <th scope="col">Wet</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach (var item in Model.Sessions)
                     {
-                        <tr>
-                            <td>
-                                @Ajax.ActionLink("Details", "ListRiderSession", new { idSession = item.SessionId }, new AjaxOptions
-                           {
-                               InsertionMode = InsertionMode.Replace,
-                               UpdateTargetId = "gridListRiderSession",
-                               HttpMethod = "GET"
-                           }, new { id = "linkListRiderSession" })
-                            </td>
-                            <td>
-                                @Html.DisplayFor(p => item.SessionType)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(p => item.Note)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(p => item.GroundTemperature)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(p => item.IsWet)
-                            </td>
-
-                        </tr>
+                    <tr>
+                        <td>
+                            @Ajax.ActionLink("Details", "ListRiderSession", new { idSession = item.SessionId }, new AjaxOptions
+                       {
+                           InsertionMode = InsertionMode.Replace,
+                           UpdateTargetId = "gridListRiderSession",
+                           HttpMethod = "GET"
+                       }, new { id = "linkListRiderSession" })
+                        </td>
+                        <td>@Html.DisplayFor(p => item.SessionType)</td>
+                        @if (item.NbFalls > 0)
+                        {
+                        <td class="alert-danger">@Html.DisplayFor(p => item.NbFalls)</td>
+                        }
+                        else
+                        {
+                        <td></td>
+                        }
+                        <td class="small">@Html.DisplayFor(p => item.Note)</td>
+                        <td  class="small">
+                            @{ string temp = item.GroundTemperature.HasValue ? item.GroundTemperature + "°" : "";}
+                            @Html.DisplayFor(p => temp)
+                            @if (item.IsWet)
+                            {
+                            <img src="/img/rain.png" width="20" height="20" />
+                            }
+                        </td>
+                    </tr>
                     }
                 </tbody>
             </table>
@@ -51,7 +56,7 @@
                 <div class="col-3">
                     <a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-show-count="true">Tweet</a>
                 </div>
-                <div class="col-6">
+                <!--<div class="col-6">
                     Bet:
                     <a href="https://www.bet365.com/#/AS/B27/" target="_blank">
                         <img src="/img/b365.jpg" width="60" height="30" />
@@ -59,9 +64,9 @@
                     <a href="https://sports.williamhill.com/betting/en-gb/motorbikes" target="_blank">
                         <img src="/img/willhill.jpg" width="60" height="30" />
                     </a>
-                </div>
-                </div>
+                </div>-->
             </div>
+        </div>
         <div class="col-md-6 offset-md-1">
             <table class="w-100 border">
                 <tr>

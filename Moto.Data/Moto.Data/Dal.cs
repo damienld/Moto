@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Configuration;
 using System.Data.Entity;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Moto.Data
 {
-    public class Dal
+    public partial class Dal : IDal
     {
         public void Dispose()
         {
@@ -18,10 +19,15 @@ namespace Moto.Data
         }
         public MotoDataContext Db { get; set; }
         //public Dal(string nameDB/*="MotoGp"*/, bool isConnectionString) => Db = new MotoDataContext(nameDB);
-        public Dal(string connectionString) => Db = new MotoDataContext(connectionString);
-        public ObservableCollection<Season> getAllSeasons()
+        public Dal(string nameOrConnectionString) => Db = new MotoDataContext(nameOrConnectionString);
+        public ObservableCollection<Season> getAllSeasons(int? year, Categories? category)
         {
-            return new ObservableCollection<Season>(Db.Seasons);
+            ObservableCollection < Season > seasons = new ObservableCollection<Season>(Db.Seasons);
+            if (year.HasValue)
+                seasons = new ObservableCollection<Season>(seasons.Where(s => s.Year == year.Value));
+            if (category.HasValue)
+                seasons = new ObservableCollection<Season>(seasons.Where(s => s.Category == category.Value));
+            return seasons;
         }
         public Season getSeason(int year, Categories category)
         {
@@ -36,7 +42,7 @@ namespace Moto.Data
         /// <returns></returns>
         public List<Season> AddSeasonsIfDontExist(List<ValueTuple<int, Categories>> seasonsArgs)//(int year, Categories category)
         {
-            List < Season > listNewSeasons = new List<Season>();
+            List<Season> listNewSeasons = new List<Season>();
             bool hasSeasonsChanged = false;
             foreach (var seasonArgs in seasonsArgs)
             {
@@ -53,7 +59,7 @@ namespace Moto.Data
                     });
                     hasSeasonsChanged = true;
                     listNewSeasons.Add(newSeason);
-                } 
+                }
                 else listNewSeasons.Add(season);
             }
             if (hasSeasonsChanged)
@@ -61,7 +67,7 @@ namespace Moto.Data
             return listNewSeasons;
         }
 
-        
+
         /// <summary>
         /// Add the season if it exists into the DB, else return the existing season.
         /// </summary>
@@ -109,7 +115,7 @@ namespace Moto.Data
         {
             if (selectedGp != null)
             {
-                List<Session> list = Db.Sessions.Where(g => g.Gp.GpId == selectedGp.GpId).OrderBy(s=>s.SessionType).ToList();
+                List<Session> list = Db.Sessions.Where(g => g.Gp.GpId == selectedGp.GpId).OrderBy(s => s.SessionType).ToList();
                 return list;
             }
             else return new List<Session>();
@@ -118,7 +124,7 @@ namespace Moto.Data
         {
             return Db.RiderSessions.FirstOrDefault(g => g.RiderSessionId == riderSessionId);
         }
-        public List<RiderSession> GetRiderSessions (int sessionId)
+        public List<RiderSession> GetRiderSessions(int sessionId)
         {
             return Db.RiderSessions.Where(g => g.Session.SessionId == sessionId).ToList();
         }
@@ -128,7 +134,8 @@ namespace Moto.Data
             {
                 foreach (RiderSession riderSession in session.RiderSessions)
                 {
-                    if (riderSession.ListLapTimes != null) {
+                    if (riderSession.ListLapTimes != null)
+                    {
                         //foreach (LapTime lapTime in riderSession.ListLapTimes)
                         {
                             Db.LapTimes.RemoveRange(riderSession.ListLapTimes);
@@ -138,7 +145,7 @@ namespace Moto.Data
                 Db.RiderSessions.RemoveRange(session.RiderSessions);
                 Db.Sessions.Remove(session);
                 Db.SaveChanges();
-                
+
             }
             catch (Exception ex)
             {
@@ -147,7 +154,7 @@ namespace Moto.Data
         }
         public List<Session> GetGpSessions(int gpId)
         {
-            List<Session> list = Db.Sessions.Where(g => g.Gp.GpId == gpId).OrderBy(s=>s.SessionType).ToList();
+            List<Session> list = Db.Sessions.Where(g => g.Gp.GpId == gpId).OrderBy(s => s.SessionType).ToList();
             return list;
         }
 
@@ -193,20 +200,20 @@ namespace Moto.Data
             Db.SaveChanges();
         }
 
-        public Rider AddRider(string name, string firstname, string note="")
+        public Rider AddRider(string name, string firstname, string note = "")
         {
             Rider riderCreated = Db.Riders.Add(new Rider() { Firstname = firstname, Name = name, Note = note });
             Db.SaveChanges();
             return riderCreated;
         }
-        public RiderSeason AddRiderSeason (Season season, Rider rider, string team)
+        public RiderSeason AddRiderSeason(Season season, Rider rider, string team)
         {
-            RiderSeason riderSeason = 
+            RiderSeason riderSeason =
                 Db.RiderSeasons.Add(new RiderSeason() { Season = season, Rider = rider, Team = team });
             Db.SaveChanges();
             return riderSeason;
         }
-        public User AddUser(User user, string key, bool isValidation=true)
+        public User AddUser(User user, string key, bool isValidation = true)
         {
             user.Password = BitConverter.ToString(new MD5CryptoServiceProvider()
                     .ComputeHash(ASCIIEncoding.Default.GetBytes(user.Password + key)));
@@ -233,7 +240,7 @@ namespace Moto.Data
                     .ComputeHash(ASCIIEncoding.Default.GetBytes(user.Password + key)));
             user.ConfirmPassword = BitConverter.ToString(new MD5CryptoServiceProvider()
                                 .ComputeHash(ASCIIEncoding.Default.GetBytes(user.ConfirmPassword + key)));
-           
+
             Db.Configuration.ValidateOnSaveEnabled = false;
             try
             {
@@ -252,6 +259,41 @@ namespace Moto.Data
             password = BitConverter.ToString(new MD5CryptoServiceProvider()
                     .ComputeHash(ASCIIEncoding.Default.GetBytes(password + key)));
             return Db.Users.FirstOrDefault(u => u.Username == username && u.Password == password);
+        }
+        private List<RiderSession> GetListRiderSessions(int seasonId)
+        {
+            return Db.RiderSessions.Where(r => r.Session.Gp.Season.SeasonId == seasonId).ToList();
+        }
+        private List<RiderSession> GetListRiderSessions(int seasonId, SessionType sessionType)
+        {
+            return Db.RiderSessions.Where(r => r.Session.Gp.Season.SeasonId == seasonId
+            && (r.Session.SessionType == sessionType)).ToList();
+        }
+        public List<RiderStats> MakeRiderStats(int seasonId)
+        {
+            List<RiderStats> listRiderStats = new List<RiderStats>();
+            List<RiderSession> riderSessions = GetListRiderSessions(seasonId);
+            List<string> riders = riderSessions.Select(r => r.RiderFirstName.Substring(0,1) + "." + r.RiderName).Distinct().ToList();
+            foreach (var rider in riders)
+            {
+                RiderStats riderStats = new RiderStats() {RiderName = rider};
+                riderStats.RiderSessions = riderSessions.Where
+                    (r => r.RiderFirstName.Substring(0, 1) + "." + r.RiderName == rider).ToList();
+                listRiderStats.Add(riderStats);
+            }
+            if (listRiderStats == null) return null;
+            var byWR = listRiderStats.OrderByDescending(p => p.RacePoints).ToList();
+            var byQual = listRiderStats.OrderByDescending(p => p.QualifyingPts).ToList();
+            var byWUP = listRiderStats.OrderByDescending(p => p.WupPoints).ToList();
+            var byFP4 = listRiderStats.OrderByDescending(p => p.Fp4Points).ToList();
+            foreach (var riderStats in listRiderStats)
+            {
+                riderStats.RaceRank = byWR.IndexOf(riderStats)+1;
+                riderStats.QualifyingRank = byQual.IndexOf(riderStats) + 1;
+                riderStats.WupRank = byWUP.IndexOf(riderStats) + 1;
+                riderStats.Fp4Rank = byFP4.IndexOf(riderStats) + 1;
+            }
+            return listRiderStats.OrderByDescending(p=>p.RacePoints).ToList();
         }
     }
 }

@@ -9,14 +9,14 @@ namespace Moto.Data
 {
     public class MotoDataContext: DbContext
     {
-        //paramterless constructor needed for scaffolding
+        //paramterless constructor NEEDED for scaffolding
         public MotoDataContext() : base("name=cnnMotoDb")
         {
             //Database.SetInitializer<MotoDataContext>(new MotoDbInitializer());
         }
-        public MotoDataContext(string connectionString)
+        public MotoDataContext(string nameOrConnectionString)
             //: base(isConnectionString?$"name={nameDB}":nameDB)//("name=MotoGpDBConnectionString")
-            : base($"name={connectionString}")
+            : base(nameOrConnectionString)
         {
             //Database.SetInitializer<MotoDataContext>(new MotoDbInitializer());
         }

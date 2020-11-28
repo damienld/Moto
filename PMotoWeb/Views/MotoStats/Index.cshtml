@@ -1,0 +1,90 @@
+﻿@model PMotoWeb.ViewModels.MotoStatsViewModel
+@{
+    ViewBag.Title = "MotoGP Stats";
+}
+<script>
+    $(document).ready(function () {
+        $("#tableStats").bootstrapTable();
+        //RankingFormatter();
+    });
+    function callChangefunc(val) {
+        window.location.href = "/MotoStats/Index/" + val;
+    }
+</script>
+<script>
+    function RankingFormatter(value, row) {
+        var color = "";
+        var avg = (Number(row.race) + Number(row.qual) + Number(row.fp4) + Number(row.wup))/4;
+        //alert("race:" + row.race + ";qual" + row.qual + ";fp4:" + row.fp4 + ";wup:" + row.wup+";avg=" + avg+";value="+value);
+        if (value < avg-1)
+            color = "MediumSeaGreen";
+        else if (value > avg+1)
+            color = "red";
+        return '<div style="color: ' + color + '">' + value + '</div>';
+    }
+</script>
+<h2>MotoGP Stats</h2>
+<div class="row">
+Official 2020 World Ranking points for Races vs simulation of points for Qualifying/Warm-Up/FP4 sessions rankings
+</div>
+<div class="row">
+    <span style="color:MediumSeaGreen">Green </span>/<span style="color:red"> Red&nbsp;</span> will show where the rider over/under perform versus the average of the 4 sessions rankings.
+</div>
+<hr />
+@Html.DropDownListFor(model=>model.SelectedSeasonId, new SelectList(Model.Seasons, "SeasonId", "Label"), "--select season--", new { @onchange = "callChangefunc(this.value)" } )
+<div class="row">
+    <div class="col-sm-10">
+        <!--class="table table-striped table-hover table-sm table-condensed sortable">-->
+        <table id="tableStats" data-toggle="table"
+               data-pagination="true" data-page-size="15" data-page-list="[15, All]" data-locale="en-US"
+               class="table table-striped table-hover table-sm " data-detail-view="true">
+            <thead>
+                <tr class="danger">
+                    <th data-sortable="true">Rider</th>
+                    <th data-field="race" data-sortable="true"  data-formatter="RankingFormatter" class="font-weight-bold">@Html.DisplayNameFor(m => m.RiderStats.First().RaceRank)</th>
+                    <th data-field="racePts" data-sortable="true" class="font-weight-bold">@Html.DisplayNameFor(m => m.RiderStats.First().RacePoints)</th>
+                    <th data-field="qual" data-sortable="true" data-formatter="RankingFormatter">@Html.DisplayNameFor(m => m.RiderStats.First().QualifyingRank)</th>
+                    <th data-field="qualPts" data-sortable="true" class="small">@Html.DisplayNameFor(m => m.RiderStats.First().QualifyingPts)</th>
+                    <th data-field="wup" data-sortable="true" data-formatter="RankingFormatter">@Html.DisplayNameFor(m => m.RiderStats.First().WupRank)</th>
+                    <th data-field="wupPts" data-sortable="true" class="small">@Html.DisplayNameFor(m => m.RiderStats.First().WupPoints)</th>
+                    <th data-field="fp4" data-sortable="true" data-formatter="RankingFormatter">@Html.DisplayNameFor(m => m.RiderStats.First().Fp4Rank)</th>
+                    <th data-field="fp4Pts" data-sortable="true" class="small">@Html.DisplayNameFor(m => m.RiderStats.First().Fp4Points)</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.RiderStats)
+                {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(p => item.RiderName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(p => item.RaceRank)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(p => item.RacePoints)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(p => item.QualifyingRank)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(p => item.QualifyingPts)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(p => item.WupRank)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(p => item.WupPoints)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(p => item.Fp4Rank)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(p => item.Fp4Points)
+                    </td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

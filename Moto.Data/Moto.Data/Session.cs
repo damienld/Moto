@@ -18,6 +18,14 @@ namespace Moto.Data
         {
             RiderSessions = new ObservableCollection<RiderSession>();
         }
+        [Browsable(false)]
+        public int NbFalls 
+        {
+            get
+            {
+                return RiderSessions?.Sum(m => m.NbFalls)??0;
+            }
+        }
         [Description("Session")]
         [Display(Name ="Session")]
         public SessionType SessionType { get; set; }
@@ -403,5 +411,18 @@ namespace Moto.Data
 
         }
 
+        /// <summary>
+        /// Returns true if this session is the final race (for example if it s race 2)
+        /// </summary>
+        /// <returns></returns>
+        public bool IsTheRightRace()
+        {
+            return (
+                (this.SessionType == SessionType.Race 
+                && this.Gp.Sessions.FirstOrDefault(s => s.SessionType == SessionType.Race2)==null
+                ||
+                (this.SessionType == SessionType.Race2)
+                ));
+        }
     }
 }

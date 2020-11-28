@@ -17,7 +17,7 @@ namespace PMotoWpf.ViewModel
         }
 
         public EventHandler ShowMessageBox = delegate { };
-        private Dal _dal = MainWindowVM._dal;
+        private IDal _dal = MainWindowVM._dal;
 
         private bool isWet;
         public bool IsWet

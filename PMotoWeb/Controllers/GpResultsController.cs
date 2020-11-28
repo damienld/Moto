@@ -11,11 +11,11 @@ namespace PMotoWeb.Controllers
 {
     public class GpResultsController : Controller
     {
-        private Dal dal;
-        public GpResultsController() : this(new Dal("cnnMotoDb"))
+        private IDal dal;
+        public GpResultsController() : this(new Dal("name=cnnMotoDb"))
         {
         }
-        public GpResultsController(Dal dalIoc)
+        public GpResultsController(IDal dalIoc)
         {
             dal = dalIoc;
         }
@@ -95,7 +95,7 @@ namespace PMotoWeb.Controllers
 
             decimal res = 0;
             List<RiderSessionChart> listChart 
-                = list.Select(p => new RiderSessionChart { RiderName = p.RiderFirstName.Substring(1,1)+"."+ p.RiderName
+                = list.Select(p => new RiderSessionChart { RiderName = p.RiderFirstName.Substring(0,1)+"."+ p.RiderName
                 , Lap1 = Decimal.TryParse(p.Lap1, out res)?res:0
                 , Avg = p.getAvgBestXLaps(nbLapsForAvg.Value)
                 , AvgUsedTyres = p.getAvgBestXLaps(nbLapsForAvgWithTyres.Value, minTyreLapsFront.Value, minTyreLapsRear.Value)

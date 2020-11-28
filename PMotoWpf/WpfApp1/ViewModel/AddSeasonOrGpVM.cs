@@ -15,10 +15,10 @@ namespace PMotoWpf.ViewModel
         private Season _season;
         private Gp _gp;
         private Session _session;
-        private Dal _dal = MainWindowVM._dal;
+        private IDal _dal = MainWindowVM._dal;
         public AddSeasonOrGpVM()
         {
-            SeasonCollection = _dal.getAllSeasons();
+            SeasonCollection = _dal.getAllSeasons(null, null);
         }
 
         private ObservableCollection<Season> seasonCollection;
@@ -110,7 +110,7 @@ namespace PMotoWpf.ViewModel
             try
             {
                 _dal.AddSeasonsIfDontExist(SelectedSeason.Year, SelectedSeason.Category);
-                SeasonCollection = new ObservableCollection<Season>(_dal.getAllSeasons());
+                SeasonCollection = new ObservableCollection<Season>(_dal.getAllSeasons(null, null));
                 ShowMessageBox(this, new MessageEventArgs()
                 {
                     Message = "Changes are saved !"

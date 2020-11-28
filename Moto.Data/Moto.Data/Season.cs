@@ -29,7 +29,7 @@ namespace Moto.Data
         }
         public override string ToString()
         {
-            return $"{this.SeasonId}-{this.Year}-{this.Category}";
+            return $"{this.Year}-{this.Category}";
         }
     }
 }

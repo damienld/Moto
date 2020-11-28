@@ -7,14 +7,14 @@
 <script>
     $(document).ready(function () {
         $("#tableListGp").bootstrapTable();
-    }
+    });
 </script>
 
 <div class="row">
     <div class="col-9">
         <h1>Data visualization for MotoGP</h1>
     </div>
-    <div class="col-3">
+    <!--<div class="col-3">
         <div class="row">
             Bet on MotoGP
         </div>
@@ -30,10 +30,13 @@
                 </a>
             </div>
         </div>
-    </div>
+    </div>-->
 </div>
 <div class="row">Quickly compare the best laps from each rider.</div>
 <div class="row">Filter lap times by used tyres.</div>
+<div class="row">
+    <span class="font-weight-bold">NEWS (27/11/20): You can check Season stats for MotoGP @Html.ActionLink("here", "Index", "MotoStats")</span>
+</div>
 <div class="row">
     <span class="font-weight-bold">NEWS (19/11/20): You can now select the used tyres options for Moto2 and Moto3</span>
     <span>The values are not available from the official data but will be estimated using 0 lap for both tyres since the last pit stop</span>

@@ -69,6 +69,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Dal.cs" />
+    <Compile Include="IDal.cs" />
     <Compile Include="LapTime.cs" />
     <Compile Include="Migrations\202011061225559_InitialCreate.cs" />
     <Compile Include="Migrations\202011061225559_InitialCreate.designer.cs">
@@ -82,6 +83,10 @@
     <Compile Include="Migrations\202011251422470_SimplifiedUserClass.designer.cs">
       <DependentUpon>202011251422470_SimplifiedUserClass.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202011280026065_Add IsNotClassified To RiderSession.cs" />
+    <Compile Include="Migrations\202011280026065_Add IsNotClassified To RiderSession.designer.cs">
+      <DependentUpon>202011280026065_Add IsNotClassified To RiderSession.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="MotoDataContext.cs" />
     <Compile Include="MotoDbInitializer.cs" />
@@ -90,6 +95,7 @@
     <Compile Include="Rider.cs" />
     <Compile Include="RiderSeason.cs" />
     <Compile Include="RiderSession.cs" />
+    <Compile Include="RiderStats.cs" />
     <Compile Include="Season.cs" />
     <Compile Include="Gp.cs" />
     <Compile Include="Session.cs" />
@@ -108,6 +114,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202011251422470_SimplifiedUserClass.resx">
       <DependentUpon>202011251422470_SimplifiedUserClass.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202011280026065_Add IsNotClassified To RiderSession.resx">
+      <DependentUpon>202011280026065_Add IsNotClassified To RiderSession.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

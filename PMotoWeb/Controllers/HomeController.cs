@@ -10,11 +10,11 @@ namespace PMotoWeb.Controllers
 {
     public class HomeController : Controller
     {
-        private Dal dal;
-        public HomeController() : this(new Dal("cnnMotoDb"))
+        private IDal dal;
+        public HomeController() : this(new Dal("name = cnnMotoDb"))
         {
         }
-        public HomeController(Dal dalIoc)
+        public HomeController(IDal dalIoc)
         {
             dal = dalIoc;
         }

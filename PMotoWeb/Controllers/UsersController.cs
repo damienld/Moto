@@ -16,11 +16,11 @@ namespace PMotoWeb.Controllers
     public class UsersController : Controller
     {
         private string key = System.Configuration.ConfigurationManager.AppSettings["encryptKey"];
-        private Dal dal;
-        public UsersController() : this(new Dal("cnnMotoDb"))
+        private IDal dal;
+        public UsersController() : this(new Dal("name = cnnMotoDb"))
         {
         }
-        public UsersController(Dal dalIoc)
+        public UsersController(IDal dalIoc)
         {
             dal = dalIoc;
         }
@@ -99,6 +99,7 @@ namespace PMotoWeb.Controllers
             }
             else
             {
+                ModelState.Clear();
                 ModelState.AddModelError("User.Username", "Username and/or password incorrect(s)");
                 return View();
             }

@@ -135,8 +135,10 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\AllSessionsController.cs" />
     <Compile Include="Controllers\GpResultsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\LastGpsController.cs" />
     <Compile Include="Controllers\MotoStatsController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Global.asax.cs">
@@ -161,9 +163,18 @@
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="img\b365.jpg" />
+    <Content Include="img\carousel\LapAndTyres.png" />
+    <Content Include="img\carousel\LapByLap.JPG" />
+    <Content Include="img\carousel\MarquezJEREZ.JPG" />
+    <Content Include="img\carousel\Replay-gaps.png" />
+    <Content Include="img\carousel\Replay-ranks.png" />
+    <Content Include="img\carousel\Season2020StatsMotoGP.png" />
+    <Content Include="img\carousel\UsedTyres.JPG" />
+    <Content Include="img\green-arrow-up-16.png" />
     <Content Include="img\Hard.JPG" />
     <Content Include="img\Medium.JPG" />
     <Content Include="img\rain.png" />
+    <Content Include="img\red-arrow-down-16.png" />
     <Content Include="img\Soft.JPG" />
     <Content Include="img\MediumWet.jpg" />
     <Content Include="img\SoftWet.jpg" />
@@ -171,10 +182,8 @@
     <Content Include="img\Willhill.jpg" />
     <Content Include="Scripts\bootstrap-table\bootstrap-table.js" />
     <Content Include="Scripts\bootstrap-table\bootstrap-table.min.js" />
-    <Content Include="Scripts\bootstrap-table\extensions\editable\bootstrap-table-editable.min.js" />
-    <Content Include="Scripts\bootstrap-table\extensions\export\bootstrap-table-export.min.js" />
-    <Content Include="Scripts\bootstrap-table\extensions\filter\bootstrap-table-filter.min.js" />
-    <Content Include="Scripts\bootstrap-table\extensions\flatJSON\bootstrap-table-flatJSON.min.js" />
+    <Content Include="Scripts\bootstrap-table\extensions\filter-control\bootstrap-table-filter-control.min.css" />
+    <Content Include="Scripts\bootstrap-table\extensions\filter-control\bootstrap-table-filter-control.min.js" />
     <Content Include="Scripts\bootstrap-table\locale\bootstrap-table-cs-CZ.min.js" />
     <Content Include="Scripts\bootstrap-table\locale\bootstrap-table-da-DK.min.js" />
     <Content Include="Scripts\bootstrap-table\locale\bootstrap-table-de-DE.min.js" />
@@ -354,10 +363,20 @@
     <Content Include="Views\Home\Golf.cshtml" />
     <Content Include="Views\Home\Tennis.cshtml" />
     <Content Include="Views\MotoStats\Index.cshtml" />
+    <Content Include="Views\AllSessions\Create.cshtml" />
+    <Content Include="Views\AllSessions\Delete.cshtml" />
+    <Content Include="Views\AllSessions\Details.cshtml" />
+    <Content Include="Views\AllSessions\Edit.cshtml" />
+    <Content Include="Views\AllSessions\Index.cshtml" />
+    <Content Include="Views\LastGps\Index.cshtml" />
+    <Content Include="Views\Home\Replay.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Models\" />
+    <Folder Include="Scripts\bootstrap-table\extensions\editable\" />
+    <Folder Include="Scripts\bootstrap-table\extensions\export\" />
+    <Folder Include="Scripts\bootstrap-table\extensions\flatJSON\" />
     <Folder Include="Views\Default\" />
   </ItemGroup>
   <ItemGroup>

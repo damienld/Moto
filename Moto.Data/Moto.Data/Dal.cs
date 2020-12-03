@@ -111,6 +111,15 @@ namespace Moto.Data
                 .ThenByDescending(g => g.Season.Category).ToList();
             return gps;
         }
+        public List<Session> getAllSessions(Categories? category)
+        {
+            if (category == null)
+                return Db.Sessions.OrderByDescending(g => g.Date).ThenByDescending(g => g.Gp.Season.Category)
+                .ThenByDescending(g => g.SessionType).ToList();
+            else
+                return Db.Sessions.Where(s=>s.Gp.Season.Category==category)
+                    .OrderByDescending(g => g.Date).ThenByDescending(g => g.SessionType).ToList();
+        }
         public List<Session> GetGpSessions(Gp selectedGp)
         {
             if (selectedGp != null)
@@ -186,12 +195,14 @@ namespace Moto.Data
 
         public void AddOrReplaceSession(Gp gp, Session session)
         {
-            Session existingSimilarSession = gp.Sessions.FirstOrDefault(s => s.SessionType == session.SessionType);
-            if (existingSimilarSession == null)
-                gp.Sessions.Add(session);
-            else
-                existingSimilarSession = session;
+            Session existingSimilarSession = gp.Sessions.SingleOrDefault(s => s.SessionType == session.SessionType);
+            if (existingSimilarSession != null)
+            {
+                RemoveSession(existingSimilarSession);
+            }
+            gp.Sessions.Add(session);
             Db.SaveChanges();
+            
         }
 
         public void SetListRiderSession(Session session, List<RiderSession> riderSessions)
@@ -273,12 +284,12 @@ namespace Moto.Data
         {
             List<RiderStats> listRiderStats = new List<RiderStats>();
             List<RiderSession> riderSessions = GetListRiderSessions(seasonId);
-            List<string> riders = riderSessions.Select(r => r.RiderFirstName.Substring(0,1) + "." + r.RiderName).Distinct().ToList();
+            List<string> riders = riderSessions.Select(r => r.RiderDisplayName).Distinct().ToList();
             foreach (var rider in riders)
             {
                 RiderStats riderStats = new RiderStats() {RiderName = rider};
                 riderStats.RiderSessions = riderSessions.Where
-                    (r => r.RiderFirstName.Substring(0, 1) + "." + r.RiderName == rider).ToList();
+                    (r => r.RiderDisplayName == rider).ToList();
                 listRiderStats.Add(riderStats);
             }
             if (listRiderStats == null) return null;

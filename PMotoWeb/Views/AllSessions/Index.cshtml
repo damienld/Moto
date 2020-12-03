@@ -1,0 +1,116 @@
+﻿@model IEnumerable<Moto.Data.Session>
+
+@{
+    ViewBag.Title = "All Sessions";
+}
+<style>
+    #tableListSessions tbody tr {
+        line-height: 25px;
+    }
+</style>
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            $("#tableListGp").bootstrapTable();
+        });
+        $(document).ready(function () {
+            $("#tableStats").bootstrapTable();
+            //RankingFormatter();
+        });
+        function callChangefunc(val) {
+            window.location.href = "/AllSessions/Index?selectedCatId=" + val;
+        }
+    </script>
+}
+    <h2>All Sessions</h2>
+    <p>
+    </p>
+    <table id="tableListSessions" data-toggle="table" data-search="true"
+           data-pagination="true" data-page-size="10" data-locale="en-US" data-filter-control="true"
+           class="table table-striped table-hover table-sm ">
+        <thead>
+            <tr class="danger">
+                <th data-sortable="true">Year</th>
+                <th data-field="id" data-sortable="true">#</th>
+                <th data-field="category" data-filter-control="select" data-filter-default="MotoGP" data-sortable="true">Category</th>
+                <th data-field="race" data-sortable="true">Race</th>
+                <th data-field="sessionType">Session</th>
+                <th>Link</th>
+                <th>1st</th>
+                <th>2nd</th>
+                <th>3rd</th>
+                <th>4th</th>
+                <th>5th</th>
+                <th>Lap</th>
+                <th data-field="isWet" data-filter-control="select">Weather</th>
+                <th>
+                    @Html.DisplayNameFor(model => model.GroundTemperature)
+                </th>
+                <th>Note GP</th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Note)
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr class="row-bigHeight">
+                    <td>
+                        <span class="badge badge-light">
+                            @{ string dateStr = item.Date.Year.ToString();
+                            }
+                            @Html.DisplayFor(p => dateStr)
+                        </span>
+                    </td>
+                    <td>
+                        <span class="badge badge-light">
+                            @Html.DisplayFor(modelItem => item.Gp.GpIdInSeason)
+                        </span>
+                    </td>
+                    <td class="badge badge-@item.Gp.Season.Category">
+                        @Html.DisplayFor(p => item.Gp.Season.Category)
+                    </td>
+                    <td>
+                        <span class="badge badge-light">
+                            @Html.DisplayFor(modelItem => item.Gp.Name)
+                        </span>
+                    </td>
+                    <td class="badge badge-@item.SessionType">
+                        @Html.DisplayFor(modelItem => item.SessionType)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Sessions", "Index", "GpResults", new { id = item.Gp.GpId }, null)
+                    </td>
+                    <td><span class="badge badge-warning">@item.RiderSessions.First().RiderDisplayNameShort</span></td>
+                    <td><span class="badge badge-success">@item.RiderSessions.ElementAtOrDefault(1).RiderDisplayNameShort</span></td>
+                    <td><span class="badge badge-primary">@item.RiderSessions.ElementAtOrDefault(2).RiderDisplayNameShort</span></td>
+                    <td><span class="badge badge-secondary">@item.RiderSessions.ElementAtOrDefault(3).RiderDisplayNameShort</span></td>
+                    <td><span class="badge badge-light">@item.RiderSessions.ElementAtOrDefault(4).RiderDisplayNameShort</span></td>
+                    <td><span class="badge badge-info">@item.RiderSessions.First().getAvgBestXLaps(1)</span></td>
+                    @{string wet = ""; }
+                    @if (item.IsWet)
+                    {
+                        wet = "Wet";
+                    }
+                    <td>
+                        @Html.DisplayFor(modelItem => wet)
+                    </td>
+                    <td>
+                        <span class="badge badge-light">
+                            @Html.DisplayFor(modelItem => item.GroundTemperature)
+                        </span>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(p => item.Gp.Note)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Note)
+                    </td>
+
+                </tr>
+            }
+        </tbody>
+    </table>
+
+

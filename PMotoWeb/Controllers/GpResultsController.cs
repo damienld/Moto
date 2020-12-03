@@ -38,7 +38,6 @@ namespace PMotoWeb.Controllers
             else vm.RiderSessions = new List<RiderSession>();
             return View(vm);
         }
-
         public ActionResult ListRiderSession(int? idSession)
         {
             if (!idSession.HasValue)
@@ -48,7 +47,7 @@ namespace PMotoWeb.Controllers
                 RiderSessions = dal.GetRiderSessions(idSession.Value),
             };
             //if (vm.RiderSessions != null && vm.RiderSessions.Count > 0 
-            //    && vm.RiderSessions.First().Session.Gp.Season.Category != Categories.c500)
+            //    && vm.RiderSessions.First().Session.Gp.Season.Category != Categories.MotoGP)
             //    RiderSession.simulateTyreUseIfNotAvailable(vm.RiderSessions);
 
             if (vm.RiderSessions != null & vm.RiderSessions.Count() > 0)
@@ -78,7 +77,7 @@ namespace PMotoWeb.Controllers
                  || !minTyreLapsFront.HasValue || !minTyreLapsRear.HasValue || !riderRange.HasValue)
                 return new JsonResult();
             List<RiderSession> list = dal.GetRiderSessions(idSession.Value);
-            if (list!=null && list.Count > 0 && list.First().Session.Gp.Season.Category != Categories.c500)
+            if (list!=null && list.Count > 0 && list.First().Session.Gp.Season.Category != Categories.MotoGP)
                 RiderSession.simulateTyreUseIfNotAvailable(list);
 
             if (riderRange.Value == 1)
@@ -110,7 +109,7 @@ namespace PMotoWeb.Controllers
             if (!idRiderSession.HasValue)
                 return PartialView(new RiderSession());
             RiderSession session = dal.GetRiderSession(idRiderSession.Value);
-            if (session.Session.Gp.Season.Category != Categories.c500)
+            if (session.Session.Gp.Season.Category != Categories.MotoGP)
                 RiderSession.simulateTyreUseIfNotAvailable(session);
             return PartialView(session);
         }

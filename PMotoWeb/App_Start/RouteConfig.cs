@@ -13,11 +13,11 @@ namespace PMotoWeb
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
-            routes.MapRoute(
+           /* routes.MapRoute(
                 name: "MotoStats",
                 url: "{controller}/{action}/{selectedSeasonId}",
                 defaults: new { controller = "MotoStats", action = "Index", selectedSeasonId = UrlParameter.Optional }
-            );
+            );*/
             routes.MapRoute(
                 name: "RiderSessionsToChart",
                 url: "GpResults/RiderSessionsToChart/{idSession}/{nbLapsForAvg}/{nbLapsForAvgWithTyres}/{minTyreLapsFront}/{minTyreLapsRear}/{riderRange}",

@@ -87,6 +87,14 @@
     <Compile Include="Migrations\202011280026065_Add IsNotClassified To RiderSession.designer.cs">
       <DependentUpon>202011280026065_Add IsNotClassified To RiderSession.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202011301939326_Add T1 T2 T3 T4 to LapTime.cs" />
+    <Compile Include="Migrations\202011301939326_Add T1 T2 T3 T4 to LapTime.designer.cs">
+      <DependentUpon>202011301939326_Add T1 T2 T3 T4 to LapTime.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202011302001052_Add T1isCancelled T2T1isCancelled ... to LapTime.cs" />
+    <Compile Include="Migrations\202011302001052_Add T1isCancelled T2T1isCancelled ... to LapTime.designer.cs">
+      <DependentUpon>202011302001052_Add T1isCancelled T2T1isCancelled ... to LapTime.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="MotoDataContext.cs" />
     <Compile Include="MotoDbInitializer.cs" />
@@ -117,6 +125,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202011280026065_Add IsNotClassified To RiderSession.resx">
       <DependentUpon>202011280026065_Add IsNotClassified To RiderSession.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202011301939326_Add T1 T2 T3 T4 to LapTime.resx">
+      <DependentUpon>202011301939326_Add T1 T2 T3 T4 to LapTime.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202011302001052_Add T1isCancelled T2T1isCancelled ... to LapTime.resx">
+      <DependentUpon>202011302001052_Add T1isCancelled T2T1isCancelled ... to LapTime.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

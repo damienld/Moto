@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 
 namespace Moto.Data
@@ -39,6 +40,38 @@ namespace Moto.Data
         [Display(Name = "")]
         public string RiderFirstName
         { get; set; }
+        [Browsable(false)]
+        [NotMapped]
+        public string RiderDisplayName
+        {
+            get
+            {
+                try
+                {
+                    return $"{RiderFirstName.Substring(0, 1)}.{RiderName[0]}{RiderName.ToLower().Substring(1)}";
+                }
+                catch (Exception)
+                {
+                    return RiderName;                    
+                }
+            }
+        }
+        [Browsable(false)]
+        [NotMapped]
+        public string RiderDisplayNameShort
+        {
+            get
+            {
+                try
+                {
+                    return $"{RiderDisplayName.Substring(0, Math.Min(5, RiderDisplayName.Length))}";
+                }
+                catch (Exception)
+                {
+                    return RiderDisplayName;
+                }
+            }
+        }
         [Description("#")]
         [Display(Name = "#")]
         public string RiderNumber

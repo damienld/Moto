@@ -1,4 +1,6 @@
-﻿using Moto.Data;
+﻿using iTextSharp.text.pdf;
+using iTextSharp.text.pdf.parser;
+using Moto.Data;
 using PMotoWpf.Infra;
 using System;
 using System.Collections.Generic;
@@ -6,6 +8,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace PMotoWpf.ViewModel
 {
@@ -166,12 +169,33 @@ namespace PMotoWpf.ViewModel
             else
                 return false;
         }
+        /*
+        public static string ExtractTextFromPdf()
+        {//ITEXT SHARP
+            ITextExtractionStrategy its = new iTextSharp.text.pdf.parser.LocationTextExtractionStrategy();
+            string url = "https://resources.motogp.com/files/results/2020/POR/MotoGP/RAC/Analysis.pdf?v3_0200c734";
+            using (PdfReader reader = new PdfReader(url))
+            {
+                StringBuilder text = new StringBuilder();
+
+                for (int i = 1; i <= reader.NumberOfPages; i++)
+                {
+                    string thePage = PdfTextExtractor.GetTextFromPage(reader, i, its);
+                    string[] theLines = thePage.Split('\n');
+                    foreach (var theLine in theLines)
+                    {
+                        Console.WriteLine(theLine);
+                        text.AppendLine(theLine);
+                    }
+                }
+                return text.ToString();
+            }
+        }*/
         private void ProcessText()
         {
             try
             {
-                ListRiderSessions = new ObservableCollection<RiderSession>
-                    (Session.ReadAnalysisPdf(TextToProcess));
+                //Console.WriteLine(ExtractTextFromPdf());
                 if (TextToProcess.ToLower().Contains("Free Practice Nr. 1".ToLower()))
                     SessionType = SessionType.FP1;
                 else if (TextToProcess.ToLower().Contains("Free Practice Nr. 2".ToLower()))
@@ -192,6 +216,9 @@ namespace PMotoWpf.ViewModel
                     SessionType = SessionType.Race2;
                 else if (TextToProcess.ToLower().Contains("Race".ToLower()))
                     SessionType = SessionType.Race;
+                ListRiderSessions = new ObservableCollection<RiderSession>
+                    (Session.ReadAnalysisPdf(TextToProcess, SessionType));
+
                 Note = "";
                 isWet = false;
                 GroundTemp = null;
@@ -234,6 +261,7 @@ namespace PMotoWpf.ViewModel
                 _dal.AddOrReplaceSession(SelectedGp, session);
                 SelectedGp.NotifyPropertyChanged();
                 _dal.SetListRiderSession(session, ListRiderSessions.ToList());
+                session.CreateCsvRace();
                 ResetForm();
                 Note = $"<{SessionType} saved>";
             }
@@ -273,6 +301,45 @@ namespace PMotoWpf.ViewModel
                 SelectedGp.NotifyPropertyChanged();
                 ResetForm();
                 Note = $"<{SessionType} removed>";
+            }
+            catch (Exception ex)
+            {
+                ShowMessageBox(this, new MessageEventArgs()
+                {
+                    Message = ex.Message
+                });
+            }
+        }
+        #endregion
+        #region COPY TO CSV
+        public RelayCommand CopyToCsvCmd
+        {
+            get
+            {
+                return new RelayCommand(x => CopyToCsv(), x => canCopyToCsvCmd());
+            }
+        }
+        private bool canCopyToCsvCmd()
+        {
+            return true;// ListRiderSessions != null && ListRiderSessions.Count > 0;
+        }
+        private void CopyToCsv()
+        {
+            try
+            {
+                if (SelectedGp == null || SelectedSession == null)
+                {
+                    ShowMessageBox(this, new MessageEventArgs()
+                    {
+                        Message = "Please select a GrandPrix/session"
+                    });
+                    return;
+                }
+                Clipboard.SetText(selectedSession.CreateCsvRace());
+                ShowMessageBox(this, new MessageEventArgs()
+                {
+                    Message = "CSV copied to Clipboard"
+                });
             }
             catch (Exception ex)
             {

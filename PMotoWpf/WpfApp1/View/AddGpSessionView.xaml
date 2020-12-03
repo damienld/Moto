@@ -100,7 +100,11 @@
                 <DataGridTextColumn Binding="{Binding NbLapsFrontTyre}" Header="Lap"></DataGridTextColumn>
                 <DataGridTextColumn Binding="{Binding RearTyreType}" Header="Rear"></DataGridTextColumn>
                 <DataGridTextColumn Binding="{Binding NbLapsRearTyre}" Header="Lap"></DataGridTextColumn>
-            </DataGrid.Columns>
+                <DataGridTextColumn Binding="{Binding T1}" Header="T1"></DataGridTextColumn>
+                <DataGridTextColumn Binding="{Binding T2}" Header="T2"></DataGridTextColumn>
+                <DataGridTextColumn Binding="{Binding T3}" Header="T3"></DataGridTextColumn>
+                <DataGridTextColumn Binding="{Binding T4}" Header="T4"></DataGridTextColumn>
+                </DataGrid.Columns>
         </DataGrid>
         </StackPanel>
         <StackPanel Grid.Row="4" Grid.Column="0" Orientation="Horizontal">
@@ -112,6 +116,7 @@
             <CheckBox Content="Wet" IsChecked="{Binding IsWet}"></CheckBox>
             <Button Content="Save Session" Command="{Binding SaveSessionCmd}"></Button>
             <Button Content="Delete Session" Command="{Binding DeleteSessionCmd}"></Button>
+            <Button Content="Copy To CSV" Command="{Binding CopyToCsvCmd}"></Button>
         </StackPanel>
         
     </Grid>

@@ -22,22 +22,22 @@ namespace PMotoWeb.Controllers
         public ActionResult Index()
         {
             HomeViewModel vm = new HomeViewModel();
-           // vm.SelectedCategory = Moto.Data.Categories.c500;
-            vm.ListGpsForCategory = dal.getAllGp();// (vm.SelectedCategory);
+           // vm.SelectedCategory = Moto.Data.Categories.MotoGP;
+            vm.ListGps = dal.getAllGp().Take(3).ToList();// (vm.SelectedCategory);
             return View(vm);
         }
 
         public ActionResult About()
         {
-            ViewBag.Message = "Your application description page.";
-
             return View();
         }
 
         public ActionResult Contact()
         {
-            ViewBag.Message = "Your contact page.";
-
+            return View();
+        }
+        public ActionResult Replay()
+        {
             return View();
         }
         public ActionResult Tennis()

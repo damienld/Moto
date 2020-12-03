@@ -10,7 +10,7 @@ namespace Moto.Data
         public string RiderName { get; set; }
         public List<RiderSession> RiderSessions { get; set; }
 
-        [Display(Name = "Qual Rk")]
+        [Display(Name = "QUAL Rk")]
         public int QualifyingRank { get; set; }
         [Display(Name = "Qual Pts")]
         public int QualifyingPts
@@ -26,7 +26,7 @@ namespace Moto.Data
                 return ptsInQ2 + ptsInQ1;
             }
         }
-        [Display(Name = "Race Rk")]
+        [Display(Name = "RACE Rk")]
         public int RaceRank { get; set; }
         [Display(Name = "Race Pts")]
         public int RacePoints
@@ -41,7 +41,7 @@ namespace Moto.Data
                 return pts;
             }
         }
-        [Display(Name = "Wup Rk")]
+        [Display(Name = "WUP Rk")]
         public int WupRank { get; set; }
         [Display(Name = "Wup Pts")]
         public int WupPoints

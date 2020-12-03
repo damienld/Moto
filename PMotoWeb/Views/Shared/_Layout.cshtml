@@ -12,6 +12,8 @@
     </script>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="keywords" content="MotoGP, sport, stat, data, visualization" />
+    <meta name="description" content="Resultats, Stats and Data visualization for MotoGP" />
     <title>@ViewBag.Title</title>
     @Styles.Render("~/Content/css")
 
@@ -25,11 +27,13 @@
             </button>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav mr-auto">
-                    <li class="nav-item">@Html.ActionLink("MotoGP", "Index", "Home", null, new { @class = "nav-link" })</li>
+                    <li class="nav-item">@Html.ActionLink("Last Races", "Index", "LastGps", null, new { @class = "nav-link" })</li>
+                    <li class="nav-item">@Html.ActionLink("All Sessions", "Index", "AllSessions", null, new { @class = "nav-link" })</li>
+                    <li class="nav-item">@Html.ActionLink("Replay Race", "Replay", "Home", null, new { @class = "nav-link" })</li>
                     <li class="nav-item">@Html.ActionLink("Season Stats", "Index", "MotoStats", null, new { @class = "nav-link" })</li>
                     <!--<li class="nav-item">@Html.ActionLink("Tennis", "Tennis", "Home", null, new { @class = "nav-link" })</li>
-    <li class="nav-item">@Html.ActionLink("Golf", "Golf", "Home", null, new { @class = "nav-link" })</li>
-    -->
+                    <li class="nav-item">@Html.ActionLink("Golf", "Golf", "Home", null, new { @class = "nav-link" })</li>
+                    -->
                     <li class="nav-item">@Html.ActionLink("About", "About", "Home", null, new { @class = "nav-link" })</li>
                     <li class="nav-item align-content-end">@Html.ActionLink("Contact", "Contact", "Home", null, new { @class = "nav-link" })</li>
                 </ul>
@@ -50,37 +54,32 @@
             </div>
         </div>
     </nav>
-    <!--<div class="navbar navbar-inverse navbar-fixed-top">
+    <!--2nd navbar
+    <nav class="navbar navbar-expand-lg navbar-light bg-info border">
         <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                @Html.ActionLink("DataMotoGP.eu", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
-            </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                    <li>@Html.ActionLink("About", "About", "Home")</li>
-                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+            <div class="navbar-collapse collapse w-100 border">
+                <ul class="nav navbar-nav mr-auto">
+                    <li class="nav-item border">@Html.ActionLink("Portimao MotoGP Sessions", "Index", "GpResults", null, new { @id = 15, @class = "nav-link" })</li>
+                    <li class="nav-item border">@Html.ActionLink("Portimao Moto2 Sessions", "Index", "GpResults", null, new { @id = 14, @class = "nav-link" })</li>
+                    <li class="nav-item border">@Html.ActionLink("Portimao Moto3 Sessions", "Index", "GpResults", null, new { @id = 13, @class = "nav-link" })</li>
                 </ul>
             </div>
         </div>
-    </div>-->
+    </nav>
+    -->
     <div class="container body-content">
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; @DateTime.Now.Year - @ViewBag.Title</p>
+            <p>&copy; DataMotoGP.eu @DateTime.Now.Year - @ViewBag.Title</p>
+            <p>Source Data from © DORNA, 2020</p>
         </footer>
     </div>
 
     @Scripts.Render("~/bundles/modernizr")
     @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
     @Scripts.Render("~/Scripts/jquery.unobtrusive-ajax.js")
+    @Scripts.Render("~/bundles/bootstrap")
     @Scripts.Render("~/bundles/bootstrap-table")
     @RenderSection("scripts", required: false)
 </body>

@@ -29,38 +29,38 @@ namespace Moto.Data.Tests
         private void InitSeasons2020()
         {
             (int year, Categories category) season1
-                = (2020, Categories.c125);
+                = (2020, Categories.Moto3);
             (int year, Categories category) season2
-                = (2020, Categories.c250);
+                = (2020, Categories.Moto2);
             (int year, Categories category) season3
-                = (2020, Categories.c500);
+                = (2020, Categories.MotoGP);
             dal.AddSeasonsIfDontExist(new List<(int, Categories)>() { season1, season2, season3 });
             
         }
         [TestMethod]
         public void Check_AddSeasons()
         {
-            Season season = dal.getSeason(2020, Categories.c500);
+            Season season = dal.getSeason(2020, Categories.MotoGP);
             Assert.IsTrue(season != null);
-            season = dal.getSeason(2020, Categories.c250);
+            season = dal.getSeason(2020, Categories.Moto2);
             Assert.IsTrue(season != null);
-            season = dal.getSeason(2020, Categories.c125);
+            season = dal.getSeason(2020, Categories.Moto3);
             Assert.IsTrue(season != null);
         }
         [TestMethod]
         public void Check_AddGp()
         {
-            dal.AddGp(2020, Categories.c125, 1, new DateTime(2020, 3, 6), "Qatar", "", "");
-            dal.AddGp(2020, Categories.c250, 1, new DateTime(2020, 3, 6), "Qatar", "", "");
-            Gp gp = dal.getGp(2020, Categories.c250, 1);
+            dal.AddGp(2020, Categories.Moto3, 1, new DateTime(2020, 3, 6), "Qatar", "", "");
+            dal.AddGp(2020, Categories.Moto2, 1, new DateTime(2020, 3, 6), "Qatar", "", "");
+            Gp gp = dal.getGp(2020, Categories.Moto2, 1);
             Assert.IsTrue(gp != null);
-            gp = dal.getGp(2020, Categories.c125, 1);
+            gp = dal.getGp(2020, Categories.Moto3, 1);
             Assert.IsTrue(gp != null);
         }
         [TestMethod]
         public void Check_AddRider_RiderSeason()
         {
-            Season season = dal.getSeason(2020, Categories.c500);
+            Season season = dal.getSeason(2020, Categories.MotoGP);
             Rider rider = dal.AddRider("testName", "testFirstName", "[test]");
             RiderSeason riderSeason = dal.AddRiderSeason(season, rider, "teamTest");
             Assert.IsTrue(riderSeason.Rider.Firstname == "testFirstName");

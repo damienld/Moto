@@ -29,7 +29,7 @@ namespace PMotoWeb.Controllers
             if (selectedSeasonId.HasValue)
                 m.SelectedSeasonId = selectedSeasonId.Value;
             else
-                m.SelectedSeasonId = m.Seasons.Where(s=>s.Category==Categories.c500).First().SeasonId;
+                m.SelectedSeasonId = m.Seasons.Where(s=>s.Category==Categories.MotoGP).First().SeasonId;
             m.RiderStats = dal.MakeRiderStats(m.SelectedSeasonId );
             return View(m);
         }

@@ -1,7 +1,7 @@
 ﻿@model Moto.Data.RiderSession
 
 <br />
-@if (Model.Session.Gp.Season.Category == Moto.Data.Categories.c500)
+@if (Model.Session.Gp.Season.Category == Moto.Data.Categories.MotoGP)
 {
 <div>
     Only min. Tyres: Front
@@ -55,6 +55,7 @@ else
     </select>
 </div>
 }
+@section scripts{
 <script type="text/javascript">
     function filterTyre() {
         //select = $("#filterTyreFront");
@@ -69,6 +70,7 @@ else
     }
     $('#listLapsForRider').bootstrapTable();
 </script>
+}
 <div>Lap Times for <strong>@Model.RiderFirstName @Model.RiderName</strong></div>
 <table data-toggle="table" class="table-sm table-hover table-responsive w-auto small border-0" id="listLapsForRider">
     <thead>

@@ -13,9 +13,9 @@ namespace Moto.Data
 	    {
 	        IList<Season> defaultSeasons = new List<Season>();
 
-			defaultSeasons.Add(new Season() { Category = Categories.c125, Year = 2020 });
-			defaultSeasons.Add(new Season() { Category = Categories.c250, Year = 2020 });
-			defaultSeasons.Add(new Season() { Category = Categories.c500, Year = 2020 });
+			defaultSeasons.Add(new Season() { Category = Categories.Moto3, Year = 2020 });
+			defaultSeasons.Add(new Season() { Category = Categories.Moto2, Year = 2020 });
+			defaultSeasons.Add(new Season() { Category = Categories.MotoGP, Year = 2020 });
 
 			context.Seasons.AddRange(defaultSeasons);
 	

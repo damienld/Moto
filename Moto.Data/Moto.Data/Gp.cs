@@ -43,7 +43,7 @@ namespace Moto.Data
         }
         public override string ToString()
         {
-            return $"{this.GpIdInSeason}-{this.Name}-{this.Date}";// -{this.Season.Category}";
+            return $"{this.GpIdInSeason}-{this.Name}-{this.Date.Year}";// -{this.Season.Category}";
         }
 
     }

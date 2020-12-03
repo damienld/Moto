@@ -27,8 +27,10 @@ namespace PMotoWeb
    "~/Scripts/respond.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/bootstrap-table").Include(
-   "~/Scripts/bootstrap-table/tableExport.min.js",
-   "~/Scripts/bootstrap-table/bootstrap-table.min.js"
+   "~/Scripts/bootstrap-table/tableExport.min.js"
+   , "~/Scripts/bootstrap-table/bootstrap-table.min.js"
+   , "~/Scripts/bootstrap-table/extensions/filter-control/bootstrap-table-filter-control.min.js"
+
    //"~/Scripts/bootstrap-table/bootstrap-table-locale-all.min.js",
    //"~/Scripts/bootstrap-table/extensions/export/bootstrap-table-export.min.js"
    ));
@@ -36,6 +38,7 @@ namespace PMotoWeb
             bundles.Add(new StyleBundle("~/Content/css").Include(
    "~/Content/bootstrap.min.css",
    "~/Content/bootstrap-table.min.css",
+   "~/Content/bootstrap-table/extensions/filter-control/bootstrap-table-filter-control.min.css",
    "~/Content/site.css"));
         }
     }

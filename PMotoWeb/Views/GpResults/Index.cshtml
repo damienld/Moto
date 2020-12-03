@@ -8,47 +8,49 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-5">
-            <table class="table table-sm sortable" id="tbSessions">
+            <table class="table" id="tbSessions">
                 <thead class="alert">
                     <tr>
                         <th scope="col">Link</th>
                         <th scope="col">Session</th>
-                        <th scope="col">Falls</th>
+                        <th scope="col" data-toggle="tooltip" data-placement="top" title="# of unfinished laps">Unf.</th>
                         <th scope="col">Note</th>
-                        <th scope="col">Ground (°C)</th>
+                        <th scope="col">Ground(°C)</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach (var item in Model.Sessions)
                     {
-                    <tr>
-                        <td>
-                            @Ajax.ActionLink("Details", "ListRiderSession", new { idSession = item.SessionId }, new AjaxOptions
-                       {
-                           InsertionMode = InsertionMode.Replace,
-                           UpdateTargetId = "gridListRiderSession",
-                           HttpMethod = "GET"
-                       }, new { id = "linkListRiderSession" })
-                        </td>
-                        <td>@Html.DisplayFor(p => item.SessionType)</td>
-                        @if (item.NbFalls > 0)
-                        {
-                        <td class="alert-danger">@Html.DisplayFor(p => item.NbFalls)</td>
-                        }
-                        else
-                        {
-                        <td></td>
-                        }
-                        <td class="small">@Html.DisplayFor(p => item.Note)</td>
-                        <td  class="small">
-                            @{ string temp = item.GroundTemperature.HasValue ? item.GroundTemperature + "°" : "";}
-                            @Html.DisplayFor(p => temp)
-                            @if (item.IsWet)
+                        <tr>
+                            <td>
+                                @Ajax.ActionLink("Details", "ListRiderSession", new { idSession = item.SessionId }, new AjaxOptions
+                           {
+                               InsertionMode = InsertionMode.Replace,
+                               UpdateTargetId = "gridListRiderSession",
+                               HttpMethod = "GET"
+                           }, new { id = "linkListRiderSession" })
+                            </td>
+                            <td><span class="badge badge-@item.SessionType">@Html.DisplayFor(p => item.SessionType)</span></td>
+                            @if (item.NbFalls > 0)
                             {
-                            <img src="/img/rain.png" width="20" height="20" />
+                                <td><span class="badge badge-danger">@Html.DisplayFor(p => item.NbFalls)</span></td>
                             }
-                        </td>
-                    </tr>
+                            else
+                            {
+                                <td></td>
+                            }
+                            <td><span class="badge badge-light">@Html.DisplayFor(p => item.Note)</span></td>
+                            <td>
+                                <span class="badge badge-light">
+                                    @{ string temp = item.GroundTemperature.HasValue ? item.GroundTemperature + "°" : "";}
+                                    @Html.DisplayFor(p => temp)
+                                    @if (item.IsWet)
+                                    {
+                                        <img src="/img/rain.png" width="20" height="20" />
+                                    }
+                                </span>
+                            </td>
+                        </tr>
                     }
                 </tbody>
             </table>
@@ -105,90 +107,90 @@
                 </tr>
             </table>
             <table class="w-100 border">
-                @if (Model.SelectedSession.Gp.Season.Category != Moto.Data.Categories.c500)
+                @if (Model.SelectedSession.Gp.Season.Category != Moto.Data.Categories.MotoGP)
                 {
-                <tr><td class="text-secondary" colspan="4">(For this cat. # of laps by tyre is just since last Pit stop)</td></tr>
+                    <tr><td class="text-secondary" colspan="4">(For this cat. # of laps by tyre is just since last Pit stop)</td></tr>
                 }
-            <tr>
-                <td>
-                    <span class="font-weight-bold">Avg </span>
-                    <select class="mdb-select md-form colorful-select"
-                            title="#laps for average with used tyres" id="nbLapsForAvgWithTyresInChart" onchange="DrawonLoad(currentSessionId)">
-                        <option value=1 selected>1</option>
-                        <option value=2>2</option>
-                        <option value=3>3</option>
-                        <option value=4>4</option>
-                        <option value=5>5</option>
-                        <option value=6>6</option>
-                        <option value=7>7</option>
-                        <option value=8>8</option>
-                        <option value=9>9</option>
-                        <option value=10>10</option>
-                        <option value=11>11</option>
-                        <option value=12>12</option>
-                        <option value=13>13</option>
-                        <option value=14>14</option>
-                        <option value=15>15</option>
-                    </select>
-                </td>
-                <td>
-                    <span class="font-weight-bold"> with used tyres: </span>
-                    <span>select min laps</span>
-                    <span class="text-right font-weight-bold"> Front </span>
-                    <select class="mdb-select md-form colorful-select"
-                            title="#min laps for front tyre" id="nbLMinLapsFrontForAvgInChart" onchange="DrawonLoad()">
-                        <option value=0 selected>0</option>
-                        <option value=2>2</option>
-                        <option value=4>4</option>
-                        <option value=5>5</option>
-                        <option value=6>6</option>
-                        <option value=7>7</option>
-                        <option value=8>8</option>
-                        <option value=9>9</option>
-                        <option value=10>10</option>
-                        <option value=11>11</option>
-                        <option value=12>12</option>
-                        <option value=13>13</option>
-                        <option value=14>14</option>
-                        <option value=15>15</option>
-                        <option value=16>16</option>
-                        <option value=17>17</option>
-                        <option value=18>18</option>
-                        <option value=19>19</option>
-                        <option value=20>20</option>
-                    </select>
-                </td>
-                <td>
-                    <span class="text-right"> <span class="font-weight-bold">Rear</span> </span>
-                    <select class="mdb-select md-form colorful-select"
-                            title="#min laps for Rear Tyre" id="nbLMinLapsRearForAvgInChart" onchange="DrawonLoad()">
-                        <option value=0>0</option>
-                        <option value=2>2</option>
-                        <option value=4>4</option>
-                        <option value=5>5</option>
-                        <option value=6 selected>6</option>
-                        <option value=7>7</option>
-                        <option value=8>8</option>
-                        <option value=9>9</option>
-                        <option value=10>10</option>
-                        <option value=11>11</option>
-                        <option value=12>12</option>
-                        <option value=13>13</option>
-                        <option value=14>14</option>
-                        <option value=15>15</option>
-                        <option value=16>16</option>
-                        <option value=17>17</option>
-                        <option value=18>18</option>
-                        <option value=19>19</option>
-                        <option value=20>20</option>
-                    </select>
-                </td>
-            </tr>
+                <tr>
+                    <td>
+                        <span class="font-weight-bold">Avg </span>
+                        <select class="mdb-select md-form colorful-select"
+                                title="#laps for average with used tyres" id="nbLapsForAvgWithTyresInChart" onchange="DrawonLoad(currentSessionId)">
+                            <option value=1 selected>1</option>
+                            <option value=2>2</option>
+                            <option value=3>3</option>
+                            <option value=4>4</option>
+                            <option value=5>5</option>
+                            <option value=6>6</option>
+                            <option value=7>7</option>
+                            <option value=8>8</option>
+                            <option value=9>9</option>
+                            <option value=10>10</option>
+                            <option value=11>11</option>
+                            <option value=12>12</option>
+                            <option value=13>13</option>
+                            <option value=14>14</option>
+                            <option value=15>15</option>
+                        </select>
+                    </td>
+                    <td>
+                        <span class="font-weight-bold"> with used tyres: </span>
+                        <span>select min laps</span>
+                        <span class="text-right font-weight-bold"> Front </span>
+                        <select class="mdb-select md-form colorful-select"
+                                title="#min laps for front tyre" id="nbLMinLapsFrontForAvgInChart" onchange="DrawonLoad()">
+                            <option value=0 selected>0</option>
+                            <option value=2>2</option>
+                            <option value=4>4</option>
+                            <option value=5>5</option>
+                            <option value=6>6</option>
+                            <option value=7>7</option>
+                            <option value=8>8</option>
+                            <option value=9>9</option>
+                            <option value=10>10</option>
+                            <option value=11>11</option>
+                            <option value=12>12</option>
+                            <option value=13>13</option>
+                            <option value=14>14</option>
+                            <option value=15>15</option>
+                            <option value=16>16</option>
+                            <option value=17>17</option>
+                            <option value=18>18</option>
+                            <option value=19>19</option>
+                            <option value=20>20</option>
+                        </select>
+                    </td>
+                    <td>
+                        <span class="text-right"> <span class="font-weight-bold">Rear</span> </span>
+                        <select class="mdb-select md-form colorful-select"
+                                title="#min laps for Rear Tyre" id="nbLMinLapsRearForAvgInChart" onchange="DrawonLoad()">
+                            <option value=0>0</option>
+                            <option value=2>2</option>
+                            <option value=4>4</option>
+                            <option value=5>5</option>
+                            <option value=6 selected>6</option>
+                            <option value=7>7</option>
+                            <option value=8>8</option>
+                            <option value=9>9</option>
+                            <option value=10>10</option>
+                            <option value=11>11</option>
+                            <option value=12>12</option>
+                            <option value=13>13</option>
+                            <option value=14>14</option>
+                            <option value=15>15</option>
+                            <option value=16>16</option>
+                            <option value=17>17</option>
+                            <option value=18>18</option>
+                            <option value=19>19</option>
+                            <option value=20>20</option>
+                        </select>
+                    </td>
+                </tr>
             </table>
-                
-                <div id="chartRiderSession" style="height: 450px; width: 100%; float:right">
-                </div>
+
+            <div id="chartRiderSession" style="height: 450px; width: 100%; float:right">
             </div>
+        </div>
     </div>
 
     <div id="gridListRiderSession">
@@ -197,11 +199,12 @@
         }
     </div>
 </div>
-<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-<script>
-
-</script>
-<script type="text/javascript">
+@section scripts{
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script>
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    })
 
     google.charts.load('current', { 'packages': ['corechart'] });
     //Call function after Google Chart is loaded, it is required, otherwise you may get error
@@ -214,7 +217,7 @@
             riderRange = $("#rangeRiders").val();
             nbMinLapsRearForAvg = 0;
             nbMinLapsFrontForAvg = 0;
-            //isMotoGPCat = ("@(Model.SelectedSession.Gp.Season.Category == Moto.Data.Categories.c500)" == "True");
+            //isMotoGPCat = ("@(Model.SelectedSession.Gp.Season.Category == Moto.Data.Categories.MotoGP)" == "True");
             isMotoGPCat = true;
             if (isMotoGPCat)
             {
@@ -321,4 +324,5 @@
         })
 
     }
-</script>
+    </script>
+}

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Moto.Data
 {
-    public enum Categories { c125, c250, c500}
+    public enum Categories { Moto3, Moto2, MotoGP}
     public class Season: NotificationClass
     {
         public Season()

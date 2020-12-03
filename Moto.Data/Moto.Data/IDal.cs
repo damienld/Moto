@@ -21,6 +21,7 @@ namespace Moto.Data
         List<Gp> getAllGp(int year, Categories category);
         ObservableCollection<Season> getAllSeasons(int? year, Categories? category);
         Gp getGp(int year, Categories category, int gpIdInSeason);
+        List<Session> getAllSessions(Categories? category);
         List<Session> GetGpSessions(Gp selectedGp);
         List<Session> GetGpSessions(int gpId);
         RiderSession GetRiderSession(int riderSessionId);

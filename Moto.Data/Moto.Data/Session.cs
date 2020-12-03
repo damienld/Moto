@@ -14,6 +14,66 @@ namespace Moto.Data
     public enum SessionType { FP1, FP2, FP3, FP4, Q1, Q2, WUP, Race, Race2}
     public class Session
     {
+        public string CreateCsvRace()// List<RiderSession> riderSessions)
+        {
+            List<RiderSession> riderSessions = this.RiderSessions.ToList();
+            int nbLapsRace = riderSessions.First().ListLapTimes.Count;
+            string res = $"Rider,Team,ImageURL,";
+            for (int i = 1; i <= nbLapsRace - 1; i++)
+            {
+                res += ",,,,"+ (nbLapsRace - i) + "Lap(s) to Go";
+            }
+            res += ",,,,FINISH!!!";
+            res += Environment.NewLine;
+            foreach (var riderSession in riderSessions)
+            {
+                try
+                {
+                    string arrayCumulatedLapTimes = "0,";
+                    decimal cumulLapTime = 0;
+                    for (int indexLap = 1; indexLap <= nbLapsRace; indexLap++)
+                    {
+                        if (riderSession.ListLapTimes.Count < indexLap)
+                        {
+                            arrayCumulatedLapTimes += $"{cumulLapTime},{cumulLapTime},{cumulLapTime},{cumulLapTime},";
+                        }
+                        else
+                        {
+                            LapTime lapTime = riderSession.ListLapTimes.ElementAt(indexLap-1);
+                            if (lapTime.T1.HasValue)
+                                arrayCumulatedLapTimes += (cumulLapTime + lapTime.T1) + ",";
+                            else
+                                arrayCumulatedLapTimes += (cumulLapTime) + ",";
+                            if (lapTime.T1.HasValue && lapTime.T2.HasValue)
+                                arrayCumulatedLapTimes += (cumulLapTime + lapTime.T1 + lapTime.T2) + ",";
+                            else
+                                arrayCumulatedLapTimes += (cumulLapTime) + ",";
+                            if (lapTime.T1.HasValue && lapTime.T2.HasValue && lapTime.T3.HasValue)
+                                arrayCumulatedLapTimes += (cumulLapTime + lapTime.T1 + lapTime.T2 + lapTime.T3) + ",";
+                            else
+                                arrayCumulatedLapTimes += (cumulLapTime) + ",";
+                            if (lapTime.Time.HasValue)
+                            {
+                                arrayCumulatedLapTimes += (cumulLapTime + lapTime.Time) + ",";
+                                cumulLapTime += lapTime.Time.Value;
+                            }
+                            else arrayCumulatedLapTimes += (cumulLapTime) + ",";
+                        }
+                    }
+                    res += $"{riderSession.RiderDisplayName},,,{arrayCumulatedLapTimes}" + Environment.NewLine;
+
+                }
+                catch (Exception ex)
+                {
+
+                }
+                //System.IO.File.WriteAllText("d:/" + riderSessions.First().Session.Gp.Season.Category +"-" 
+                //    + riderSessions.First().Session.Gp.Name + ".csv", res);
+            }
+            Console.WriteLine(res);
+            return res;
+        }
+
         public Session()
         {
             RiderSessions = new ObservableCollection<RiderSession>();
@@ -54,16 +114,16 @@ namespace Moto.Data
         {
             return $"{this.SessionType}-{this.Gp?.Name??""}-{this.Gp?.Season.Category.ToString()??""}";
         }
-        public static List<RiderSession> ReadAnalysisPdf(string _data)
+        public static List<RiderSession> ReadAnalysisPdf(string _data, SessionType sessionType)
         {
             List<string> lines = _data.Replace("\r\n", "£").Split('£').ToList();
 
             lines = removeUselessLines(lines);
 
             if (lines.FindIndex(l => l.Contains("Run #")) > -1)
-                return ReadLinesRidersAndLapsWithRunsDetails(lines);
+                return ReadLinesRidersAndLapsWithRunsDetails(lines, sessionType);
             else
-                return ReadLinesRidersAndLaps(lines);
+                return ReadLinesRidersAndLaps(lines, sessionType);
         }
         private static List<string> removeUselessLines(List<string> _data)
         {
@@ -105,7 +165,7 @@ namespace Moto.Data
             return _data;
         }
 
-        public static List<RiderSession> ReadLinesRidersAndLapsWithRunsDetails(List<string> _data)
+        public static List<RiderSession> ReadLinesRidersAndLapsWithRunsDetails(List<string> _data, SessionType sessionType)
         {
             List<RiderSession> _listRiders = new List<RiderSession>();
             string strToFindPilots = "Runs=";
@@ -164,7 +224,7 @@ namespace Moto.Data
                     //read All Laps/Runs
                     for (int i = _index; i <= (_indexNextRider <= -2 ? _data.Count : _indexNextRider); i++)
                     {
-                        string _lineLap = _data.ElementAt(i - 1);
+                        string _lineLap = _data.ElementAt(i - 1).Replace(" *","*");
                         Console.WriteLine(_lineLap);
                         string[] _tabLineLap = _lineLap.Split(' ');
                         if (_tabLineLap.Length >= 4 && _tabLineLap[0].StartsWith("Run"))
@@ -207,7 +267,7 @@ namespace Moto.Data
                             //8 8 Laps at start Laps at start
                             try
                             {
-                                string _lineNextLap = _data.ElementAt(i).Replace("New Tyre", "0");
+                                string _lineNextLap = _data.ElementAt(i).Replace(" *", "*").Replace("New Tyre", "0");
                                 string[] _tabLineNextLap = _lineNextLap.Split(' ');
                                 int nbLaps = 0;
                                 if (!(int.TryParse(_tabLineNextLap[0], out nbLaps)))
@@ -240,7 +300,11 @@ namespace Moto.Data
                             {
                                 IndexLap = lastIndexLap,
                                 Time = null,
-                                IsCancelled = _tabLineLap[1].Contains("*") || _lineLap.Contains(" * "),
+                                T1 = null,
+                                T2 = null,
+                                T3 = null,
+                                T4 = null,
+                                IsCancelled = _tabLineLap[1].Contains("*"),
                                 IsPitStop = _lineLap.Contains(" P "),
                                 IsUnFinished = _tabLineLap[0].ToLower() == "unfinished",
                                 FrontTyreType = currentFrontTyreType,
@@ -248,16 +312,7 @@ namespace Moto.Data
                                 NbLapsFrontTyre = nbLapsFrontTyre,
                                 NbLapsRearTyre = nbLapsRearTyre
                             };
-                            if (!_lapTimes.IsUnFinished)// && !_lapTimes.IsCancelled && !_lapTimes.IsPitStop)
-                            {
-                                string[] _tabTime = _tabLineLap[1].Replace('*', ' ').Replace("'", ".").Trim().Split('.');
-                                if (_tabTime.Length == 3)
-                                {
-                                    _lapTimes.Time = Decimal.Parse(_tabTime[0]) * 60 + Decimal.Parse(_tabTime[1])
-                                        + Decimal.Parse(_tabTime[2]) / 1000;
-
-                                }
-                            }
+                            _lapTimes.readLapAndSectorsTimeFromAnalysis(_lineLap, sessionType);
                             _riderSession.ListLapTimes.Add(_lapTimes);
                         }
                         else
@@ -299,7 +354,8 @@ namespace Moto.Data
             
 
         }
-        public static List<RiderSession> ReadLinesRidersAndLaps(List<string> _data)
+
+        public static List<RiderSession> ReadLinesRidersAndLaps(List<string> _data, SessionType sessionType)
         {
             List<RiderSession> _listRiders = new List<RiderSession>();
             //identify rows with riders names
@@ -317,7 +373,7 @@ namespace Moto.Data
                 _nbLoops++;
                 try
                 {
-                    string _lineRider = _data.ElementAt(_index);
+                    string _lineRider = _data.ElementAt(_index).Replace(" *", "*"); ;
                     string[] _tabLine = _lineRider.Split(' ');
                     RiderSession _rider = new RiderSession()
                     {
@@ -355,7 +411,7 @@ namespace Moto.Data
                     //All lines for a Rider
                     for (int i = _index; i <= (_indexNextRider == -1 ? _data.Count - 1 : _indexNextRider-1); i++)
                     {
-                        string _lineLap = _data.ElementAt(i);
+                        string _lineLap = _data.ElementAt(i).Replace(" *", "*"); ;
                         string[] _tabLineLap = _lineLap.Split(' ');
                         if (_tabLineLap.Length >= 1)
                         {
@@ -364,20 +420,15 @@ namespace Moto.Data
                             {
                                 IndexLap = lastIndexLap,
                                 Time = null,
-                                IsCancelled = _tabLineLap[1].Contains("*")  || _lineLap.Contains(" * "),
+                                T1 = null,
+                                T2 = null,
+                                T3 = null,
+                                T4 = null,
+                                IsCancelled = _tabLineLap[1].Contains("*"),
                                 IsPitStop = _lineLap.Contains(" P "),
                                 IsUnFinished = _tabLineLap[0].ToLower() == "unfinished"
                             };
-                            if (!_lapTimes.IsUnFinished)// && !_lapTimes.IsCancelled && !_lapTimes.IsPitStop)
-                            {
-                                string[] _tabTime = _tabLineLap[1].Replace('*', ' ').Replace("'", ".").Trim().Split('.');
-                                if (_tabTime.Length == 3)
-                                {
-                                    _lapTimes.Time = Decimal.Parse(_tabTime[0]) * 60 + Decimal.Parse(_tabTime[1])
-                                        + Decimal.Parse(_tabTime[2]) / 1000;
-
-                                }
-                            }
+                            _lapTimes.readLapAndSectorsTimeFromAnalysis(_lineLap, sessionType);
                             _rider.ListLapTimes.Add(_lapTimes);
                         }
                         else

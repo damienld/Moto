@@ -23,7 +23,9 @@ select,
 textarea {
     max-width: 280px;
 }
-
+.row-bigHeight {
+    height:40px;
+}
 .row-default {
 
 }
@@ -37,4 +39,76 @@ textarea {
 .row-pit {
     color: gray;
     background-color: cornflowerblue;
+}
+
+.icon-up {
+    background-image: url(/img/green-arrow-up-16.png);
+    background-repeat: no-repeat;
+}
+.icon-down {
+    background-image: url(/img/red-arrow-down-16.png);
+    background-repeat: no-repeat;
+}
+/*Bootstrap Carousel, invert white for black color*/
+.carousel-control-next,
+.carousel-control-prev , .carousel-indicators, .carousel-caption {
+    filter: invert(100%);
+}
+.carousel-control-prev-icon {
+    width: 65px;
+    height: 65px;
+}
+
+.carousel-control-next-icon {
+    width: 65px;
+    height: 65px;
+}
+.badge {
+    font-size: 100%;
+}
+
+.badge-Moto2 {
+    background-color: limegreen;
+    color: white;
+    
+}
+.badge-Moto3 {
+    background-color: darkseagreen;
+    color: white;
+}
+.badge-MotoGP {
+    background-color: green;
+    color: white;
+}
+.badge-Race {
+    background-color: indigo;
+    color: white;
+}
+.badge-WUP {
+    background-color: mediumpurple;
+    color: white;
+}
+.badge-Q1 {
+    background-color: coral;
+    color: white;
+}
+.badge-Q2 {
+    background-color: darkorange;
+    color: white;
+}
+.badge-FP4 {
+    background-color: dodgerblue;
+    color: white;
+}
+.badge-FP3 {
+    background-color: cornflowerblue;
+    color: white;
+}
+.badge-FP2 {
+    background-color: lightskyblue;
+    color: white;
+}
+.badge-FP1 {
+    background-color: lightblue;
+    color: black;
 }

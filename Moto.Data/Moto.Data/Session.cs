@@ -79,6 +79,14 @@ namespace Moto.Data
             RiderSessions = new ObservableCollection<RiderSession>();
         }
         [Browsable(false)]
+        public int getNbLapsSessionLeader
+        {
+            get
+            {
+                return this.RiderSessions.First().NbLaps.GetValueOrDefault(0);
+            }
+        }
+        [Browsable(false)]
         public int NbFalls 
         {
             get
@@ -114,16 +122,94 @@ namespace Moto.Data
         {
             return $"{this.SessionType}-{this.Gp?.Name??""}-{this.Gp?.Season.Category.ToString()??""}";
         }
-        public static List<RiderSession> ReadAnalysisPdf(string _data, SessionType sessionType)
+        public static List<RiderSession> ReadAnalysisPdf(string _data, SessionType sessionType, Gp gp)
         {
+            List<RiderSession> riderSessions;
             List<string> lines = _data.Replace("\r\n", "£").Split('£').ToList();
 
             lines = removeUselessLines(lines);
 
             if (lines.FindIndex(l => l.Contains("Run #")) > -1)
-                return ReadLinesRidersAndLapsWithRunsDetails(lines, sessionType);
+                riderSessions = ReadLinesRidersAndLapsWithRunsDetails(lines, sessionType);
             else
-                return ReadLinesRidersAndLaps(lines, sessionType);
+                riderSessions = ReadLinesRidersAndLaps(lines, sessionType);
+            if (sessionType == SessionType.Race || sessionType == SessionType.Race2)
+            {
+                SetRanksAfter1Lap(riderSessions);
+                SetGridRanksBasedOnQP(riderSessions, gp);
+            }
+            return riderSessions;
+        }
+        /// <summary>
+        /// null if Not Finished
+        /// </summary>
+        /// <param name="riderSessions"></param>
+        public static void SetRanksAfter1Lap(List<RiderSession> riderSessions)
+        {
+            riderSessions.Where(n => n.getLapTime(1).HasValue)
+                .OrderBy(n => n.getLapTime(1))
+                .Select((n, index) => { n.RankAfter1Lap = index+1; return n; }).ToList();
+            riderSessions.Where(n => n.Lap1.Trim() == "").ToList()
+                .ForEach(r => r.RankAfter1Lap = null);
+            #if DEBUG
+            Console.WriteLine("Ranks After Lap1:");
+            riderSessions.OrderBy(n => n.RankAfter1Lap).ToList()
+                .ForEach(r => Console.WriteLine(r.RiderNumber + " " + r.RiderDisplayNameShort + " " 
+                + r.RankAfter1Lap.GetValueOrDefault(-1)));
+            #endif
+        }
+        /// <summary>
+        /// Info is not saved into Db
+        /// </summary>
+        /// <param name="Xlaps"></param>
+        /// <param name="riderSessions"></param>
+        public void SetRanksAfterXLaps
+            (int Xlaps)
+        {
+            RiderSessions.Where(n => n.getLapTime(Xlaps).HasValue)
+                .OrderBy(n => n.getLapTime(Xlaps))
+                .Select((n, index) => { n.RankAfterXLaps[Xlaps] = index + 1; return n; }).ToList();
+            //riderSessions.Where(n => n.Lap1.Trim() == "").ToList()
+            //    .ForEach(r => r.RankAfterXLaps[Xlaps] = null);
+#if DEBUG
+            Console.WriteLine($"Ranks After Lap {Xlaps}:");
+            RiderSessions.Where(n => n.RankAfterXLaps.ContainsKey(Xlaps))
+                .OrderBy(n => n.RankAfterXLaps[Xlaps]).ToList()
+                .ForEach(r => Console.WriteLine(r.RiderNumber + " " + r.RiderDisplayNameShort + " "
+                + r.RankAfter1Lap.GetValueOrDefault(-1)));
+#endif
+        }
+        public static void SetGridRanksBasedOnQP(List<RiderSession> riderSessions, Gp gp)
+        {
+            Session q1 = gp.Sessions.FirstOrDefault(s => s.SessionType == SessionType.Q1);
+            Session q2 = gp.Sessions.FirstOrDefault(s => s.SessionType == SessionType.Q2);
+            int nbRidersFromQ1toQ2 = gp.getNbRiderFromQ1ToQ2();
+            if (q1 == null || q2 == null)
+                return;
+            foreach (var riderSession in riderSessions)
+            {
+                string riderDisplayName = riderSession.RiderDisplayName;
+                RiderSession q2RiderResult = 
+                    q2.RiderSessions.FirstOrDefault(r => r.RiderDisplayName == riderDisplayName);
+                int? rank = null; 
+                if (q2RiderResult == null)
+                {
+                    RiderSession q1RiderResult =
+                        q1.RiderSessions.FirstOrDefault(r => r.RiderDisplayName == riderDisplayName);
+                    rank = q2.RiderSessions.Count()- nbRidersFromQ1toQ2 
+                        + q1RiderResult.Rank + q1RiderResult.PensToAddToRank.GetValueOrDefault(0);
+                }
+                else
+                {
+                    rank = q2RiderResult.Rank + q2RiderResult.PensToAddToRank.GetValueOrDefault(0);
+                }
+                riderSession.RankOnGrid = rank;
+            }
+#if DEBUG
+            Console.WriteLine("Grid Ranks:");
+            riderSessions.OrderBy(n => n.RankOnGrid).ToList()
+                .ForEach(r => Console.WriteLine(r.RiderNumber + " " + r.RiderDisplayNameShort + " " + r.RankOnGrid));
+#endif
         }
         private static List<string> removeUselessLines(List<string> _data)
         {

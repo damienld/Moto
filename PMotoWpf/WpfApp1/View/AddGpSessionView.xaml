@@ -62,50 +62,55 @@
         <Button Content="Process" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" HorizontalAlignment="Center" Width="Auto"
                 Command="{Binding ProcessTextCmd}"/>
         <StackPanel Orientation="Horizontal" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" ClipToBounds="True" Width="Auto">
-            <DataGrid  ItemsSource="{Binding ListRiderSessions}" CanUserAddRows="False"
+            <DataGrid Name="grdListRiders" ItemsSource="{Binding ListRiderSessions, Mode=TwoWay}" CanUserAddRows="False"
                   SelectedItem="{Binding SelectedRiderSession}" AutoGenerateColumns="False"
-            SelectionMode="Single">
-            <DataGrid.Columns>
-                <DataGridTextColumn Binding="{Binding RiderName}"></DataGridTextColumn>
-                <DataGridTextColumn Binding="{Binding RiderFirstName}"></DataGridTextColumn>
-                <DataGridTextColumn Binding="{Binding NbFullLaps}" Header="NbFull"></DataGridTextColumn>
-                <DataGridTextColumn Binding="{Binding NbRuns}"></DataGridTextColumn>
-                <DataGridTextColumn Binding="{Binding AvgBest5Laps}" Header="Avg Best5"></DataGridTextColumn>
-                <DataGridTextColumn Binding="{Binding Lap1}"></DataGridTextColumn>
-                <DataGridTextColumn Binding="{Binding Lap2}"></DataGridTextColumn>
-                <DataGridTextColumn Binding="{Binding Lap3}"></DataGridTextColumn>
-                <DataGridTextColumn Binding="{Binding Lap4}"></DataGridTextColumn>
-                <DataGridTextColumn Binding="{Binding Lap5}"></DataGridTextColumn>
-                <DataGridTextColumn Binding="{Binding Lap6}"></DataGridTextColumn>
-                <DataGridTextColumn Binding="{Binding Lap7}"></DataGridTextColumn>
-                <DataGridTextColumn Binding="{Binding Lap8}"></DataGridTextColumn>
-            </DataGrid.Columns>
+            SelectionMode="Single" MouseDoubleClick="DataGrid_MouseDoubleClick">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Binding="{Binding Rank}" Header="Rk"></DataGridTextColumn>
+                    <DataGridTextColumn Binding="{Binding RiderName}"></DataGridTextColumn>
+                    <DataGridTextColumn Binding="{Binding RiderFirstName}"></DataGridTextColumn>
+                    <DataGridTextColumn Binding="{Binding NbFullLaps}" Header="NbFull"></DataGridTextColumn>
+                    <DataGridTextColumn Binding="{Binding NbRuns}"></DataGridTextColumn>
+                    <DataGridTextColumn Binding="{Binding AvgBest5Laps}" Header="Avg Best5"></DataGridTextColumn>
+                    <DataGridTextColumn Binding="{Binding Lap1}"></DataGridTextColumn>
+                    <DataGridTextColumn Binding="{Binding Lap2}"></DataGridTextColumn>
+                    <DataGridTextColumn Binding="{Binding Lap3}"></DataGridTextColumn>
+                    <DataGridTextColumn Binding="{Binding Lap4}"></DataGridTextColumn>
+                    <DataGridTextColumn Binding="{Binding Lap5}"></DataGridTextColumn>
+                    <DataGridTextColumn Binding="{Binding Lap6}"></DataGridTextColumn>
+                    <DataGridTextColumn Binding="{Binding Lap7}"></DataGridTextColumn>
+                    <DataGridTextColumn Binding="{Binding Lap8}"></DataGridTextColumn>
+                    <DataGridTextColumn Binding="{Binding RiderNumber}" Header="#"></DataGridTextColumn>
+                    <DataGridTextColumn Binding="{Binding RankOnGrid}" Header="Grid"></DataGridTextColumn>
+                    <DataGridTextColumn Binding="{Binding PensToAddToRank}" Header="Pen"></DataGridTextColumn>
+                    <DataGridTextColumn Binding="{Binding RankAfter1Lap}" Header="Rk L1"></DataGridTextColumn>
+                </DataGrid.Columns>
         </DataGrid>
             <Separator Margin="2"></Separator>
             <DataGrid  ItemsSource="{Binding SelectedRiderSession.ListLapTimes}" 
             SelectionMode="Single" AutoGenerateColumns="False" CanUserAddRows="False" >
-            <DataGrid.RowStyle>
-                <Style TargetType="DataGridRow">
-                    <Setter Property="Background" Value="{Binding RelativeSource={RelativeSource Self},
+                <DataGrid.RowStyle>
+                    <Style TargetType="DataGridRow">
+                        <Setter Property="Background" Value="{Binding RelativeSource={RelativeSource Self},
                     Path=Item, Converter={StaticResource LapTimeToBackgroundConverter}}"/>
-                </Style>
-            </DataGrid.RowStyle>
-            <DataGrid.Columns>
-                <DataGridTextColumn Binding="{Binding IndexLap}"></DataGridTextColumn>
-                <DataGridTextColumn Binding="{Binding Time, StringFormat=\{0:F1\}}" ElementStyle="{StaticResource LapTimeStyle}" Header="Time" FontWeight="Bold"></DataGridTextColumn>
-                <DataGridCheckBoxColumn Binding="{Binding IsCancelled}" Width="Auto" Header="Canc."></DataGridCheckBoxColumn>
-                <DataGridCheckBoxColumn Binding="{Binding IsPitStop}" Width="Auto" Header="pit"></DataGridCheckBoxColumn>
-                <DataGridCheckBoxColumn Binding="{Binding IsUnFinished}" Width="Auto" Header="ab."></DataGridCheckBoxColumn>
-                <DataGridTextColumn Binding="{Binding FrontTyreType}" Header="Front"></DataGridTextColumn>
-                <DataGridTextColumn Binding="{Binding NbLapsFrontTyre}" Header="Lap"></DataGridTextColumn>
-                <DataGridTextColumn Binding="{Binding RearTyreType}" Header="Rear"></DataGridTextColumn>
-                <DataGridTextColumn Binding="{Binding NbLapsRearTyre}" Header="Lap"></DataGridTextColumn>
-                <DataGridTextColumn Binding="{Binding T1}" Header="T1"></DataGridTextColumn>
-                <DataGridTextColumn Binding="{Binding T2}" Header="T2"></DataGridTextColumn>
-                <DataGridTextColumn Binding="{Binding T3}" Header="T3"></DataGridTextColumn>
-                <DataGridTextColumn Binding="{Binding T4}" Header="T4"></DataGridTextColumn>
+                    </Style>
+                </DataGrid.RowStyle>
+                <DataGrid.Columns>
+                    <DataGridTextColumn Binding="{Binding IndexLap}"></DataGridTextColumn>
+                    <DataGridTextColumn Binding="{Binding Time, StringFormat=\{0:F1\}}" ElementStyle="{StaticResource LapTimeStyle}" Header="Time" FontWeight="Bold"></DataGridTextColumn>
+                    <DataGridCheckBoxColumn Binding="{Binding IsCancelled}" Width="Auto" Header="Canc."></DataGridCheckBoxColumn>
+                    <DataGridCheckBoxColumn Binding="{Binding IsPitStop}" Width="Auto" Header="pit"></DataGridCheckBoxColumn>
+                    <DataGridCheckBoxColumn Binding="{Binding IsUnFinished}" Width="Auto" Header="ab."></DataGridCheckBoxColumn>
+                    <DataGridTextColumn Binding="{Binding FrontTyreType}" Header="Front"></DataGridTextColumn>
+                    <DataGridTextColumn Binding="{Binding NbLapsFrontTyre}" Header="Lap"></DataGridTextColumn>
+                    <DataGridTextColumn Binding="{Binding RearTyreType}" Header="Rear"></DataGridTextColumn>
+                    <DataGridTextColumn Binding="{Binding NbLapsRearTyre}" Header="Lap"></DataGridTextColumn>
+                    <DataGridTextColumn Binding="{Binding T1}" Header="T1"></DataGridTextColumn>
+                    <DataGridTextColumn Binding="{Binding T2}" Header="T2"></DataGridTextColumn>
+                    <DataGridTextColumn Binding="{Binding T3}" Header="T3"></DataGridTextColumn>
+                    <DataGridTextColumn Binding="{Binding T4}" Header="T4"></DataGridTextColumn>
                 </DataGrid.Columns>
-        </DataGrid>
+            </DataGrid>
         </StackPanel>
         <StackPanel Grid.Row="4" Grid.Column="0" Orientation="Horizontal">
             <ComboBox SelectedItem="{Binding SessionType}"

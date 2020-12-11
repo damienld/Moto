@@ -1,6 +1,6 @@
 ﻿@model PMotoWeb.ViewModels.MotoStatsViewModel
 @{
-    ViewBag.Title = "Season Stats";
+    ViewBag.Title = "MotoGP Stats - Season Stats";
 }
 @section scripts{
     <script>
@@ -10,16 +10,14 @@
     });
     function callChangefunc(val) {
         window.location.href = "/MotoStats/Index?selectedSeasonId=" + val;
-    }
+        }
     function RankingFormatter(value, row) {
         var color = "";
         isMotoGPCat = ("@(Model.RiderStats.First().RiderSessions.First().Session.Gp.Season.Category == Moto.Data.Categories.MotoGP)" == "True");
-        if (isMotoGPCat)
-        {
+        if (isMotoGPCat) {
             var avg = (Number(row.race) + Number(row.qual) + Number(row.fp4) + Number(row.wup)) / 4;
         }
-        else
-        {
+        else {
             var avg = (Number(row.race) + Number(row.qual) + Number(row.wup)) / 3;
         }
         //alert("race:" + row.race + ";qual" + row.qual + ";fp4:" + row.fp4 + ";wup:" + row.wup+";avg=" + avg+";value="+value);

@@ -32,5 +32,6 @@ namespace Moto.Data
         void SetListRiderSession(Session session, List<RiderSession> riderSessions);
         User UpdateUser(User user, string key, bool isValidation = true);
         List<RiderStats> MakeRiderStats(int seasonId);
+        List<RiderStatsForStart> MakeRiderStatsForStarts(int seasonId);
     }
 }

@@ -1,12 +1,12 @@
 ﻿@{
-    ViewBag.Title = "DataMotoGP";
+    ViewBag.Title = "Data MotoGP";
 }
 @model PMotoWeb.ViewModels.HomeViewModel
 
 <div class="container-fluid">
     <div class="row">
         <div class="col-8">
-            <h1>Data visualization for MotoGP</h1>
+            <h1>Results, Stats and Data visualization for MotoGP</h1>
             <ul>
                 <li>Quickly compare the best laps from each rider: @Html.ActionLink("Last Race", "Index", "GpResults", new { id = Model.ListGps.First().GpId }, null)</li>
                 <li>Filter lap times by used tyres: @Html.ActionLink("Last Race", "Index", "GpResults", new { id = Model.ListGps.First().GpId }, null)</li>

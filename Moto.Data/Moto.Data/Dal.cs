@@ -139,8 +139,6 @@ namespace Moto.Data
         }
         public void RemoveSession(Session session)
         {
-            try
-            {
                 foreach (RiderSession riderSession in session.RiderSessions)
                 {
                     if (riderSession.ListLapTimes != null)
@@ -154,12 +152,6 @@ namespace Moto.Data
                 Db.RiderSessions.RemoveRange(session.RiderSessions);
                 Db.Sessions.Remove(session);
                 Db.SaveChanges();
-
-            }
-            catch (Exception ex)
-            {
-
-            }
         }
         public List<Session> GetGpSessions(int gpId)
         {
@@ -293,6 +285,7 @@ namespace Moto.Data
                 listRiderStats.Add(riderStats);
             }
             if (listRiderStats == null) return null;
+            //SET Rankings
             var byWR = listRiderStats.OrderByDescending(p => p.RacePoints).ToList();
             var byQual = listRiderStats.OrderByDescending(p => p.QualifyingPts).ToList();
             var byWUP = listRiderStats.OrderByDescending(p => p.WupPoints).ToList();
@@ -305,6 +298,27 @@ namespace Moto.Data
                 riderStats.Fp4Rank = byFP4.IndexOf(riderStats) + 1;
             }
             return listRiderStats.OrderByDescending(p=>p.RacePoints).ToList();
+        }
+        public List<RiderStatsForStart> MakeRiderStatsForStarts(int seasonId)
+        {
+            List<RiderStatsForStart> listRiderStats = new List<RiderStatsForStart>();
+            List<RiderSession> ridersSessionsRaces 
+                = GetListRiderSessions(seasonId).Where(s => s.Session.SessionType == SessionType.Race).ToList();
+            List<string> riders = ridersSessionsRaces.Select(r => r.RiderDisplayName).Distinct().ToList();
+            foreach (var session in ridersSessionsRaces.Select(s=>s.Session).Distinct())
+            {
+                session.SetRanksAfterXLaps(2);
+                session.SetRanksAfterXLaps(5);
+                session.SetRanksAfterXLaps(10);
+            }
+            foreach (var rider in riders)
+            {
+                RiderStatsForStart riderStats = new RiderStatsForStart() { RiderName = rider };
+                riderStats.RiderSessions = ridersSessionsRaces.Where
+                    (r => r.RiderDisplayName == rider).ToList();
+                listRiderStats.Add(riderStats);
+            }
+            return listRiderStats.OrderBy(l => l.AvgGridRank).ToList();
         }
     }
 }

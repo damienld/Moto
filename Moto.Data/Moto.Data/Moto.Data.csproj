@@ -95,6 +95,10 @@
     <Compile Include="Migrations\202011302001052_Add T1isCancelled T2T1isCancelled ... to LapTime.designer.cs">
       <DependentUpon>202011302001052_Add T1isCancelled T2T1isCancelled ... to LapTime.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202012070733124_Added Field on RiderSession for Grid, Lap1, RankingPen.cs" />
+    <Compile Include="Migrations\202012070733124_Added Field on RiderSession for Grid, Lap1, RankingPen.designer.cs">
+      <DependentUpon>202012070733124_Added Field on RiderSession for Grid, Lap1, RankingPen.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="MotoDataContext.cs" />
     <Compile Include="MotoDbInitializer.cs" />
@@ -104,6 +108,7 @@
     <Compile Include="RiderSeason.cs" />
     <Compile Include="RiderSession.cs" />
     <Compile Include="RiderStats.cs" />
+    <Compile Include="RiderStatsForStart.cs" />
     <Compile Include="Season.cs" />
     <Compile Include="Gp.cs" />
     <Compile Include="Session.cs" />
@@ -131,6 +136,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202011302001052_Add T1isCancelled T2T1isCancelled ... to LapTime.resx">
       <DependentUpon>202011302001052_Add T1isCancelled T2T1isCancelled ... to LapTime.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202012070733124_Added Field on RiderSession for Grid, Lap1, RankingPen.resx">
+      <DependentUpon>202012070733124_Added Field on RiderSession for Grid, Lap1, RankingPen.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -217,7 +217,7 @@ namespace PMotoWpf.ViewModel
                 else if (TextToProcess.ToLower().Contains("Race".ToLower()))
                     SessionType = SessionType.Race;
                 ListRiderSessions = new ObservableCollection<RiderSession>
-                    (Session.ReadAnalysisPdf(TextToProcess, SessionType));
+                    (Session.ReadAnalysisPdf(TextToProcess, SessionType, SelectedGp));
 
                 Note = "";
                 isWet = false;

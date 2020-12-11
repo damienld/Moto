@@ -257,6 +257,7 @@
     <Content Include="Scripts\moment-with-langs.min.js" />
     <Content Include="Scripts\moment.js" />
     <Content Include="Scripts\moment.min.js" />
+    <Content Include="Scripts\moto\motoFormatting.js" />
     <Content Include="Scripts\popper-utils.js" />
     <Content Include="Scripts\popper-utils.min.js" />
     <Content Include="Scripts\popper.js" />
@@ -370,6 +371,7 @@
     <Content Include="Views\AllSessions\Index.cshtml" />
     <Content Include="Views\LastGps\Index.cshtml" />
     <Content Include="Views\Home\Replay.cshtml" />
+    <Content Include="Views\MotoStats\HoleshotStats.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

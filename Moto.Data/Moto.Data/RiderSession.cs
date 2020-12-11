@@ -93,8 +93,39 @@ namespace Moto.Data
         { get; set; }
         public int? NbLaps
         { get; set; }
+        [Description("Grid")]
+        [Display(Name = "Grid")]
+        public int? RankOnGrid
+        { get; set; }
+        /// <summary>
+        /// Number of places to add after penalties
+        /// </summary>
+        [Description("Pen")]
+        [Display(Name = "Pen")]
+        public int? PensToAddToRank
+        { get; set; }
+        [Description("Lap1 Rk")]
+        [Display(Name = "Lap1 Rk")]
+        public int? RankAfter1Lap
+        { get; set; }
+        /// <summary>
+        /// NbLaps, Rank
+        /// !! Call Session.SetRanksAfterXLaps() to set the values
+        /// </summary>
+        [NotMapped]
+        public Dictionary<int, int?> RankAfterXLaps
+        { get; set; } = new Dictionary<int, int?>();
+
         public virtual ICollection<LapTime> ListLapTimes
         { get; set; }
+        public decimal? getLapTime(int indexLapBase1)
+        {
+            if (ListLapTimes == null)
+                return null;
+            if (ListLapTimes.Count < indexLapBase1)
+                return null;
+            return ListLapTimes.ElementAt(indexLapBase1-1).Time;
+        }
 
         public List<LapTime> getListBestXLaps(int aNbLaps, int minTyreLapsFront = 0, int minTyreLapsRear = 0)
         {

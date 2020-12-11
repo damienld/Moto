@@ -49,6 +49,11 @@ textarea {
     background-image: url(/img/red-arrow-down-16.png);
     background-repeat: no-repeat;
 }
+/*Bootstrap table*/
+.table-hover tbody tr:hover {
+    color: #212529;
+    background-color: deepskyblue;
+}
 /*Bootstrap Carousel, invert white for black color*/
 .carousel-control-next,
 .carousel-control-prev , .carousel-indicators, .carousel-caption {
@@ -111,4 +116,21 @@ textarea {
 .badge-FP1 {
     background-color: lightblue;
     color: black;
+}
+.badge-verygood {
+    background-color: green;
+    color: white;
+}
+.badge-good
+{
+    background-color: aquamarine;
+    color: black;
+}
+.badge-bad {
+    background-color: salmon;
+    color: black;
+}
+.badge-verybad {
+    background-color: red;
+    color: white;
 }

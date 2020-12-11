@@ -11,6 +11,15 @@ namespace Moto.Data
 {
     public class Gp : NotificationClass
     {
+        public int getNbRiderFromQ1ToQ2()
+        {
+            if (this.Season.Category == Categories.MotoGP)
+                return 2;
+            else if (this.Season.Category == Categories.Moto2)
+                return 4;
+            else //if (this.Season.Category == Categories.Moto3)
+                return 4;
+        }
         public Gp()
         {
             Sessions = new List<Session>();

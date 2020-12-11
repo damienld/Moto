@@ -30,5 +30,10 @@ namespace PMotoWpf.View
                 MessageBox.Show(((MessageEventArgs)args).Message);
             };
         }
+
+        private void DataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+
+        }
     }
 }

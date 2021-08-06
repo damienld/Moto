@@ -196,8 +196,16 @@ namespace Moto.Data
                 {
                     RiderSession q1RiderResult =
                         q1.RiderSessions.FirstOrDefault(r => r.RiderDisplayName == riderDisplayName);
-                    rank = q2.RiderSessions.Count()- nbRidersFromQ1toQ2 
-                        + q1RiderResult.Rank + q1RiderResult.PensToAddToRank.GetValueOrDefault(0);
+                    if (q1RiderResult == null)
+                    {
+                        rank = q2.RiderSessions.Count() - nbRidersFromQ1toQ2
+                            + q1.RiderSessions.Count+1;
+                    }
+                    else
+                    {
+                        rank = q2.RiderSessions.Count() - nbRidersFromQ1toQ2
+                            + q1RiderResult.Rank + q1RiderResult.PensToAddToRank.GetValueOrDefault(0);
+                    }
                 }
                 else
                 {
@@ -225,12 +233,14 @@ namespace Moto.Data
             int _index2 = _data.FindIndex(l => _reg.IsMatch(l));
             while (_index2 > -1)
             {
-                int _index3 = _data.FindIndex(l => l.Trim().ToUpper() == "TISSOT");
+                int _index3 = _data.FindIndex(l => l.Trim().ToUpper().StartsWith("TISSOT"));
                 for (int i = _index2; i <= _index3; i++)
                 {
                     _data.RemoveAt(_index2);
                 }
                 _index2 = _data.FindIndex(l => _reg.IsMatch(l));
+                if (_index3 < _index2)
+                    _index2 = -1;
             }
             //remove
             int _index4 = _data.FindIndex(l => l.EndsWith(" Speed"));

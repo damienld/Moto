@@ -7,7 +7,7 @@
              xmlns:System="clr-namespace:System;assembly=mscorlib"
              xmlns:Infra="clr-namespace:PMotoWpf.Infra"
              xmlns:Data="clr-namespace:Moto.Data;assembly=Moto.Data"
-             mc:Ignorable="d" d:DesignWidth="300" Height="124">
+             mc:Ignorable="d" Height="Auto" Width="Auto">
     <UserControl.Resources>
         <Style TargetType="TextBlock">
             <Style.Setters>
@@ -33,11 +33,11 @@
             </ObjectDataProvider.MethodParameters>
         </ObjectDataProvider>
     </UserControl.Resources>
-    <Grid Margin="0,0,0,-83">
+    <Grid Margin="0,0,0,0">
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"></RowDefinition>
-            <RowDefinition Height="Auto"></RowDefinition>
-            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="150"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
         <DataGrid Grid.Row="0" ItemsSource="{Binding SeasonCollection}"
                   SelectedItem="{Binding SelectedSeason,Mode=TwoWay}" AutoGenerateColumns="true" SelectionMode="Single">
@@ -59,6 +59,10 @@
                 <ColumnDefinition Width="Auto"></ColumnDefinition>
                 <ColumnDefinition Width="Auto"></ColumnDefinition>
                 <ColumnDefinition Width="Auto"></ColumnDefinition>
+                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                <ColumnDefinition Width="Auto"></ColumnDefinition>
             </Grid.ColumnDefinitions>
 
             <TextBlock Grid.Row="0" Grid.Column="0" Text="Season"></TextBlock>
@@ -66,25 +70,17 @@
             <TextBlock Grid.Row="0" Grid.Column="2" Text="Category"></TextBlock>
             <TextBlock Grid.Row="0" Grid.Column="3" Text="Race"></TextBlock>
 
-            <TextBlock Grid.Row="1" Grid.Column="0" Text="{Binding Label, Mode=OneWay}"></TextBlock>
+            <TextBlock Grid.Row="0" Grid.Column="0" Text="{Binding Label, Mode=OneWay}"></TextBlock>
             <TextBox Name="myUpDownControl" Grid.Row="1" Grid.Column="1" Text="{Binding Year}"/>
-            <ComboBox Grid.Row="1" Grid.Column="2" SelectedItem="{Binding Category}"
+            <ComboBox Grid.Row="0" Grid.Column="2" SelectedItem="{Binding Category}"
                       ItemsSource="{Binding Source={StaticResource categoriesEnum}}"/>
-            <ComboBox Grid.Row="1" Grid.Column="3" SelectedItem="{Binding SelectedGp}"
+            <ComboBox Grid.Row="0" Grid.Column="3" SelectedItem="{Binding SelectedGp}"
                       ItemsSource="{Binding GPs}" Margin="0,0,-66,0"/>
 
-            
+            <Button Command="{Binding AddSeasonCmd}" Content="New Season" Grid.Row="1" Grid.Column="5"></Button>
+            <Button Command="{Binding SaveSeasonCmd}" Content="Update" Grid.Column="7"></Button>
+            <Button Command="{Binding DeleteSeasonCmd}" Content="Delete" Grid.Column="6"></Button>
         </Grid>
-        <Grid Grid.Row="2">
-            <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"></ColumnDefinition>
-                    <ColumnDefinition Width="*"></ColumnDefinition>
-                    <ColumnDefinition Width="*"></ColumnDefinition>
-            </Grid.ColumnDefinitions>
-            <Button Command="{Binding AddSeasonCmd}" Content="Add New" Grid.Column="0"></Button>
-            <Button Command="{Binding SaveSeasonCmd}" Content="Update" Grid.Column="1"></Button>
-            <Button Command="{Binding DeleteSeasonCmd}" Content="Delete" Grid.Column="2"></Button>
-        </Grid>
-        
+
     </Grid>
 </UserControl>

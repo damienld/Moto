@@ -1,6 +1,6 @@
 ﻿@model PMotoWeb.ViewModels.MotoStatsViewModel
 @{
-    ViewBag.Title = "Holeshots - Stats";
+    ViewBag.Title = "Races Stats";
 }
 @section scripts{
     <script>
@@ -118,63 +118,65 @@
 <div class="row mt-1">
     <div class="col-sm-10">
         <!--class="table table-striped table-hover table-sm table-condensed sortable">-->
-        <table id="tableStats" data-toggle="table"
-               data-pagination="true" data-page-size="15" data-page-list="[15, All]" data-locale="en-US"
-               class="table table-striped table-hover table-sm" data-detail-view="true">
-            <thead>
-                <tr>
-                    <th colspan="5">Avg Position at the end of each lap</th>
-                    <th colspan="4">2 or + positions gained/lost in Lap 1 (number of times)</th>
-                </tr>
-                <tr class="thead-light">
-                    <th data-field="grid" data-sortable="true" data-formatter="FormatGridRk">Grid</th>
-                    <th data-field="lap1" data-sortable="true" data-formatter="FormatLapRk">Lap1</th>
-                    <th data-field="lap2" data-sortable="true" data-formatter="FormatLapRk">Lap2</th>
-                    <th data-field="lap5" data-sortable="true" data-formatter="FormatLapRk">Lap5</th>
-                    <th data-field="lap10" data-sortable="true" data-formatter="FormatLapRk">Lap10</th>
-                    <th data-sortable="true" class="font-weight-bold">Rider</th>
-                    <th data-field="rankPlus2" data-sortable="true" data-formatter="RankingFormatterNbTimesGood">+2 Pos</th>
-                    <th data-field="rankMinus2" data-sortable="true" data-formatter="RankingFormatterNbTimesBad">-2 Pos</th>
-                    <th data-field="diffRanksWonLost" data-sortable="true" data-formatter="RankingFormatter" class="font-weight-bold">Diff</th>
+        <div class="table-responsive">
+            <table id="tableStats" data-toggle="table"
+                   data-pagination="true" data-page-size="15" data-page-list="[15, All]" data-locale="en-US"
+                   class="table table-striped table-hover table-sm" data-detail-view="true">
+                <thead>
+                    <tr>
+                        <th colspan="5">Avg Position at the end of each lap</th>
+                        <th colspan="4">2 or + positions gained/lost in Lap 1 (number of times)</th>
+                    </tr>
+                    <tr class="thead-light">
+                        <th data-field="grid" data-sortable="true" data-formatter="FormatGridRk">Grid</th>
+                        <th data-field="lap1" data-sortable="true" data-formatter="FormatLapRk">Lap1</th>
+                        <th data-field="lap2" data-sortable="true" data-formatter="FormatLapRk">Lap2</th>
+                        <th data-field="lap5" data-sortable="true" data-formatter="FormatLapRk">Lap5</th>
+                        <th data-field="lap10" data-sortable="true" data-formatter="FormatLapRk">Lap10</th>
+                        <th data-sortable="true" class="font-weight-bold">Rider</th>
+                        <th data-field="rankPlus2" data-sortable="true" data-formatter="RankingFormatterNbTimesGood">+2 Pos</th>
+                        <th data-field="rankMinus2" data-sortable="true" data-formatter="RankingFormatterNbTimesBad">-2 Pos</th>
+                        <th data-field="diffRanksWonLost" data-sortable="true" data-formatter="RankingFormatter" class="font-weight-bold">Diff</th>
 
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model.RiderStatsForStart)
-                {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(p => item.AvgGridRank)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(p => item.AvgLap1Rank)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(p => item.AvgLap2Rank)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(p => item.AvgLap5Rank)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(p => item.AvgLap10Rank)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(p => item.RiderName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(p => item.NbTimes2RkWonAfterLap1)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(p => item.NbTimes2RkLostAfterLap1)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(p => item.Diff2RkWonLostAfterLap1)
-                    </td>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.RiderStatsForStart)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(p => item.AvgGridRank)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(p => item.AvgLap1Rank)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(p => item.AvgLap2Rank)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(p => item.AvgLap5Rank)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(p => item.AvgLap10Rank)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(p => item.RiderName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(p => item.NbTimes2RkWonAfterLap1)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(p => item.NbTimes2RkLostAfterLap1)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(p => item.Diff2RkWonLostAfterLap1)
+                            </td>
 
-                </tr>
-                }
-            </tbody>
-        </table>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
         <div class="small font-italic"></div>
         <div class="small font-italic"></div>
     </div>

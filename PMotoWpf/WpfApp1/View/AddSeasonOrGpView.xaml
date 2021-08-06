@@ -20,7 +20,7 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <local:SeasonCollection Grid.Row="0"></local:SeasonCollection>
-        <local:GpSessionInput Grid.Row="1"></local:GpSessionInput>
+        <local:SeasonCollection Grid.Row="0" Margin="0,0,0,125" Grid.RowSpan="2"></local:SeasonCollection>
+        <local:GpSessionInput Grid.Row="1" Margin="0,30,0,0"></local:GpSessionInput>
     </Grid>
 </Page>

@@ -42,13 +42,14 @@ namespace Moto.Data
         [Required]
         public virtual Season Season { get; set; }
         public virtual ICollection<Session> Sessions { get; set; }
-        [NotMapped]
-        public string Label
+        
+        public string getLabel(int? Length)
         {
-            get
-            {
-                return this.ToString();
-            }
+            string str = this.ToString();
+            if (Length.HasValue)
+                return str.Substring(0, Math.Min(Length.Value - 1, str.Length - 1));
+            else
+                return str;
         }
         public override string ToString()
         {

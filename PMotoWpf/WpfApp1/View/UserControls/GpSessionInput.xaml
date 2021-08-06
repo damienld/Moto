@@ -65,7 +65,7 @@
                 <ColumnDefinition Width="*"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
-            <Button Command="{Binding AddGpCmd}" Content="Add New" Grid.Column="0"></Button>
+            <Button Command="{Binding AddGpCmd}" Content="New Gp" Grid.Column="0"></Button>
             <Button Command="{Binding SaveGpCmd}" Content="Update" Grid.Column="1"></Button>
             <Button Command="{Binding DeleteGpCmd}" Content="Delete" Grid.Column="2"></Button>
         </Grid>

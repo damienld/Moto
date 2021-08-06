@@ -6,63 +6,61 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-8">
-            <h1>Results, Stats and Data visualization for MotoGP</h1>
+            <h3>MotoGP Results, Stats and Data visualization</h3>
             <ul>
-                <li>Quickly compare the best laps from each rider: @Html.ActionLink("Last Race", "Index", "GpResults", new { id = Model.ListGps.First().GpId }, null)</li>
-                <li>Filter lap times by used tyres: @Html.ActionLink("Last Race", "Index", "GpResults", new { id = Model.ListGps.First().GpId }, null)</li>
-                <li>Display and filter all sessions: @Html.ActionLink(" All Sessions", "Index", "AllSessions")</li>
-                <li>Replay some races lap by lap: @Html.ActionLink("Replay", "Replay", "Home")</li>
-                <li>Check the riders who excel for each type of session: @Html.ActionLink("Season stats", "Index", "MotoStats")</li>
+                <li>Race - Compare the best laps: @Html.ActionLink("Last Race", "Index", "GpResults", new { id = Model.ListGps.First().GpId }, null)</li>
+                <li>Race - Filter times by used tyres: @Html.ActionLink("Last Race", "Index", "GpResults", new { id = Model.ListGps.First().GpId }, null)</li>
+                <!--<li>Display and filter all sessions: @Html.ActionLink(" All Sessions", "Index", "AllSessions")</li>-->
+                <li>Replay races lap by lap: @Html.ActionLink("Replay", "Replay", "Home")</li>
+                <li>Season - Analysis by Session: @Html.ActionLink("Season stats", "Index", "MotoStats")</li>
+                <li>Season - Analysis by Laps: @Html.ActionLink("Races stats", "HoleshotStats", "MotoStats")</li>
             </ul>
         </div>
-        <div class="col-2 col-md-2 float-right ml-auto">
+        <div class="col-3 col-md-1">
+            <!--float-right ml-auto-->
             <!--class="table table-striped table-hover table-sm table-condensed sortable">-->
             <table id="tableListGp" class="table table-striped table-hover table-sm w-25">
                 <thead>
                     <tr><th colspan="3">Last Results</th></tr>
                 </thead>
-                <tbody>
+                <tbody class="border">
                     @foreach (var item in Model.ListGps)
                     {
                         <tr>
                             <td>
-                                @Html.ActionLink("Sessions", "Index", "GpResults", new { id = item.GpId }, null)
+                                @Html.ActionLink(item.getLabel(7), "Index", "GpResults", new { id = item.GpId, @class = "badge badge-info"}, null)
                             </td>
                             <td>
                                 <span class="badge badge-@item.Season.Category">
                                     @Html.DisplayFor(p => item.Season.Category)
                                 </span>
                             </td>
-                            <td>
-                                <span class="badge badge-info">
-                                    @Html.DisplayFor(p => item.Label)
-                                </span>
                         </tr>
                     }
                 </tbody>
             </table>
         </div>
         <!--<div class="col-3">
-            <div class="row">
-                Bet on MotoGP
+        <div class="row">
+            Bet on MotoGP
+        </div>
+        <div class="row">
+            <div class="col-6">
+                <a href="https://www.bet365.com/#/AS/B27/" target="_blank">
+                    <img src="/img/b365.jpg" width="60" height="30" />
+                </a>
             </div>
-            <div class="row">
-                <div class="col-6">
-                    <a href="https://www.bet365.com/#/AS/B27/" target="_blank">
-                        <img src="/img/b365.jpg" width="60" height="30" />
-                    </a>
-                </div>
-                <div class="col-6">
-                    <a href="https://sports.williamhill.com/betting/en-gb/motorbikes" target="_blank">
-                        <img src="/img/willhill.jpg" width="60" height="30" />
-                    </a>
-                </div>
+            <div class="col-6">
+                <a href="https://sports.williamhill.com/betting/en-gb/motorbikes" target="_blank">
+                    <img src="/img/willhill.jpg" width="60" height="30" />
+                </a>
             </div>
-        </div>-->
+        </div>
+    </div>-->
     </div>
 
     <div class="row mt-1">
-        <div class="col-8">
+        <div class="col-12 border">
             <div id="carouselExampleControls" class="carousel slide border" data-ride="carousel">
                 <ol class="carousel-indicators">
                     <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
